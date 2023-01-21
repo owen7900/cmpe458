@@ -1,0 +1,47 @@
+program p (output);
+type ary = array [1..10] of integer;
+var i: integer;
+    a: ary;
+
+procedure q;
+begin
+    write (42); writeln;
+end;
+
+procedure r (v: integer);
+begin
+    write (v); writeln;
+end;
+
+procedure s (var v: integer);
+begin
+    write (v); writeln;
+end;
+
+procedure t (i: integer; var a: ary);
+begin
+    write (a[i]); writeln;
+end;
+
+procedure u (i: integer; var a: ary);
+begin
+    a[i] := 42;
+    write (a[i]); writeln;
+end;
+
+begin
+    q;
+    r (42);
+    i := 42;
+    r (i);
+    i := 10;
+    a[i] := 42;
+    r (a[i]);
+    i := 42;
+    s (i);
+    i := 5;
+    a[i] := 42;
+    s (a[i]);
+    t (i, a);
+    u (3, a);
+end.

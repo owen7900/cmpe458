@@ -1,0 +1,47 @@
+{ Pascal's triangle }
+program Pascal (output);
+    var pascal : array[1 .. 15] of integer;
+    var col : integer;
+        row : integer;
+
+    procedure addto (index : integer);
+    begin
+        if index = 1 then
+            pascal [1] := pascal [1] + 1
+        else
+            pascal [index] := pascal [index] + pascal [index - 1];
+    end;
+
+begin
+    {  initialize the array  }
+    pascal [1] := 1;
+    col := 2;
+    repeat
+        pascal [col] := 0;
+        col := col + 1;
+    until col > 15;
+
+    write (1:5); writeln;
+
+    row := 2;
+    repeat
+        { calculate a new row }
+        col := row;
+        while col >= 1 do
+        begin
+            addto (col);
+            col := col - 1;
+        end;
+
+        { print this row }
+        col := 1;
+        while col <= row do
+        begin
+            write (pascal [col] : 5);
+            col := col + 1;
+        end;
+        writeln;
+
+        row := row + 1;
+    until row > 15;
+end.

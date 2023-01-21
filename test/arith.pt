@@ -1,0 +1,23 @@
+program p (output);
+var i: integer;
+    j: integer;
+begin
+    write (42); writeln;
+    i := 42;
+    write (i); writeln;
+    i := 40;
+    j := 2;
+    write (i+j); writeln;
+    i := 44;
+    j := 2;
+    write (i-j); writeln;
+    i := 21;
+    j := 2;
+    write (i*j); writeln;
+    i := 84;
+    j := 2;
+    write (i div j); writeln;
+    i := 42;
+    j := 100;
+    write (i mod j); writeln;
+end.

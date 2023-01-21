@@ -1,0 +1,14 @@
+program p (output);
+var i: integer;
+    b: boolean;
+begin
+    i := 1;
+    b := true;
+    while b do
+    begin
+        i := i + 1;
+        if not b then i := 32767;
+        if b then b := i <> 42;
+    end;
+    write (i); writeln;
+end.

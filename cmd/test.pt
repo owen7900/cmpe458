@@ -1,0 +1,9 @@
+program p (output);
+var v : integer;
+const c = 5;
+var d : char;
+type t = integer;
+begin
+    write ('hi');
+    writeln
+end.

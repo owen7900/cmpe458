@@ -1,0 +1,74 @@
+{ this program determines the primes up to maxprimes using the sieve method }
+program Primes (output);
+    const maxprimes = 100;
+    const maxfactor = 50;       { maxprimes div 2 }
+
+    const prime = true;
+    const notprime = false;
+
+    var flagvector : array [1 .. maxprimes] of boolean;
+
+    var nextfactor : integer;
+    var multiple: integer;
+        factor : integer;
+    var isprime : boolean;
+
+    var i : integer;
+
+    procedure flagset (f : integer; tf : boolean);
+    begin
+        flagvector [f] := tf;
+    end;
+
+    procedure flag (f : integer; var set : boolean);
+    begin
+        set := flagvector [f];
+    end;
+
+begin
+    { everything begins as prime }
+    i := 1;
+    while i <= maxprimes do
+    begin
+        flagvector [i] := prime;
+        i := i + 1;
+    end;
+
+    { pick out multiples of each prime factor and set these to notprime }
+    multiple := 2;
+    factor := 2;
+
+    while factor <= maxfactor do
+    begin
+
+        { set multiples of factor to notprime } 
+        multiple := factor + factor;
+        while multiple <= maxprimes do
+        begin
+            flagset (multiple, notprime);
+            multiple := multiple + factor;
+        end;
+
+        { set factor := next prime }
+        nextfactor := factor + 1;
+        flag (nextfactor, isprime);
+        while (nextfactor <= maxprimes) and isprime do
+        begin
+            nextfactor := nextfactor + 1;
+            flag (nextfactor, isprime);
+        end;
+        factor := nextfactor;
+    end;
+
+    { now report the results }
+    write ('The primes up to ', maxprimes:1, ' are:'); writeln;
+    nextfactor := 2;
+    while nextfactor <= maxprimes do
+    begin
+        flag (nextfactor, isprime);
+        if isprime then
+            write (nextfactor:5);
+        nextfactor := nextfactor + 1;
+    end;
+    writeln;
+end.

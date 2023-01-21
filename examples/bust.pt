@@ -1,0 +1,561 @@
+program Blackjack (input, output);
+
+    { J.R. Cordy, Computer Systems Research Group, 
+      University of Toronto, July 1975             
+      For instructions on use, run once with no input. }
+
+    { hands of players }                             
+    type 
+        handarray = array [1 .. 7] of integer;
+    var playershand : handarray;
+        dealershand : handarray;
+    var playerscards : integer;
+        dealerscards : integer;
+
+    { game counts for each shuffle }
+    var gamesplayed : integer;
+       gamesplayerwon : integer;
+       gamesdealerwon : integer;
+
+    { player's hand values }
+    var dealerscount : integer;
+        playerscount : integer;
+
+    { flags to indicate player's status }
+    var dealerstops : boolean;
+        playerstops : boolean;
+
+    { player parameters }
+    var playersname : char;
+
+    { player's count limit for naive strategy }
+    var joenaivesguts : integer;
+
+    { continue flag }
+    var continue : boolean;
+
+    { deck to deal cards from }
+    var deck : array [1 .. 52] of integer;
+    var nextcard : integer;
+
+    { alphanumeric card names }
+    var cardnames : array [1 .. 13] of char;
+
+    { random seed }
+    var seed : integer;
+    var multiplier : integer;
+
+
+    procedure randint (var result : integer; modulus : integer);
+        { random number generation }
+    begin
+        if multiplier = 17 then
+            multiplier := 19
+        else 
+            multiplier := 17;
+        seed := (seed * multiplier) mod 10000;
+        result := (seed mod modulus) + 1;
+    end {randint};
+
+
+    procedure shuffle;
+        { puts a new shuffled deck of cards in the array 'deck'. }
+        { cards are coded as 1 to 13, 1 being ace, }
+        { 2-10 as they are, and 11-13 being j,q,k respectively. }
+
+        var card : integer;
+        var cardcount : array [1 .. 13] of integer;
+        var c : integer;
+            ncards : integer;
+
+    begin
+        c := 1;
+        repeat
+            cardcount [c] := 0;
+            c := c + 1;
+        until c > 13;
+
+        ncards := 1;
+        repeat
+            randint (card, 13);
+            while cardcount [card] = 4 do
+                randint (card, 13);
+
+            deck [ncards] := card;
+            cardcount [card] := cardcount [card] + 1;
+
+            ncards := ncards + 1;
+        until ncards > 52;
+
+        nextcard := 0;
+    end {shuffle};
+
+    procedure dealcard (var card : integer);
+    begin
+        nextcard := nextcard + 1;
+        card := deck [nextcard];
+    end {dealcard};
+
+    procedure cardsleft (var number : integer);
+    begin
+        number := 52 - nextcard + 1;
+    end {cardsleft};
+
+
+    procedure writehandimage (ncards : integer; var hand : handarray);
+        { print an image of the hand  }
+        var i : integer;
+    begin
+        i := 1;
+        while i <= ncards do 
+        begin
+            write (' ', cardnames [hand [i]]);
+            if hand[i] = 10 then
+                write ('0');
+            i := i + 1;
+        end;
+    end {writehandimage};
+
+
+    procedure writeplayersname;
+        { print the player's name }
+    begin
+        if playersname = 'e' then
+            write ('E.O. Thorp')
+        else if playersname = 'j' then
+            write ('Jim')
+        else
+            write ('Pooja');
+    end {writeplayersname};
+
+
+    procedure somebodyplays (var r : boolean);
+        { returns true if (there is another shuffle to   }
+        { be played (i.e. if (another player name is     }
+        { input), false otherwise initializes new shuffle                       }
+    begin
+        gamesplayed := 0;
+        gamesplayerwon := 0;
+        gamesdealerwon := 0;
+        writeln; writeln;
+        write ('New shuffle.'); writeln;
+        writeln;
+        write ('Choose a player (e for E.O.Thorp, j for Jim, p for Pooja, q to quit): ');
+        read (playersname); readln; 
+
+        if playersname = 'q' then
+            r := false
+        else
+            begin
+                if playersname <> 'e' then
+                    begin
+                        write ('What does s/he stand on? ');
+                        read (joenaivesguts); readln;
+                        while (joenaivesguts <= 0) or (joenaivesguts > 21) do
+                            begin
+                                write ('(1..20): ');
+                                read (joenaivesguts); readln;
+                            end;
+                    end;
+
+                if playersname = 'e' then
+                    begin
+                        writeln;
+                        write ('E.O.Thorp plays this time.'); writeln;
+                    end
+                else 
+                    begin
+                        writeln;
+                        write ('Next player is ');
+                        writeplayersname;
+                        write ('.'); writeln;
+                        write ('S/he stops at ', joenaivesguts:1, '.'); writeln;
+
+                        if joenaivesguts < 15 then
+                            begin
+                                write ('(What a hamburger!)'); writeln;
+                            end
+                        else
+                            begin
+                                write ('Good luck, ');
+                                writeplayersname;
+                                write ('.'); writeln;
+                            end;
+                    end;
+
+                r := true;
+            end
+    end {somebodyplays}; 
+
+
+    procedure playing (var r : boolean);
+        { returns true if (enough cards left for        }
+        { another game, otherwise prints a shuffle      }
+        { summary and returns false.                    }
+
+        var numcards: integer;
+
+    begin
+        cardsleft (numcards);
+
+        if numcards > 10 then
+            begin
+                writeln;
+                write ('New game.'); writeln;
+                gamesplayed := gamesplayed + 1;
+                r := true;
+            end
+        else 
+            begin
+                writeln;
+                write ('Too few cards left for another game.'); writeln;
+                write ('Of ', gamesplayed:1, ' games, ');
+                writeplayersname;
+                write (' won ', gamesplayerwon:1, ', dealer won ', gamesdealerwon:1, '.'); writeln;
+
+                if gamesdealerwon > gamesplayerwon then
+                    begin
+                        write ('House cleans up on ');
+                        writeplayersname;
+                        write (' this time.'); writeln;
+                    end
+                else if gamesplayerwon > gamesdealerwon then
+                    begin
+                        if playersname = 'e' then
+                            begin
+                                write ('E.O.Thorp does it again.'); writeln;
+                            end
+                        else 
+                            begin
+                                writeplayersname;
+                                write (' must have doctored the shuffle.'); writeln;
+                            end
+                    end
+                else 
+                    begin
+                        write ('Even shuffle.'); writeln;
+                    end;
+
+                r := false;
+            end;
+    end {playing};
+
+
+    procedure playertakesacard; 
+        { player's hand gets another card from the top of the deck. }
+    begin
+        playerscards := playerscards + 1;
+        dealcard (playershand [playerscards]);
+    end {playertakesacard};
+
+
+    procedure dealertakesacard; 
+        { dealer's hand gets another card from the top  }
+        { of the deck.                                  }
+    begin
+        dealerscards := dealerscards + 1;
+        dealcard (dealershand [dealerscards]);
+    end;
+
+
+    procedure deal; 
+        { initializes for a new hand and performs initial deal.                                 }
+        { player and dealer each get two cards.         }
+
+    begin
+        playerstops := false;
+        dealerstops := false;
+        playerscards := 0;
+        dealerscards := 0;
+
+        playertakesacard;
+        dealertakesacard;
+        playertakesacard;
+        dealertakesacard;
+
+        write ('The initial deal gives ');
+        writeplayersname;
+        write (' :');
+        writehandimage (playerscards, playershand); writeln;
+        write ('  and the dealer :'); 
+        writehandimage (dealerscards, dealershand);
+        write ('.'); writeln;
+    end {deal};
+
+
+    procedure evaluate (ncards : integer; var hand : handarray;
+                        var softhand : boolean; var value : integer);
+        { evaluates the best count for the hand, and    }
+        { sets 'softhand' to true if one or more aces are counted as 11.                            }
+
+        var nacescounted11 : integer;
+        var i : integer;
+
+    begin
+        value := 0;
+        nacescounted11 := 0;
+
+        i := 1;
+        while i <= ncards do
+        begin
+            if (hand [i] > 1) and (hand [i] < 11) then
+                begin
+                    { 2-10 }
+                    value := value + hand [i];
+                end 
+            else if hand [i] = 1 then
+                begin
+                    { A }
+                    value := value + 11;
+                    nacescounted11 := nacescounted11 + 1;
+                end
+            else 
+                begin
+                    { J,Q,K  }
+                    value := value + 10;
+                end;
+            i := i + 1;
+        end;
+
+        while (value > 21) and (nacescounted11 <> 0) do
+        begin
+            value := value - 10;
+            nacescounted11 := nacescounted11 - 1;
+        end;
+
+        softhand := nacescounted11 > 0;
+    end {evaluate};
+
+
+    procedure dealer; 
+        { simulates play of dealer.                         }
+        { dealer plays the standard strategy of             }
+        { standing with 17 or better.                       }
+        { when dealer decides to stop, prints hand summary. }
+
+        var softhand : boolean;
+
+    begin
+
+        evaluate (dealerscards, dealershand, softhand, dealerscount);
+
+        if dealerscount > 21 then
+            begin
+                write ('Dealer goes bust.'); writeln;
+                dealerstops := true;
+                gamesplayerwon := gamesplayerwon + 1;
+            end
+        else if dealerscount = 21 then
+            begin
+                write ('Dealer calls blackjack.'); writeln;
+                dealerstops := true;
+                gamesdealerwon := gamesdealerwon + 1;
+            end
+        else 
+            begin
+                if dealerscount < 17 then
+                    dealertakesacard
+                else 
+                    dealerstops := true;
+
+                if dealerstops then
+                    begin
+                        write ('Dealer stands with ', dealerscount:1, '.'); writeln;
+
+                        if dealerscount > playerscount then
+                            begin
+                                write ('House wins.'); writeln;
+                                gamesdealerwon := gamesdealerwon + 1;
+                            end
+                        else if dealerscount < playerscount then
+                            begin
+                                writeplayersname;
+                                write (' wins.'); writeln;
+                                gamesplayerwon := gamesplayerwon + 1;
+                            end
+                        else 
+                            begin
+                                write ('Tie game.'); writeln;
+                            end
+                    end
+        
+                else 
+                    begin
+                        write ('Dealer takes a card and now has ');
+                        writehandimage (dealerscards, dealershand); writeln;
+                   end;
+            end
+    end {dealer};
+
+
+    procedure playerjoenaive; 
+        { simulates the naive player strategy }
+    begin
+        if playerscount < joenaivesguts then
+            playertakesacard
+        else 
+            playerstops := true;
+    end {playerjoenaive};
+
+    procedure playerthorp (softhand : boolean);
+        { simulates a simplified version of the player       }
+        { strategy described by E.O.Thorp in his book        }
+        { 'Beat the Dealer' (Vintage books, 1966) pp. 20,21. }
+
+        var dealershows: integer;
+    begin
+        dealershows := dealershand [1];
+
+        if softhand then
+            begin
+                { soft hand strategy }
+                if dealershows > 8 then
+                    begin
+                        { 9 or 10  }
+                        playerstops := playerscount > 18;
+                    end
+                else 
+                    begin
+                        { 2-8,A  }
+                        playerstops := playerscount > 17;
+                    end
+            end
+        else 
+            begin
+                { hard hand strategy  }
+                if (dealershows > 1) and (dealershows < 4) then
+                    begin
+                        { 2 or 3  }
+                        playerstops := playerscount > 12;
+                    end
+                else if (dealershows > 3) and (dealershows < 7) then
+                    begin
+                        { 4 to 6  }
+                        playerstops := playerscount > 11;
+                    end
+                else 
+                    begin
+                        { 7 to 10,A  }
+                        playerstops := playerscount > 16;
+                    end
+            end;
+
+        if not playerstops then
+            playertakesacard;
+    end {playerthorpe}; 
+
+
+    procedure player; 
+        { simulates play of player                                }
+        { player plays either the naive strategy                  }
+        { or, if playersname = 'E.O.Thorp', E.O.Thorp's strategy. }
+
+        var softhand : boolean;
+    begin
+
+        evaluate (playerscards, playershand, softhand, playerscount);
+
+        if playerscount = 21 then
+            begin
+                writeplayersname;
+                write (' calls blackjack.'); writeln;
+                playerstops := true;
+                dealerstops := true;
+                gamesplayerwon := gamesplayerwon + 1;
+            end
+        else if playerscount > 21 then
+            begin
+                writeplayersname;
+                write (' goes bust.'); writeln;
+                playerstops := true;
+                dealerstops := true;
+                gamesdealerwon := gamesdealerwon + 1;
+            end
+        else 
+            if playersname = 'e' then
+                playerthorp (softhand)
+            else 
+                playerjoenaive;
+
+        if playerstops then
+            begin
+                writeplayersname;
+                write (' stands with ', playerscount:1, '.'); writeln;
+            end
+        else 
+            begin
+                writeplayersname;
+                write (' takes a card and now has ');
+                writehandimage (playerscards, playershand); writeln;
+            end
+
+    end {player};
+
+
+begin
+    { main program  }
+
+    { print program explanation }
+    write ('This program simulates the game of blackjack.'); writeln;
+    writeln;
+    write ('The dealer plays the compulsory strategy of standing on 17 or better.'); writeln;
+    writeln;
+    write ('The player plays either'); writeln;
+    write ('  [1] The standard naive strategy of standing on n or better, or'); writeln;
+    write ('  [2] A simplified version of the strategy described by  E.O.Thorp'); writeln;
+    write ('      in his book ''Beat the Dealer'' (Vintage Books, 1966) pp. 20-21.'); writeln;
+    writeln;
+    write ('Input :'); writeln;
+    write ('  For each shuffle, a player name (character string of <= 20 characters),'); writeln;
+    write ('  and if (the player name specified is not ''E.O.Thorp'', the count [n]'); writeln;
+    write ('  on which the player stands.'); writeln;
+    writeln;
+    write ('If the player name specified is ''E.O.Thorp'', the player strategy used', ' will be Thorp''s.');
+    writeln;
+    write ('Otherwise, the player will use the standard stop on count > n strategy.'); writeln;
+    writeln;
+    write ('The program will simulate one complete shuffle of play for each player.'); writeln;
+
+    { initialize random seed }
+    seed := 13277;
+    multiplier := 17;
+
+    { initialize card names }
+    cardnames [1] := 'A';
+    cardnames [2] := '2';
+    cardnames [3] := '3';
+    cardnames [4] := '4';
+    cardnames [5] := '5';
+    cardnames [6] := '6';
+    cardnames [7] := '7';
+    cardnames [8] := '8';
+    cardnames [9] := '9';
+    cardnames [10] := '1';  { add 0 later }
+    cardnames [11] := 'J';
+    cardnames [12] := 'Q';
+    cardnames [13] := 'K';
+
+    { commence the games! }
+    somebodyplays (continue);
+
+    while continue do
+    begin
+        shuffle;
+        playing (continue);
+
+        while continue do
+        begin
+            deal;
+
+            while not playerstops do
+                player;
+
+            while not dealerstops do
+                dealer;
+
+            playing (continue);
+        end;
+
+        somebodyplays (continue);
+    end
+end.

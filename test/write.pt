@@ -1,0 +1,13 @@
+program p (output);
+var i: integer;
+    j: integer;
+begin
+    write (42); writeln;
+    write (output, 42, 42); writeln (output);
+    write (42:10, 42:10, 42:10); writeln;
+    i := 42;
+    j:= 42;
+    write (i,j,i,j); writeln;
+    write (i:10,j,i:10,j,i:10); writeln;
+    write (i:10,'        42',i:10,'        42',i:10,'        42'); writeln;
+end.

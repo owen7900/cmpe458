@@ -1,0 +1,76 @@
+{ Bubble sort of a list of integers }
+program Bubble (output);
+
+const nelements = 25;
+const maxval = 99;
+
+var list : array [1 .. nelements] of integer;
+var current: integer;
+
+var i: integer;
+    j: integer;
+
+procedure lessthan (i : integer; j : integer; var b : boolean);
+begin
+    current := i;
+    b := (list [i] < list [j]);
+end;
+
+procedure swap (i: integer; j : integer);
+    var t : integer;
+begin
+    current := j;
+    t := list [i];
+    list [i] := list [j];
+    list [j] := t;
+end;
+
+procedure print; 
+    var i: integer;
+begin
+    i := 1;
+    repeat
+        write (list[i]:4);
+        i := i + 1;
+    until i > nelements;
+    writeln;
+end;
+
+procedure sort;
+    var i: integer;
+        j: integer;
+    var lt: boolean;
+begin
+    i := nelements - 1;
+    while i > 0 do
+    begin
+        j := 1;
+        while j < nelements do
+        begin
+            lessthan (j, j+1, lt);
+            if not lt then
+                swap (j, j + 1);
+            j := j + 1;
+        end;
+        i := i - 1;
+    end;
+end;
+
+begin
+    { Initialization }
+    list[1] := 61;
+
+    i := 1;
+    repeat
+        i := i + 1;
+        j := list[i-1] * 1271;
+        list[i] := j mod maxval;
+    until i = nelements;
+
+    current := 0;
+
+    { Main program }
+    print;
+    sort;
+    print;
+end.

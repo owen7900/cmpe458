@@ -1,0 +1,277 @@
+program CahceExperiment (input, output);
+
+    { Example CISC 211A Assignment 2 Solution 
+      J.R. Cordy, October 1995                }
+
+    { Program parameters :
+         N is the number of customers in the database,
+         M is the number of random lookups to try      }
+
+    var N : integer;
+        M : integer;
+
+    { The database is modelled by a set of random integers }
+    var customer : array [1 .. 1000] of integer;
+
+    { Counter for total number of compares }
+    var ncompares : integer;
+
+    { random seed }
+    var seed : integer;
+    var multiplier : integer;
+
+    { cache for use by cache strategy }
+    var cachename : array [1 .. 10] of integer;
+    var cacheindx : array [1 .. 10] of integer;
+    var cp : integer;
+
+    var c : integer;
+        r : integer;
+        j : integer;
+        indx : integer;
+        cavg : integer;
+
+
+    { Procedure to generate random numbers }
+
+    procedure randint (var result : integer; modulus : integer);
+        { random number generation }
+    begin
+        if multiplier = 17 then
+            multiplier := 19
+        else 
+            multiplier := 17;
+        seed := (seed * multiplier) mod 10000;
+        result := (seed mod modulus) + 1;
+    end {randint};
+
+
+    { Procedure to initialize the customer database to N random }
+    { integers between 100000 and 999999 }
+
+    procedure initialize;
+        var i : integer;
+            p : integer;
+    begin
+        i := 1;
+        while i <= N do
+        begin
+            randint (p, 9000);
+            p := p + 1000;
+            customer [i] := p;
+            i := i + 1;
+        end
+    end {initialize};
+
+
+    { Function to generate a random successful lookup key. }
+    { We generate a random index of the array, then use }
+    { the value there to look up. }
+
+    procedure randomname (var r : integer);
+        var p : integer;
+    begin
+        randint (p, N);
+        r := customer [p];
+    end {randomname};
+
+
+    { Function implementing a naive linear lookup. }
+
+    procedure findlinear (name : integer; var r : integer);
+        var i : integer;
+    begin
+        i := 1;
+        r := 0;
+        while (i <=  N) and (r = 0) do
+        begin
+            ncompares := ncompares + 1;
+            if customer [i] = name then
+                r := i;
+            i := i + 1;
+        end;
+    end {findlinear};
+
+
+    { Function impelementing a linear lookup with cache of size 10. }
+    { The cache strategy is LRE - that is, least recently }
+    { entered cache item gets replaced.  This is effectively }
+    { round-robin use of the cache. }
+
+
+    procedure findcache (name : integer; r : integer);
+        var i : integer;
+            c : integer;
+    begin
+        c := 1;
+        r := 0;
+        while (c <= 10) and (r = 0) do
+        begin
+            ncompares := ncompares + 1;
+            if cachename [c] = name then
+                r := cacheindx [c];
+            c := c + 1;
+        end;
+        i := 1;
+        while (i <= N) and (r = 0)  do
+        begin
+            ncompares := ncompares + 1;
+            if customer [i] = name then
+                begin
+                    { Put it in the cache }
+                    cp := cp + 1;
+                    if cp > 10 then
+                        cp := 1;
+                    cachename [cp] := name;
+                    cacheindx [cp] := i;
+                    r := i;
+                end;
+            i := i + 1;
+        end;
+    end {findcache};
+
+
+    { Procedure to bubble sort the customer array so that }
+    { we can use binary search.  Compares used here count }
+    { as part of the total cost of that strategy. }
+
+    procedure swap (n1: integer; n2 : integer);
+        var temp : integer;
+    begin
+        temp := customer [n1];
+        customer [n1] := customer [n2];
+        customer [n2] := temp;
+    end {swap};
+
+    procedure bubblesort;
+        var j : integer;
+            k : integer;
+            nswaps : integer;
+    begin
+        j := N;
+        nswaps := 1;
+        while (j > 1) and (nswaps <> 0)  do
+        begin
+            nswaps := 0;
+            k := 1;
+            while k < j do
+            begin
+                ncompares := ncompares + 1;
+                if customer [k] > customer [k + 1] then
+                    begin
+                        nswaps := nswaps + 1;
+                        swap (k, k + 1);
+                    end; 
+                k := k + 1;
+            end;
+            j := j - 1;
+        end
+    end {bubblesort};
+
+
+    { Function implementing a binary search. }
+    { Assumes that the database is sorted in increasing order. }
+
+    procedure findbinary (name : integer; r : integer);
+        var first : integer;
+            last : integer;
+            mid : integer;
+    begin
+        first := 1;
+        last := N;
+        while first <> last do
+        begin
+            mid := (first + last) div 2;
+            ncompares := ncompares + 1;
+            if name > customer [mid] then
+                first := mid + 1
+            else
+                last := mid;
+        end;
+        ncompares := ncompares + 1;
+        if customer [first] = name then
+            r := first
+        else
+            r := 0;
+    end {findbinary};
+
+
+begin
+    { Main program. }
+    { Initialize the database to N random integers }
+    { then look up M of them using each method. }
+
+    { initialize random seed }
+    seed := 13277;
+    multiplier := 17;
+
+    { Get the number of customers in the database N and the number of random lookups to try M }
+    write ('Enter N (number of elements, at most 1000, e.g. 100): ');
+    read (N); readln;
+    write ('Enter M (number of lookups, e.g. 1000): ');
+    read (M); readln;
+    write ('Enter a prime number (e.g. 13, 19, 51, ...): ');
+    read (multiplier); readln;
+
+    initialize;
+
+    { Linear lookup }
+    writeln; write ('Linear lookup'); writeln;
+    ncompares := 0;
+
+    c := 1;
+    while c <= M do
+    begin
+        randomname (r);
+        findlinear (r, indx);
+        c := c + 1;
+    end;
+
+    cavg := ncompares div M;
+    write ('N= ', N:1, '  Average compares per search (Cavg) = ', cavg:1); writeln;
+
+
+    { Linear lookup with cache }
+    writeln; write ('Linear lookup with cache'); writeln;
+    ncompares := 0;
+
+    { Initialize the cache to empty }
+    cp := 0;
+    j := 1;
+    while j <= 10 do
+    begin
+        cachename [j] := 0;
+        j := j + 1;
+    end;
+
+    c := 1;
+    while c <= M do
+    begin
+        randomname (r);
+        findlinear (r, indx);
+        c := c + 1;
+    end;
+
+    cavg := ncompares div M;
+    write ('N= ', N:1, '  Average compares per search (Cavg) = ', cavg:1); writeln;
+
+
+    { Binary search }
+    writeln; write ('Binary search'); writeln;
+    ncompares := 0;
+
+    { Count compares of bubble sort in total }
+    bubblesort;
+
+    c := 1;
+    while c <= M do
+    begin
+        randomname (r);
+        findbinary (r, indx);
+        c := c + 1;
+    end;
+
+    cavg := ncompares div M;
+    write ('N= ', N:1, '  Average compares per search (Cavg) = ', cavg:1); writeln;
+
+end.

@@ -1,0 +1,15 @@
+program p (output);
+var i: integer;
+    b: boolean;
+    c: char;
+begin
+    i := 42;
+    write (i); writeln;
+    b := true;
+    if (b) then 
+    begin
+        write (i); writeln;
+    end;
+    c := '4';
+    write ('        ',c,'2'); writeln;
+end.

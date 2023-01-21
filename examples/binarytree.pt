@@ -1,0 +1,69 @@
+program tree (input, output);
+
+var s : integer;
+
+const nilPointer = 0;
+const maxTreeElements = 100;
+type treeReference = 0 .. maxTreeElements;
+
+var treeleft : array [0 .. maxTreeElements] of treeReference;
+var treeright : array [0 .. maxTreeElements] of treeReference;
+var treeval : array [0 .. maxTreeElements] of integer;
+
+var avail : integer;
+var root : treeReference;
+
+procedure Insert (val : integer);
+    var node : treeReference;
+begin
+    treeval [avail] := val;
+    treeright [avail] := nilPointer;
+    treeleft [avail] := nilPointer;
+
+    if root = nilPointer then
+        root := avail
+    else 
+        begin
+            node := root;
+            repeat 
+                if val < treeval [node] then
+                    if treeleft [node] = nilPointer then
+                        begin
+                            treeleft [node] := avail;
+                            node := avail;
+                        end
+                    else
+                        node := treeleft [node]
+
+                else if val > treeval [node] then
+                    if treeright [node] = nilPointer then
+                        begin
+                            treeright [node] := avail;
+                            node := avail;
+                        end
+                    else
+                        node := treeright [node];
+
+            until treeval [node] = val;
+
+        end;
+
+    avail := avail + 1;
+end;
+
+begin
+    { Initialization }
+    avail := 1;
+    root := nilPointer;
+
+    { Main program } 
+
+    write ('Type in some integers, please, ending with 0');
+    writeln;
+
+    repeat
+        read (s);
+        if s <> 0 then
+            Insert (s);
+    until s = 0;
+end.

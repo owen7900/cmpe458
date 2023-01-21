@@ -1,0 +1,15 @@
+program p (output);
+var i: integer;
+    a: array [1..10] of integer;
+begin
+    write (42); writeln;
+    i := 42;
+    write (i); writeln;
+    a[1] := 42;
+    write (a[1]); writeln;
+    i := 2;
+    a[i] := 42;
+    write (a[i]); writeln;
+    a[i+1] := 42;
+    write (a[i+1]); writeln;
+end.

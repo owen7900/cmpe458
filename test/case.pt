@@ -1,0 +1,21 @@
+program p (output);
+var i: integer;
+    j: integer;
+begin 
+    i := 42;
+    case i of
+        42: begin write (i); writeln; end;
+        43: ;
+        44: begin write (99); writeln; end;
+    end;
+    case i of
+        43: ;
+        42: begin write (i); writeln; end;
+        44: begin write (99); writeln; end;
+    end;
+    case i of
+        43: ;
+        44: begin write (99); writeln; end;
+        42: begin write (i); writeln; end;
+    end;
+end.

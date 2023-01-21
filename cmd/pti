@@ -1,0 +1,3 @@
+#!/bin/bash
+BIN=/usr/local/bin
+$BIN/ptc -I $*

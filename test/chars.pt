@@ -1,0 +1,19 @@
+program p (output);
+var c: char;
+    d: char;
+    i: integer;
+begin
+    c := '\n';
+    d := '\t';
+    write (d:1, '42', c);
+    c := '4';
+    d := '2';
+    write (' ':8, c:1, d:1); writeln;
+    c := chr (ord (c));
+    d := chr (ord (d));
+    write (' ':8, c:1, d:1); writeln;
+    i := 42;
+    write (i); writeln;
+    i := ord (chr (i));
+    write (i); writeln;
+end.

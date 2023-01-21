@@ -1,0 +1,11 @@
+program p (input, output);
+var i: integer;
+    j: integer;
+    f: text;
+begin
+    f := file (3);
+    reset (f);
+    read (f, i, j);
+    write (i, j); writeln;
+end.
+

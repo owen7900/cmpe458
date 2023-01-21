@@ -1,0 +1,47 @@
+
+program p (output);
+var i: integer;
+    j: integer;
+    k: integer;
+    f: text;
+    g: file of integer;
+    h: text;
+    s: array [1..10] of char;
+begin
+    assign (f, 'test.txt');
+    rewrite (f);
+    write (f, 42);
+    i := 42;
+    write (f, i);
+    i := 0; j := 0;
+    reset (f);
+    read (f, i, j);
+    write (i, j); writeln;
+
+    assign (g, 'test.bin');
+    rewrite (g);
+    write (g, 42);
+    i := 42;
+    write (g, i);
+    i := 0; j := 0;
+    k := file (g);
+    g := file (k);
+    reset (g);
+    read (g, i, j);
+    write (i, j); writeln;
+
+    s[1] := 't';
+    s[2] := 'e';
+    s[3] := 's';
+    s[4] := 't';
+    s[5] := '.';
+    s[6] := 't';
+    s[7] := 'x';
+    s[8] := 't';
+    s[9] := chr(0);
+    assign (h, s);
+    reset (h);
+    read (h, i, j);
+    write (i, j); writeln;
+end.
+

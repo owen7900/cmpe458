@@ -1,0 +1,16 @@
+program p (input, output);
+var i: integer;
+    c: char;
+begin
+    read (i); write (i); writeln;
+    readln (input); read (input, i); write (i); writeln;
+    readln; read (c); if c = 'c' then write (42); writeln;
+    if not eof then
+    begin
+        readln; read (c); if c = 'c' then write (42); writeln;
+    end;
+    if not eof (input) then
+    begin
+        readln; read (c); if c = 'c' then write (42); writeln;
+    end;
+end.

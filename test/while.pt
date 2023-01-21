@@ -1,0 +1,9 @@
+program p (output);
+var i: integer;
+    j: integer;
+begin
+    i := 1;
+    while i < 42 do
+        i := i + 1;
+    write (i); writeln;
+end.
