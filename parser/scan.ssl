@@ -25,6 +25,7 @@ Input :
         lDot            '.'
         lComma          ','
         lSemicolon      ';'
+        lPercent        '%'
         lQuote
         lBackslash
         lLeftAngle      '<'
@@ -108,6 +109,8 @@ Output :
         pRightParen
         pLeftBracket
         pRightBracket
+        pLeftBrace
+        pRightBrace
         pDotDot
         lastSyntaxToken = pDotDot;
 
@@ -147,12 +150,7 @@ Scan :
             | ';':
                 .pSemicolon
             | '(':
-                [
-                    | '*':
-                        @AlternateComment
-                    | *:
-                        .pLeftParen
-                ]
+		.pLeftParen
             | ')':
                 .pRightParen
             | '[':
@@ -210,6 +208,10 @@ Scan :
                         .pGreater
                 ]
             | '{':
+		.pLeftBrace
+            | '}':
+		.pRightBrace
+	    | '%':
                 @Comment
             | '*':
                 .pStar
@@ -278,33 +280,14 @@ Comment :
         % Discard the contents of a comment
 
         {[
-            | '}':
-                >
             | lNewLine:
                 .pNewLine
+                >
             | lEndFile:         % comment must be closed before EOF
                 #eCommentEOF
                 .pEndFile
                 >
             | *:        % comment may contain any other character
-                ?
-        ]};
-
-AlternateComment :
-        {[
-            | '*':
-                [
-                    | ')':
-                        >
-                    | *:
-                ]
-            | lNewLine:
-                .pNewLine
-            | lEndFile:
-                #eCommentEOF
-                .pEndFile
-                >
-            | *:
                 ?
         ]};
 

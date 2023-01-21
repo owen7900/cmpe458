@@ -1,0 +1,11 @@
+program comment(output);
+
+% THIS IS A COMMENT 
+
+begin
+	write('test string');
+	% comment with illegal chars !@#$%^&*()
+	writeln;
+	% comment with end
+end.
+
