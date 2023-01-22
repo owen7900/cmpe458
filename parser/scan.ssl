@@ -39,6 +39,7 @@ Input :
         lDollarSign     '$'
         lHashtag        '#'
         lQuestion       '?'
+        lExclamation    '!'
         lBlank
         lIllegal
         lNewLine
@@ -58,7 +59,6 @@ Output :
         pMod
         pOr
         pAnd
-        pNot
         pThen
         pElse
         pOf
@@ -97,7 +97,7 @@ Output :
         pPlus
         pMinus
         pStar
-        pColonEquals
+        pAssignment
         pDot
         pComma
         pSemicolon
@@ -117,6 +117,7 @@ Output :
         pSubStr
         pStrLen
         pStrIdx
+        pNot
         pDotDot
         lastSyntaxToken = pDotDot;
 
@@ -172,12 +173,7 @@ Scan :
             | '?':
                 .pStrIdx
             | ':':
-                [
-                    | '=':
-                        .pColonEquals
-                    | *:
-                        .pColon
-                ]
+                .pColon
             | lDigit:
                 oBufferSave
                 @Integer
@@ -189,7 +185,12 @@ Scan :
                     | *:
                 ]
             | '=':
-                .pEquals
+                [
+                    | '=':
+                        .pEquals
+                    | *:
+                        .pAssignment
+                ]
             | '+':
                 .pPlus
             | lQuote:
@@ -205,8 +206,6 @@ Scan :
                 ]
             | '<':
                 [
-                    | '>':
-                        .pNotEqual
                     | '=':
                         .pLessEqual
                     | *:
@@ -218,6 +217,13 @@ Scan :
                         .pGreaterEqual
                     | *:
                         .pGreater
+                ]
+            | '!':
+                [
+                    | '=':
+                        .pNotEqual
+                    | *:
+                        .pNot
                 ]
             | '{':
 		.pLeftBrace

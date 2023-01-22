@@ -22,7 +22,6 @@ Input :
         pMod                    'mod'
         pOr                     'or'
         pAnd                    'and'
-        pNot                    'not'
         pThen                   'then'
         pElse                   'else'
         pOf                     'of'
@@ -61,13 +60,13 @@ Input :
         pPlus                   '+'
         pMinus                  '-'
         pStar                   '*'
-        pColonEquals            ':='
+        pAssignment             '='
         pDot                    '.'
         pComma                  ','
         pSemicolon              ';'
         pColon                  ':'
-        pEquals                 '='
-        pNotEqual               '<>'
+        pEquals                 '=='
+        pNotEqual               '!='
         pLess                   '<'
         pLessEqual              '<='
         pGreaterEqual           '>='
@@ -81,6 +80,7 @@ Input :
         pSubStr                 '$'
         pStrLen	                '#'
         pStrIdx                 '?'
+        pNot                    '!'
         pDotDot                 '..'
         lastSyntaxToken = pDotDot;
 
@@ -191,11 +191,11 @@ Block :
 ConstantDefinitions :
         % Accept one or more named constant definitions
         pIdentifier  .sIdentifier
-        '=' @ConstantValue ';'
+        '==' @ConstantValue ';'
         {[
             | pIdentifier:
                 .sIdentifier
-                '=' @ConstantValue ';'
+                '==' @ConstantValue ';'
             | *:
                 >
         ]};
@@ -226,11 +226,11 @@ UnsignedIntegerConstant :
 TypeDefinitions :
         % Accept one or more named type definitions.
         pIdentifier  .sIdentifier
-        '='  @TypeBody  ';'
+        '=='  @TypeBody  ';'
         {[
             | pIdentifier:
                 .sIdentifier
-                '='  @TypeBody  ';'
+                '=='  @TypeBody  ';'
             | *:
                 >
         ]};
@@ -337,7 +337,7 @@ Statement :
 
 AssignmentOrCallStmt :
         [
-            | ':=':
+            | '=':
                 .sAssignmentStmt
                 .sIdentifier    % identifier accepted in the Statement rule
                 @Expression
@@ -348,7 +348,7 @@ AssignmentOrCallStmt :
                 .sSubscript
                 @Expression
                 .sExpnEnd
-                ']'  ':='
+                ']'  '='
                 @Expression
                 .sExpnEnd
             | *:
@@ -470,9 +470,9 @@ RepeatStmt :
 Expression :
         @SimpleExpression
         [
-            | '=':
+            | '==':
                 @SimpleExpression  .sEq
-            | '<>':
+            | '!=':
                 @SimpleExpression  .sNE
             | '<':
                 @SimpleExpression  .sLT
@@ -529,7 +529,7 @@ Factor :
                 .sInteger
             | '(':
                 @Expression  ')'
-            | 'not':
+            | '!':
                 @Factor
                 .sNot
             | pStringLiteral:
