@@ -935,6 +935,7 @@ program ScannerParser(output, stdIdentifiers, scanSsl, parseSsl, source, parseSt
             charClassMap[ord('$')] := lDollarSign;
             charClassMap[ord('#')] := lHashtag;
             charClassMap[ord('?')] := lQuestion;
+            charClassMap[ord('!')] := lExclamation;
 
             { Initialize the scan ssl table }
             reset(scanSsl {==, NscanSsl ==} );
