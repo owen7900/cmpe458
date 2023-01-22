@@ -78,6 +78,9 @@ Input :
         pRightBracket           ']'
         pLeftBrace		'{'
         pRightBrace		'}'
+        pSubStr                 '$'
+        pStrLen	                '#'
+        pStrIdx                 '?'
         pDotDot                 '..'
         lastSyntaxToken = pDotDot;
 

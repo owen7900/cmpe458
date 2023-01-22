@@ -82,15 +82,17 @@ program ScannerParser(output, stdIdentifiers, scanSsl, parseSsl, source, parseSt
         lRightBracket = 18;
         lLeftBrace = 19;
         lRightBrace = 20;
-        lBlank = 21;
-        lIllegal = 22;
-        lNewLine = 23;
-        lCarriageReturn = 24;
-        lTab = 25;
-        lNewPage = 26;
-        lEndFile = 27;
-        lastCharClass = 27;
-
+        lDollarSign = 21;
+        lHashtag = 22;
+        lQuestion = 23;
+        lBlank = 24;
+        lIllegal = 25;
+        lNewLine = 26;
+        lCarriageReturn = 27;
+        lTab = 28;
+        lNewPage = 29;
+        lEndFile = 30;
+        lastCharClass = 30;
 
         { Output Tokens }
         pDiv = 0;
@@ -145,8 +147,11 @@ program ScannerParser(output, stdIdentifiers, scanSsl, parseSsl, source, parseSt
         pRightBracket = 45;
         pLeftBrace = 46;
         pRightBrace = 47;
-        pDotDot = 48;
-        lastSyntaxToken = 48;
+        pSubStr = 48;
+        pStrLen = 49;
+        pStrIdx = 50;
+        pDotDot = 51;
+        lastSyntaxToken = 51;
 
         { Input/Output Tokens }
 
@@ -163,17 +168,16 @@ program ScannerParser(output, stdIdentifiers, scanSsl, parseSsl, source, parseSt
 
         { S/SL Rule Table Addresses } {
         Scan = 0;
-        Identifier = 215;
-        Integer = 232;
-        StringLiteral = 247;
-        Comment = 299;
+        Identifier = 233;
+        Integer = 250;
+        StringLiteral = 265;
+        Comment = 317;
         }
 
         { S/SL Table Parameters }
-        sslTblSize = 324;
+        sslTblSize = 342;
         minSslTableValue = -32767;
         maxSslTableValue = 32767;
-
 { ===== End of contents of scan.def }
 
 
@@ -235,8 +239,11 @@ program ScannerParser(output, stdIdentifiers, scanSsl, parseSsl, source, parseSt
         pRightBracket = 45;
         pLeftBrace = 46;
         pRightBrace = 47;
-        pDotDot = 48;
-        lastSyntaxToken = 48;
+        pSubStr = 48;
+        pStrLen = 49;
+        pStrIdx = 50;
+        pDotDot = 51;
+        lastSyntaxToken = 51;
 	}
 
         { Output Tokens }
@@ -924,6 +931,9 @@ program ScannerParser(output, stdIdentifiers, scanSsl, parseSsl, source, parseSt
             charClassMap[ord('{')] := lLeftBrace;
             charClassMap[ord('}')] := lRightBrace;
             charClassMap[ord('%')] := lPercent;
+            charClassMap[ord('$')] := lDollarSign;
+            charClassMap[ord('#')] := lHashtag;
+            charClassMap[ord('?')] := lQuestion;
 
             { Initialize the scan ssl table }
             reset(scanSsl {==, NscanSsl ==} );

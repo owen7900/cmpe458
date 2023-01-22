@@ -36,6 +36,9 @@ Input :
         lRightBracket   ']'
         lLeftBrace      '{'
         lRightBrace     '}'
+        lDollarSign     '$'
+        lHashtag        '#'
+        lQuestion       '?'
         lBlank
         lIllegal
         lNewLine
@@ -111,6 +114,9 @@ Output :
         pRightBracket
         pLeftBrace
         pRightBrace
+        pSubStr
+        pStrLen
+        pStrIdx
         pDotDot
         lastSyntaxToken = pDotDot;
 
@@ -159,6 +165,12 @@ Scan :
                 .pRightBracket
             | ',':
                 .pComma
+            | '#':
+                .pStrLen
+            | '$':
+                .pSubStr
+            | '?':
+                .pStrIdx
             | ':':
                 [
                     | '=':
