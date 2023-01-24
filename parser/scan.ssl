@@ -276,13 +276,8 @@ StringLiteral :
 
         {[
             | lQuote:
-                [
-                    | lQuote:
-                        oBufferSave
-                    | *:
-                        .pStringLiteral
-                        >
-                ]
+                .pStringLiteral
+                >
             | lNewLine:         % literal must not cross a line boundary
                 #eStringLiteralLine
                 .pNewLine
