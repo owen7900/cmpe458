@@ -80,11 +80,7 @@ Output :
         pWhen
         pDef
         
-        % below are simply here to not break this compilation yet
-        pBegin
-        pProgram
-        pRepeat
-        lastKeywordToken = pRepeat
+        lastKeywordToken = pDef
 
         % Scanner tokens -
         %   These are the tokens actually recognized by the Scanner itself.

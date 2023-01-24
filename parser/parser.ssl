@@ -26,14 +26,11 @@ Input :
         pElse                   'else'
         pOf                     'of'
         pEnd                    'end'
-        pUntil                  'until'
         pDo                     'do'
         pArray                  'array'
         pFile                   'file'
-        pConst                  'const'
         pVar                    'var'
         pType                   'type'
-        pProcedure              'procedure'
         pIf                     'if'
         pElsIf                  'elsif'
         pUnless                 'unless'
@@ -46,13 +43,7 @@ Input :
         pWhen                   'when'
         pDef                    'def'
 
-        % below are simply here to not break this compilation yet
-        pBegin                  'begin'
-        pProgram                'program'
-        pRepeat                 'repeat'
-
-
-        lastKeywordToken = pRepeat 
+        lastKeywordToken = pDef 
 
         % Scanner tokens -
         %   These are the tokens actually recognized by the Scanner itself.
@@ -90,7 +81,7 @@ Input :
         pLeftBrace		'{'
         pRightBrace		'}'
         pSubStr                 '$'
-        pStrLen	                '#'
+        pStrLen                 '#'
         pStrIdx                 '?'
         pNot                    '!'
         pDotDot                 '..'
@@ -104,13 +95,13 @@ Output :
         sStringLiteral
         lastCompoundSemanticToken = sStringLiteral
 
-        sProgram
+        sUsing
         sParmBegin
         sParmEnd
-        sConst
+        sVal
         sType
         sVar
-        sProcedure
+        sDef
         sBegin
         sEnd
         sNegate
@@ -130,8 +121,8 @@ Output :
         sThen
         sElse
         sWhileStmt
-        sRepeatStmt
-        sRepeatEnd
+        sDoStmt
+        sDoEnd
         sEq
         sNE
         sLT
@@ -156,10 +147,10 @@ Output :
 rules
 
 Program :
-        'program'  .sProgram
-        % program name
+        'using'  .sUsing
+        % using this assumes that at least one using is required. This may be wrong
         pIdentifier
-        % program parameters
+        % using parameters
         '('
         {
             pIdentifier  .sIdentifier
@@ -177,10 +168,10 @@ Block :
         % Strictly speaking, standard Pascal requires that declarations
         % appear only in the order consts, types, vars, procedures.
         % We allow arbitrary intermixing of these instead to preserve
-        % programmer sanity.
+        % usingmer sanity.
         {[
-            | 'const':
-                .sConst
+            | 'val':
+                .sVal
                 @ConstantDefinitions
             | 'type':
                 .sType
@@ -188,8 +179,8 @@ Block :
             | 'var':
                 .sVar
                 @VariableDeclarations
-            | 'procedure':
-                .sProcedure
+            | 'def':
+                .sDef
                 % procedure name
                 pIdentifier  .sIdentifier
                 @ProcedureHeading
@@ -197,7 +188,6 @@ Block :
             | *:
                 >
         ]}
-        'begin'
         @BeginStmt;
 
 ConstantDefinitions :
@@ -333,18 +323,17 @@ Statement :
         [
             | pIdentifier:
                 @AssignmentOrCallStmt
-            | 'begin':
-                @BeginStmt
             | 'if':
                 @IfStmt
             | 'while':
                 @WhileStmt
             | 'case':
                 @CaseStmt
-            | 'repeat':
-                @RepeatStmt
+            | 'do':
+                @DoStmt
             | *:
-                .sNullStmt
+                @BeginStmt
+                % this is using the idea of an implied begin. This might want to be changed to having each of the options call begin themselves, or removing the concept of begin entirely
         ];
 
 AssignmentOrCallStmt :
@@ -465,14 +454,14 @@ WhileStmt :
         'do'
         @Statement;
 
-RepeatStmt :
-        .sRepeatStmt
+DoStmt :
+        .sDoStmt
         {
             @Statement
             [
                 | ';':
-                | 'until':
-                    .sRepeatEnd
+                | 'break':
+                    .sDoEnd
                     >
             ]
         }
