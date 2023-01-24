@@ -34,7 +34,7 @@ See the README there for installation information.
 - Add new Quby keywords `using val def break when module unless elsif`
    - Tests
    - Documentation
-- Replace `char` type with `string` type
+- Replace `char` type with `string` type -- DONE Owen Hooper. This doesn't actually effect the screener or the scanner. Only the semantics and onwards need this
    - Documentation
    - Tests
 - Add new character classes to `scan.ssl` and `parser.pt` -- DONE Owen Hooper
