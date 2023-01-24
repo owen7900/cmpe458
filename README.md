@@ -21,11 +21,12 @@ globally on your machine using the command "sudo ./Install.sh".
 Editor plugins for the syntax colorization of PT and S/SL
 source files using Vim are in the editors subdirectory.
 See the README there for installation information.
+# HINTS
+- Run `ptc` or `pti` using `./ptc` or `./pti` in most directories to get the custom compiler
 
 # TODO 
 
 ## Phase 1
-- Determine why the screener/scanner changes aren't changing the ptc command even when invoked with `-L` 
 - Figure out how to automate testing of just the scanner/screener
    - using `ptc -t1` or `ptc -o1` will just invoke the screener/scanner
 - Remove old keywords `not until program const procedure begin repeat` -- DONE Owen Hooper
