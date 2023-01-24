@@ -63,14 +63,11 @@ Output :
         pElse
         pOf
         pEnd
-        pUntil
         pDo
         pArray
         pFile
-        pConst
         pVar
         pType
-        pProcedure
         pIf
         pElsIf
         pUnless

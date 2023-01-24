@@ -28,10 +28,10 @@ See the README there for installation information.
 - Determine why the screener/scanner changes aren't changing the ptc command even when invoked with `-L` 
 - Figure out how to automate testing of just the scanner/screener
    - using `ptc -t1` or `ptc -o1` will just invoke the screener/scanner
-- Remove old keywords `not until program const procedure begin repeat`
+- Remove old keywords `not until program const procedure begin repeat` -- DONE Owen Hooper
    - Bandid over the problems in the parser.ssl file
    - Documentation
-- Add new Quby keywords `using val def break when module unless elsif`
+- Add new Quby keywords `using val def break when module unless elsif` -- DONE Owen Hooper
    - Tests
    - Documentation
 - Replace `char` type with `string` type -- DONE Owen Hooper. This doesn't actually effect the screener or the scanner. Only the semantics and onwards need this

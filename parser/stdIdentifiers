@@ -13,15 +13,11 @@ then
 else
 of
 end
-until
 do
 array
 file
-program
-const
 var
 type
-procedure
 if
 elsif
 unless
