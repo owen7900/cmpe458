@@ -78,6 +78,9 @@ Output :
         pWhile
         pBreak
         pModule
+        pUsing
+        pVal
+        pWhen
         pDef
         
         % below are simply here to not break this compilation yet

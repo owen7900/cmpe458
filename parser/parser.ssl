@@ -41,6 +41,9 @@ Input :
         pWhile                  'while'
         pBreak                  'break'
         pModule                 'module'
+        pUsing                  'using'
+        pVal                    'val'
+        pWhen                   'when'
         pDef                    'def'
 
         % below are simply here to not break this compilation yet

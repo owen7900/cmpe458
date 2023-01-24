@@ -29,6 +29,9 @@ case
 while
 break
 module
+using
+val
+when
 def
 
 % End of keywords
