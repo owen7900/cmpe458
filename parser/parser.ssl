@@ -30,16 +30,25 @@ Input :
         pDo                     'do'
         pArray                  'array'
         pFile                   'file'
-        pProgram                'program'
         pConst                  'const'
         pVar                    'var'
         pType                   'type'
         pProcedure              'procedure'
-        pBegin                  'begin'
         pIf                     'if'
+        pElsIf                  'elsif'
+        pUnless                 'unless'
         pCase                   'case'
         pWhile                  'while'
+        pBreak                  'break'
+        pModule                 'module'
+        pDef                    'def'
+
+        % below are simply here to not break this compilation yet
+        pBegin                  'begin'
+        pProgram                'program'
         pRepeat                 'repeat'
+
+
         lastKeywordToken = pRepeat 
 
         % Scanner tokens -

@@ -67,15 +67,22 @@ Output :
         pDo
         pArray
         pFile
-        pProgram
         pConst
         pVar
         pType
         pProcedure
-        pBegin
         pIf
+        pElsIf
+        pUnless
         pCase
         pWhile
+        pBreak
+        pModule
+        pDef
+        
+        % below are simply here to not break this compilation yet
+        pBegin
+        pProgram
         pRepeat
         lastKeywordToken = pRepeat
 

@@ -9,7 +9,6 @@ div
 mod
 or
 and
-not
 then
 else
 of
@@ -23,11 +22,14 @@ const
 var
 type
 procedure
-begin
 if
+elsif
+unless
 case
 while
-repeat
+break
+module
+def
 
 % End of keywords
 
