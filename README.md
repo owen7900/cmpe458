@@ -44,8 +44,8 @@ See the README there for installation information.
    - Add tests for this
    - Documentation
 - String Literals 
-   - Replace quote type
-   - Add support for null string
+   - Replace quote type -- DONE Owen Hooper
+   - Add support for null string -- DONE Owen Hooper
    - Make sure all the old PTPascal string stuff is carried over
    - Write tests for this
    - Documentation
