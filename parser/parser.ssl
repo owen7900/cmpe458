@@ -22,28 +22,26 @@ Input :
         pMod                    'mod'
         pOr                     'or'
         pAnd                    'and'
+        pNot                    'not'
         pThen                   'then'
         pElse                   'else'
         pOf                     'of'
         pEnd                    'end'
+        pUntil                  'until'
         pDo                     'do'
         pArray                  'array'
         pFile                   'file'
+        pProgram                'program'
+        pConst                  'const'
         pVar                    'var'
         pType                   'type'
+        pProcedure              'procedure'
+        pBegin                  'begin'
         pIf                     'if'
-        pElsIf                  'elsif'
-        pUnless                 'unless'
         pCase                   'case'
         pWhile                  'while'
-        pBreak                  'break'
-        pModule                 'module'
-        pUsing                  'using'
-        pVal                    'val'
-        pWhen                   'when'
-        pDef                    'def'
-
-        lastKeywordToken = pDef 
+        pRepeat                 'repeat'
+        lastKeywordToken = pRepeat 
 
         % Scanner tokens -
         %   These are the tokens actually recognized by the Scanner itself.
@@ -63,13 +61,13 @@ Input :
         pPlus                   '+'
         pMinus                  '-'
         pStar                   '*'
-        pAssignment             '='
+        pColonEquals            ':='
         pDot                    '.'
         pComma                  ','
         pSemicolon              ';'
         pColon                  ':'
-        pEquals                 '=='
-        pNotEqual               '!='
+        pEquals                 '='
+        pNotEqual               '<>'
         pLess                   '<'
         pLessEqual              '<='
         pGreaterEqual           '>='
@@ -78,12 +76,6 @@ Input :
         pRightParen             ')'
         pLeftBracket            '['
         pRightBracket           ']'
-        pLeftBrace		'{'
-        pRightBrace		'}'
-        pSubStr                 '$'
-        pStrLen                 '#'
-        pStrIdx                 '?'
-        pNot                    '!'
         pDotDot                 '..'
         lastSyntaxToken = pDotDot;
 
@@ -95,13 +87,13 @@ Output :
         sStringLiteral
         lastCompoundSemanticToken = sStringLiteral
 
-        sUsing
+        sProgram
         sParmBegin
         sParmEnd
-        sVal
+        sConst
         sType
         sVar
-        sDef
+        sProcedure
         sBegin
         sEnd
         sNegate
@@ -121,8 +113,8 @@ Output :
         sThen
         sElse
         sWhileStmt
-        sDoStmt
-        sDoEnd
+        sRepeatStmt
+        sRepeatEnd
         sEq
         sNE
         sLT
@@ -147,10 +139,10 @@ Output :
 rules
 
 Program :
-        'using'  .sUsing
-        % using this assumes that at least one using is required. This may be wrong
+        'program'  .sProgram
+        % program name
         pIdentifier
-        % using parameters
+        % program parameters
         '('
         {
             pIdentifier  .sIdentifier
@@ -168,10 +160,10 @@ Block :
         % Strictly speaking, standard Pascal requires that declarations
         % appear only in the order consts, types, vars, procedures.
         % We allow arbitrary intermixing of these instead to preserve
-        % usingmer sanity.
+        % programmer sanity.
         {[
-            | 'val':
-                .sVal
+            | 'const':
+                .sConst
                 @ConstantDefinitions
             | 'type':
                 .sType
@@ -179,8 +171,8 @@ Block :
             | 'var':
                 .sVar
                 @VariableDeclarations
-            | 'def':
-                .sDef
+            | 'procedure':
+                .sProcedure
                 % procedure name
                 pIdentifier  .sIdentifier
                 @ProcedureHeading
@@ -188,16 +180,17 @@ Block :
             | *:
                 >
         ]}
+        'begin'
         @BeginStmt;
 
 ConstantDefinitions :
         % Accept one or more named constant definitions
         pIdentifier  .sIdentifier
-        '==' @ConstantValue ';'
+        '=' @ConstantValue ';'
         {[
             | pIdentifier:
                 .sIdentifier
-                '==' @ConstantValue ';'
+                '=' @ConstantValue ';'
             | *:
                 >
         ]};
@@ -228,11 +221,11 @@ UnsignedIntegerConstant :
 TypeDefinitions :
         % Accept one or more named type definitions.
         pIdentifier  .sIdentifier
-        '=='  @TypeBody  ';'
+        '='  @TypeBody  ';'
         {[
             | pIdentifier:
                 .sIdentifier
-                '=='  @TypeBody  ';'
+                '='  @TypeBody  ';'
             | *:
                 >
         ]};
@@ -323,22 +316,23 @@ Statement :
         [
             | pIdentifier:
                 @AssignmentOrCallStmt
+            | 'begin':
+                @BeginStmt
             | 'if':
                 @IfStmt
             | 'while':
                 @WhileStmt
             | 'case':
                 @CaseStmt
-            | 'do':
-                @DoStmt
+            | 'repeat':
+                @RepeatStmt
             | *:
-                @BeginStmt
-                % this is using the idea of an implied begin. This might want to be changed to having each of the options call begin themselves, or removing the concept of begin entirely
+                .sNullStmt
         ];
 
 AssignmentOrCallStmt :
         [
-            | '=':
+            | ':=':
                 .sAssignmentStmt
                 .sIdentifier    % identifier accepted in the Statement rule
                 @Expression
@@ -349,7 +343,7 @@ AssignmentOrCallStmt :
                 .sSubscript
                 @Expression
                 .sExpnEnd
-                ']'  '='
+                ']'  ':='
                 @Expression
                 .sExpnEnd
             | *:
@@ -454,14 +448,14 @@ WhileStmt :
         'do'
         @Statement;
 
-DoStmt :
-        .sDoStmt
+RepeatStmt :
+        .sRepeatStmt
         {
             @Statement
             [
                 | ';':
-                | 'break':
-                    .sDoEnd
+                | 'until':
+                    .sRepeatEnd
                     >
             ]
         }
@@ -471,9 +465,9 @@ DoStmt :
 Expression :
         @SimpleExpression
         [
-            | '==':
+            | '=':
                 @SimpleExpression  .sEq
-            | '!=':
+            | '<>':
                 @SimpleExpression  .sNE
             | '<':
                 @SimpleExpression  .sLT
@@ -530,7 +524,7 @@ Factor :
                 .sInteger
             | '(':
                 @Expression  ')'
-            | '!':
+            | 'not':
                 @Factor
                 .sNot
             | pStringLiteral:
