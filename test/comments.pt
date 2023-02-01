@@ -1,11 +1,4 @@
-program comment(output);
-
 % THIS IS A COMMENT 
-
-begin
-	write('test string');
-	% comment with illegal chars !@#$%^&*()
-	writeln;
-	% comment with end
-end.
-
+% comment with illegal chars !@#$%^&*()
+% comment with end
+NOT A COMMENT
