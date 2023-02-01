@@ -16,18 +16,8 @@
 - Modified `@Comment` body to end comments at newline (line 299) 
 - Removed rule `@AlternateComment` as it is no longer needed
   
-## parser.ssl
-- removed keyword tokens for `not`, `until`, `program`, `const`, `procedure`, `begin` and `repeat` (line 20-44)
-- added keyword tokens for `elsif`, `unless`, `break`, `module`, `using`, `val`, `when` and `def` (line 20-44)
-- Update `lastKeywordToken`
-- Renamed `pColonEquals` to `pAssignment` and changed symbol (line 66)
-- Changed symbol for `pEquals` and `pNotEqual` (line 71-72)
-- Added scanner token definitions for `{`, `}`, `$`, `#`, `?` and `!` (line 81-86) 
-- Renamed semantic tokens to an intermediate value for clarity. Values include `sUsing`, `sVal`, `sDoStmt`, `sDoEnd`
-- Replaced instances of changed symbols and tokens throughout the code
-
 ## parser.pt
-- Pastes of constants from `scan.def` and `parser.def`
+- Pastes of constants from `scan.def` 
 - updated quote char (line 425)
 - Added entries to `charClassMap` for `%`, `$`, `#`, `?` and `!` (line 935)
 
