@@ -1,0 +1,7 @@
+  .pIdentifier (screened to pVal)
+  .pIdentifier
+  % Output token text 'a'
+ .pAssignment
+  .pInteger
+  % Output token text '1'
+ .pEndFile

@@ -1,0 +1,9 @@
+  .pInteger
+  % Output token text '2'
+ .pGreater
+  .pInteger
+  % Output token text '1'
+ .pEquals
+  .pIdentifier
+  % Output token text 'true'
+ .pEndFile

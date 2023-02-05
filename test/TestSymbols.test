@@ -1,0 +1,79 @@
+#! /bin/bash
+
+echo "---------Testing Symbols------------"
+
+echo "   '#' should emit pStrLen:"
+
+ssltrace "./ptc -t1 -o1 hash.pt" ../lib/pt/scan.def -e > hash.eOutput 2> /dev/null
+
+if [ $(grep -c '.StrLen' hash.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   '!' should emit pNot:"
+
+ssltrace "./ptc -t1 -o1 exclamation.pt" ../lib/pt/scan.def -e > exclamation.eOutput 2> /dev/null
+
+if [ $(grep -c '.pNot' exclamation.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   '?' should emit pStrIdx:"
+
+ssltrace "./ptc -t1 -o1 question.pt" ../lib/pt/scan.def -e > question.eOutput 2> /dev/null
+
+if [ $(grep -c '.pStrIdx' question.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   '$' should emit pSubStr:"
+
+ssltrace "./ptc -t1 -o1 dollar.pt" ../lib/pt/scan.def -e > dollar.eOutput 2> /dev/null
+
+if [ $(grep -c '.pSubStr' dollar.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   '=' should emit pAssignment:"
+
+ssltrace "./ptc -t1 -o1 equal.pt" ../lib/pt/scan.def -e > equal.eOutput 2> /dev/null
+
+if [ $(grep -c '.pAssignment' equal.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   '==' should emit pEquals:"
+
+ssltrace "./ptc -t1 -o1 double_equals.pt" ../lib/pt/scan.def -e > double_equals.eOutput 2> /dev/null
+
+if [ $(grep -c '.pEquals' double_equals.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   '!=' should emit pNotEqual:"
+
+ssltrace "./ptc -t1 -o1 not_equal.pt" ../lib/pt/scan.def -e > not_equal.eOutput 2> /dev/null
+
+if [ $(grep -c '.pNotEqual' not_equal.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi

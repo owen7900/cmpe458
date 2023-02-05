@@ -1,0 +1,12 @@
+  .pStringLiteral
+  % Output token text 'hello'
+ .pSubStr
+  .pInteger
+  % Output token text '1'
+ .pDotDot
+  .pInteger
+  % Output token text '2'
+ .pEquals
+  .pStringLiteral
+  % Output token text 'he'
+ .pEndFile

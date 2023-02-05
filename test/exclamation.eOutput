@@ -1,0 +1,7 @@
+ .pNot
+  .pIdentifier
+  % Output token text 'true'
+ .pEquals
+  .pIdentifier
+  % Output token text 'false'
+ .pEndFile

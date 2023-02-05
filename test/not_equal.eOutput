@@ -1,0 +1,6 @@
+  .pInteger
+  % Output token text '1'
+ .pNotEqual
+  .pInteger
+  % Output token text '2'
+ .pEndFile
