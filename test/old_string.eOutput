@@ -1,0 +1,6 @@
+ #eIllegalChar
+  .pIdentifier
+  % Output token text 'string'
+ #eIllegalChar
+ .pNewLine
+ .pEndFile

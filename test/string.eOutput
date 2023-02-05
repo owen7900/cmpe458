@@ -1,0 +1,3 @@
+  .pStringLiteral
+  % Output token text 'test string'
+ .pEndFile

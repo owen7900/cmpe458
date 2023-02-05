@@ -4,9 +4,9 @@ echo "---------Testing Strings------------"
 
 echo "   An empty string should emit a string literal: "
 
-ssltrace "./ptc -t1 -o1 empty_string.pt" ../lib/pt/scan.def -e > /tmp/empty_string.out 2> /dev/null
+ssltrace "./ptc -t1 -o1 empty_string.pt" ../lib/pt/scan.def -e > empty_string.eOutput 2> /dev/null
 
-if [ $(grep -c '\.pStringLiteral' /tmp/empty_string.out) -eq 1 ]; then
+if [ $(grep -c '\.pStringLiteral' empty_string.eOutput) -eq 1 ]; then
     echo "      SUCCESS"
 else
     echo "      FAILED"
@@ -15,10 +15,10 @@ fi
 
 echo "   A string with single quotes (Pascal-style) should not be recognized, and should emit errors: "
 
-ssltrace "./ptc -t1 -o1 old_string.pt" ../lib/pt/scan.def -e > /tmp/old_string.out 2> /dev/null
+ssltrace "./ptc -t1 -o1 old_string.pt" ../lib/pt/scan.def -e > old_string.eOutput 2> /dev/null
 
-if [ $(grep -c '\.pStringLiteral' /tmp/old_string.out) -eq 0 -a \
-        $(grep -c '#eIllegalChar' /tmp/old_string.out) -eq 2 ]; then
+if [ $(grep -c '\.pStringLiteral' old_string.eOutput) -eq 0 -a \
+        $(grep -c '#eIllegalChar' old_string.eOutput) -eq 2 ]; then
     echo "      SUCCESS"
 else
     echo "      FAILED"
@@ -27,10 +27,10 @@ fi
 
 echo "   A string with double quotes (Quby-style) should be emitted with correct buffer text: "
 
-ssltrace "./ptc -t1 -o1 string.pt" ../lib/pt/scan.def -e > /tmp/string.out 2> /dev/null
+ssltrace "./ptc -t1 -o1 string.pt" ../lib/pt/scan.def -e > string.eOutput 2> /dev/null
 
-if [ $(grep -c '\.pStringLiteral' /tmp/string.out) -eq 1 -a \
-        $(grep -c 'test string' /tmp/string.out) -eq 1 ]; then
+if [ $(grep -c '\.pStringLiteral' string.eOutput) -eq 1 -a \
+        $(grep -c 'test string' string.eOutput) -eq 1 ]; then
     echo "      SUCCESS"
 else
     echo "      FAILED"
@@ -39,9 +39,9 @@ fi
 
 echo "   An unclosed string should emit an error: "
 
-ssltrace "./ptc -t1 -o1 unclosed_string.pt" ../lib/pt/scan.def -e > /tmp/unclosed_string.out 2> /dev/null
+ssltrace "./ptc -t1 -o1 unclosed_string.pt" ../lib/pt/scan.def -e > unclosed_string.eOutput 2> /dev/null
 
-if [ $(grep -c '#eStringLiteralLine' /tmp/unclosed_string.out) -eq 1 ]; then
+if [ $(grep -c '#eStringLiteralLine' unclosed_string.eOutput) -eq 1 ]; then
     echo "      SUCCESS"
 else
     echo "      FAILED"

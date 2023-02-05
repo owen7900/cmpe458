@@ -1,0 +1,4 @@
+  .pStringLiteral
+  % Output token text ''
+ .pNewLine
+ .pEndFile
