@@ -1,0 +1,6 @@
+case x
+    when 0 then
+        write("no")
+    when 1 then
+        write("yes")
+end

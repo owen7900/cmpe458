@@ -1,0 +1,3 @@
+module math
+    val pi = 3.14159265
+end

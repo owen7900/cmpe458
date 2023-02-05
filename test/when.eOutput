@@ -1,0 +1,30 @@
+  .pIdentifier (screened to pCase)
+  .pIdentifier
+  % Output token text 'x'
+ .pNewLine
+  .pIdentifier (screened to pWhen)
+  .pInteger
+  % Output token text '0'
+  .pIdentifier (screened to pThen)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'write'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'no'
+ .pRightParen
+ .pNewLine
+  .pIdentifier (screened to pWhen)
+  .pInteger
+  % Output token text '1'
+  .pIdentifier (screened to pThen)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'write'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'yes'
+ .pRightParen
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pEndFile

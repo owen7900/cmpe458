@@ -1,0 +1,16 @@
+  .pIdentifier (screened to pDo)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'write'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'Hi'
+ .pRightParen
+ .pNewLine
+  .pIdentifier (screened to pBreak)
+  .pIdentifier (screened to pIf)
+  .pIdentifier
+  % Output token text 'true'
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pEndFile

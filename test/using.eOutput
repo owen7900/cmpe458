@@ -1,0 +1,4 @@
+  .pIdentifier (screened to pUsing)
+  .pIdentifier
+  % Output token text 'output'
+ .pEndFile

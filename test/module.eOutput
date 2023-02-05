@@ -1,0 +1,16 @@
+  .pIdentifier (screened to pModule)
+  .pIdentifier
+  % Output token text 'math'
+ .pNewLine
+  .pIdentifier (screened to pVal)
+  .pIdentifier
+  % Output token text 'pi'
+ .pAssignment
+  .pInteger
+  % Output token text '3'
+ .pDot
+  .pInteger
+  % Output token text '14159265'
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pEndFile

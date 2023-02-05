@@ -1,0 +1,90 @@
+#! /bin/bash
+
+echo "---------Testing Keywords-----------"
+
+echo "   'using' should be screened to pUsing"
+
+ssltrace "./ptc -t1 -o1 using.pt" ../lib/pt/scan.def -e > using.eOutput 2> /dev/null
+
+if [ $(grep -c 'pUsing' using.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   'val' should be screened to pVal"
+
+ssltrace "./ptc -t1 -o1 val.pt" ../lib/pt/scan.def -e > val.eOutput 2> /dev/null
+
+if [ $(grep -c 'pVal' val.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   'def' should be screened to pDef"
+
+ssltrace "./ptc -t1 -o1 def.pt" ../lib/pt/scan.def -e > def.eOutput 2> /dev/null
+
+if [ $(grep -c 'pDef' def.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   'break' should be screened to pBreak"
+
+ssltrace "./ptc -t1 -o1 break.pt" ../lib/pt/scan.def -e > break.eOutput 2> /dev/null
+
+if [ $(grep -c 'pBreak' break.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   'when' should be screened to pWhen"
+
+ssltrace "./ptc -t1 -o1 when.pt" ../lib/pt/scan.def -e > when.eOutput 2> /dev/null
+
+if [ $(grep -c 'pWhen' when.eOutput) -eq 2 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   'module' should be screened to pModule"
+
+ssltrace "./ptc -t1 -o1 module.pt" ../lib/pt/scan.def -e > module.eOutput 2> /dev/null
+
+if [ $(grep -c 'pModule' module.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   'unless' should be screened to pUnless"
+
+ssltrace "./ptc -t1 -o1 unless.pt" ../lib/pt/scan.def -e > unless.eOutput 2> /dev/null
+
+if [ $(grep -c 'pUnless' unless.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   'elsif' should be screened to pElsIf"
+
+ssltrace "./ptc -t1 -o1 elsif.pt" ../lib/pt/scan.def -e > elsif.eOutput 2> /dev/null
+
+if [ $(grep -c 'pElsIf' elsif.eOutput) -eq 3 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi

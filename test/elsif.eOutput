@@ -1,0 +1,71 @@
+  .pIdentifier (screened to pIf)
+  .pIdentifier
+  % Output token text 'x'
+ .pGreater
+  .pInteger
+  % Output token text '80'
+  .pIdentifier (screened to pThen)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'write'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'A'
+ .pRightParen
+ .pNewLine
+  .pIdentifier (screened to pElsIf)
+  .pIdentifier
+  % Output token text 'x'
+ .pGreater
+  .pInteger
+  % Output token text '70'
+  .pIdentifier (screened to pThen)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'write'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'B'
+ .pRightParen
+ .pNewLine
+  .pIdentifier (screened to pElsIf)
+  .pIdentifier
+  % Output token text 'x'
+ .pGreater
+  .pInteger
+  % Output token text '60'
+  .pIdentifier (screened to pThen)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'write'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'C'
+ .pRightParen
+ .pNewLine
+  .pIdentifier (screened to pElsIf)
+  .pIdentifier
+  % Output token text 'x'
+ .pGreater
+  .pInteger
+  % Output token text '50'
+  .pIdentifier (screened to pThen)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'write'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'D'
+ .pRightParen
+ .pNewLine
+  .pIdentifier (screened to pElse)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'write'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'F'
+ .pRightParen
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pEndFile

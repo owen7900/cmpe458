@@ -1,0 +1,7 @@
+  .pIdentifier (screened to pVal)
+  .pIdentifier
+  % Output token text 'myconstant'
+ .pAssignment
+  .pInteger
+  % Output token text '42'
+ .pEndFile

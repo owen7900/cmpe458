@@ -1,0 +1,4 @@
+do
+    write("Hi")
+    break if true
+end

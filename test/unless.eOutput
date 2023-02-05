@@ -1,0 +1,17 @@
+  .pIdentifier (screened to pUnless)
+  .pIdentifier
+  % Output token text 'x'
+ .pGreater
+  .pInteger
+  % Output token text '5'
+  .pIdentifier (screened to pThen)
+ .pNewLine
+  .pIdentifier
+  % Output token text 'write'
+ .pLeftParen
+  .pStringLiteral
+  % Output token text 'test'
+ .pRightParen
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pEndFile

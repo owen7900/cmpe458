@@ -1,0 +1,28 @@
+  .pIdentifier (screened to pDef)
+  .pIdentifier
+  % Output token text 'square'
+ .pLeftParen
+  .pIdentifier
+  % Output token text 'num'
+ .pColon
+  .pIdentifier
+  % Output token text 'integer'
+ .pComma
+  .pIdentifier
+  % Output token text 'result'
+ .pColon
+  .pIdentifier
+  % Output token text 'integer'
+ .pRightParen
+ .pNewLine
+  .pIdentifier
+  % Output token text 'result'
+ .pAssignment
+  .pIdentifier
+  % Output token text 'num'
+ .pStar
+  .pIdentifier
+  % Output token text 'num'
+ .pNewLine
+  .pIdentifier (screened to pEnd)
+ .pEndFile

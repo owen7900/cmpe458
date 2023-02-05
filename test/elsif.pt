@@ -1,0 +1,11 @@
+if x > 80 then
+    write("A")
+elsif x > 70 then
+    write("B")
+elsif x > 60 then
+    write("C")
+elsif x > 50 then
+    write("D")
+else
+    write("F")
+end
