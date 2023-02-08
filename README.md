@@ -26,6 +26,48 @@ See the README there for installation information.
 
 # TODO 
 
+## Phase 2
+- Tokens
+   - Remove old parser output tokens --- sRepeatStmt, sRepeatEnd
+   - Add new parser output tokens    --- sPublic, sModule, sDoStmt, sBreakIf, sSubstring, sLength, sIndex
+- change main perser loop to allow delcarations and statements to be intermixed
+   - keep begin .... end statement
+- Modify parsing of constant, type and variable declarations
+- Routines (procedures)
+   - Public vs private functions
+   - emit begin ... end
+- Modules
+   - parse input to output required modules and thier requirements
+- Statements
+   - modify the parsing of `if`, `case`, `while`, `repeat`, and `begin` to meet the lang spec for Quby's `if`, `unless`, `case`, and `do`
+   - for `if` and `case` the goal is to have the output token stream match that of PTPascal
+- Unless Statements 
+   - make them look like `if not` 
+- Case Statements 
+   - output should look the same as PTPascal --- using `sCase`, `sLabelEnd` and `sCaseEnd`
+   - Re-use the the main block rule in here
+   - add else statements 
+- Elsif Clauses
+   - We can either create `sElsif` and modify the semandtic phase or look like a nested set of if statements
+   - I think we want the `sElsif` option
+- Do Statements
+   - remove the `repeat` statement add handling of the `do` statement
+   - Should use `sDo` to mark the beginning of the do statement
+   - Should use the `sBreakIf` token for `break if`
+- The String type
+   - remove handling of the `char` type 
+   - add handline of the `string` type
+   - add handling of new operators `$` `?` `#` 
+   - the `?` operator should have same precedence as the `*` operator
+   - the `#` operator should have same precedence as not
+   - the `$` operator requires adding a new level of precedence
+   - Handle the fact that `$` operator requires 3 operators
+- Other minor little details
+   - `:=`
+   - `==`
+   - `!=` 
+   - `!`
+
 ## Phase 1
 - Figure out how to automate testing of just the scanner/screener
    - using `ptc -t1` or `ptc -o1` will just invoke the screener/scanner
