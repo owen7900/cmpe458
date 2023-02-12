@@ -30,7 +30,7 @@ See the README there for installation information.
 - Tokens
    - Remove old parser output tokens --- sRepeatStmt, sRepeatEnd
    - Add new parser output tokens    --- sPublic, sModule, sDoStmt, sBreakIf, sSubstring, sLength, sIndex
-- change main perser loop to allow delcarations and statements to be intermixed
+- change main perser loop to allow delcarations and statements to be intermixed -- In Progress
    - keep begin .... end statement
 - Modify parsing of constant, type and variable declarations
 - Routines (procedures)
