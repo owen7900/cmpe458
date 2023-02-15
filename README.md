@@ -27,10 +27,10 @@ See the README there for installation information.
 # TODO 
 
 ## Phase 2
-- Tokens
+- Tokens -- DONE Matthew Thompson
    - Remove old parser output tokens --- sRepeatStmt, sRepeatEnd
    - Add new parser output tokens    --- sPublic, sModule, sDoStmt, sBreakIf, sSubstring, sLength, sIndex
-- change main perser loop to allow delcarations and statements to be intermixed
+- change main parser loop to allow declarations and statements to be intermixed
    - keep begin .... end statement
 - Modify parsing of constant, type and variable declarations
 - Routines (procedures)
