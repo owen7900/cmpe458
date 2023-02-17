@@ -22,27 +22,34 @@ Input :
         pMod                    'mod'
         pOr                     'or'
         pAnd                    'and'
-        pThen                   'then'
+      % pNot                    'not' % REMOVED
+        pThen                   'then' 
         pElse                   'else'
         pOf                     'of'
         pEnd                    'end'
+      % pUntil                  'until' % REMOVED
         pDo                     'do'
         pArray                  'array'
         pFile                   'file'
+      % pProgram                'program' % REMOVED
+      % pConst                  'const' % REMOVED
         pVar                    'var'
         pType                   'type'
+      % pProcedure              'procedure' % REMOVED
+      % pBegin                  'begin' % REMOVED
         pIf                     'if'
-        pElsIf                  'elsif'
-        pUnless                 'unless'
+        pElsIf                  'elsif' % ADDED
+        pUnless                 'unless' % ADDED
         pCase                   'case'
         pWhile                  'while'
-        pBreak                  'break'
-        pModule                 'module'
-        pUsing                  'using'
-        pVal                    'val'
-        pWhen                   'when'
-        pDef                    'def'
-        lastKeywordToken = pDef
+        pBreak                  'break' % ADDED
+        pModule                 'module' % ADDED
+        pUsing                  'using' % ADDED
+        pVal                    'val' % ADDED
+        pWhen                   'when' % ADDED
+        pDef                    'def' % ADDED
+      % pRepeat                 'repeat' % REMOVED
+        lastKeywordToken = pDef % CHANGED
 
         % Scanner tokens -
         %   These are the tokens actually recognized by the Scanner itself.
@@ -62,13 +69,13 @@ Input :
         pPlus                   '+'
         pMinus                  '-'
         pStar                   '*'
-        pAssignment             '='
+        pAssignment             '=' % CHANGED
         pDot                    '.'
         pComma                  ','
         pSemicolon              ';'
         pColon                  ':'
-        pEquals                 '=='
-        pNotEqual               '!='
+        pEquals                 '==' % CHANGED
+        pNotEqual               '!=' % CHANGED
         pLess                   '<'
         pLessEqual              '<='
         pGreaterEqual           '>='
@@ -77,12 +84,12 @@ Input :
         pRightParen             ')'
         pLeftBracket            '['
         pRightBracket           ']'
-        pLeftBrace              '{'
-        pRightBrace             '}'
-        pSubStr                 '$'
-        pStrLen                 '#'
-        pStrIdx                 '?'
-        pNot                    '!'
+        pLeftBrace              '{' % ADDED
+        pRightBrace             '}' % ADDED
+        pSubStr                 '$' % ADDED
+        pStrLen                 '#' % ADDED
+        pStrIdx                 '?' % ADDED
+        pNot                    '!' % ADDED
         pDotDot                 '..'
         lastSyntaxToken = pDotDot;
 
@@ -101,8 +108,8 @@ Output :
         sType
         sVar
         sProcedure
-        sPublic
-        sModule
+        sPublic  % ADDED
+        sModule  % ADDED
         sBegin
         sEnd
         sNegate
@@ -122,8 +129,10 @@ Output :
         sThen
         sElse
         sWhileStmt
-        sDoStmt
-        sBreakIf
+      % sRepeatStmt % REMOVED
+      % sRepeatEnd % REMOVED
+        sDoStmt % ADDED
+        sBreakIf % ADDED
         sEq
         sNE
         sLT
@@ -140,9 +149,9 @@ Output :
         sInfixAnd
         sAnd
         sNot
-        sSubstring
-        sLength
-        sIndex
+        sSubstring % ADDED
+        sLength % ADDED
+        sIndex % ADDED
         sNewLine
         sEndOfFile
         lastSemanticToken = sEndOfFile;
@@ -152,7 +161,10 @@ rules
 
 Program :
         'using'  .sProgram
+        % program name
+      % pIdentifier % REMOVED
         % program parameters
+      % '(' % REMOVED
         {
             pIdentifier  .sIdentifier
             [
@@ -161,8 +173,9 @@ Program :
                     >
             ]
         }
+      % ')' % REMOVED
         .sParmEnd
-        @Block;
+        @Block; % CHANGED
 
 Block :
         % Strictly speaking, standard Pascal requires that declarations
@@ -170,7 +183,7 @@ Block :
         % We allow arbitrary intermixing of these instead to preserve
         % programmer sanity.
         {[
-            | 'val':
+            | 'val': % CHANGED
                 .sConst
                 @ConstantDefinitions
             | 'type':
@@ -179,7 +192,7 @@ Block :
             | 'var':
                 .sVar
                 @VariableDeclarations
-            | 'def':
+            | 'def': % CHANGED
                 .sProcedure
                 % procedure name
                 pIdentifier  .sIdentifier
@@ -188,6 +201,7 @@ Block :
             | *:
                 >
         ]}
+      % 'begin' % REMOVED
         @BeginStmt;
 
 ConstantDefinitions :
@@ -323,21 +337,23 @@ Statement :
         [
             | pIdentifier:
                 @AssignmentOrCallStmt
+          % | 'begin':     % REMOVED
+          %     @BeginStmt % REMOVED
             | 'if':
                 @IfStmt
             | 'while':
                 @WhileStmt
             | 'case':
                 @CaseStmt
-            | 'do':
-                @DoStmt
+            | 'do': % CHANGED
+                @DoStmt % CHANGED
             | *:
                 .sNullStmt
         ];
 
 AssignmentOrCallStmt :
         [
-            | '=':
+            | '=': % CHANGED
                 .sAssignmentStmt
                 .sIdentifier    % identifier accepted in the Statement rule
                 @Expression
@@ -348,7 +364,7 @@ AssignmentOrCallStmt :
                 .sSubscript
                 @Expression
                 .sExpnEnd
-                ']'  '='
+                ']'  '=' % CHANGED
                 @Expression
                 .sExpnEnd
             | *:
@@ -453,25 +469,30 @@ WhileStmt :
         'do'
         @Statement;
 
-DoStmt :
-        .sDoStmt
+DoStmt : % CHANGED
+        .sDoStmt % CHANGED
         {
             @Statement
             [
                 | ';':
-                | 'break':
-                    'if' .sBreakIf @Expression .sExpnEnd
-                | 'end':
+                | 'break': % ADDED
+                    'if' .sBreakIf @Expression .sExpnEnd % ADDED
+              % | 'until':      % REMOVED
+              %     .sRepeatEnd % REMOVED
+                | 'end': % ADDED
                     >
             ]
-        };
+      % }           % REMOVED
+      % @Expression % REMOVED
+      % .sExpnEnd;  % REMOVED
+        }; % ADDED
 
 Expression :
         @SimpleExpression
         [
-            | '==':
+            | '==': % CHANGED
                 @SimpleExpression  .sEq
-            | '!=':
+            | '!=': % CHANGED
                 @SimpleExpression  .sNE
             | '<':
                 @SimpleExpression  .sLT
@@ -528,7 +549,7 @@ Factor :
                 .sInteger
             | '(':
                 @Expression  ')'
-            | '!':
+            | '!': % CHANGED
                 @Factor
                 .sNot
             | pStringLiteral:
