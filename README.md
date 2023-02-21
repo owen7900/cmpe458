@@ -32,7 +32,7 @@ See the README there for installation information.
    - Add new parser output tokens    --- sPublic, sModule, sDoStmt, sBreakIf, sSubstring, sLength, sIndex
 - change main parser loop to allow declarations and statements to be intermixed -- DONE Matthew Thompson
    - keep begin .... end statement
-- Modify parsing of constant, type and variable declarations
+- Modify parsing of constant, type and variable declarations -- DONE Matthew Thompson
 - Routines (procedures)
    - Public vs private functions
    - emit begin ... end

@@ -219,14 +219,14 @@ Block :
 ConstantDefinitions :
         % Accept one or more named constant definitions
         pIdentifier  .sIdentifier
-        '=' @ConstantValue ';'
-        {[
-            | pIdentifier:
-                .sIdentifier
-                '=' @ConstantValue ';'
-            | *:
-                >
-        ]};
+        '=' @ConstantValue; % CHANGED
+        % {[ % REMOVED LOOP
+        %     | pIdentifier:
+        %         .sIdentifier
+        %         '=' @ConstantValue ';'
+        %     | *:
+        %         >
+        % ]};
 
 ConstantValue :
         [
@@ -254,14 +254,14 @@ UnsignedIntegerConstant :
 TypeDefinitions :
         % Accept one or more named type definitions.
         pIdentifier  .sIdentifier
-        '='  @TypeBody  ';'
-        {[
-            | pIdentifier:
-                .sIdentifier
-                '='  @TypeBody  ';'
-            | *:
-                >
-        ]};
+        ':'  @TypeBody; % CHANGED
+        % {[ % REMOVED LOOP
+        %     | pIdentifier:
+        %         .sIdentifier
+        %         '='  @TypeBody  ';'
+        %     | *:
+        %         >
+        % ]};
 
 TypeBody :
         [
@@ -308,14 +308,21 @@ OptionallySignedIntegerConstant :
 VariableDeclarations :
         % Accept one or more variable declarations.
         pIdentifier  .sIdentifier
-        ':'  @TypeBody  ';'
-        {[
-            | pIdentifier:
-                .sIdentifier
-                ':'  @TypeBody  ';'
+        {[ % ADDED LOOP
+            | ',':
+                .sVar  pIdentifier  .sIdentifier
             | *:
                 >
-        ]};
+        ]}
+        ':'  @TypeBody; % ADDED
+        % ':'  @TypeBody  ';' % REMOVED
+        % {[ % REMOVED LOOP
+        %     | pIdentifier:
+        %         .sIdentifier
+        %         ':'  @TypeBody  ';'
+        %     | *:
+        %         >
+        % ]};
 
 ProcedureHeading :
         % Accept zero or more procedure formal parameter declarations.
