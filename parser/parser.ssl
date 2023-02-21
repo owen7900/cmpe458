@@ -182,6 +182,7 @@ Block :
         % appear only in the order consts, types, vars, procedures.
         % We allow arbitrary intermixing of these instead to preserve
         % programmer sanity.
+        .sBegin % ADDED
         {[
             | 'val': % CHANGED
                 .sConst
@@ -198,11 +199,22 @@ Block :
                 pIdentifier  .sIdentifier
                 @ProcedureHeading
                 @Block  ';'
+            | pIdentifier:            % ADDED (start)
+                @AssignmentOrCallStmt
+            | 'if':
+                @IfStmt
+            | 'while':
+                @WhileStmt
+            | 'case':
+                @CaseStmt
+            | 'do':
+                @DoStmt               % ADDED (end)
             | *:
                 >
         ]}
+        .sEnd; % ADDED
       % 'begin' % REMOVED
-        @BeginStmt;
+      % @BeginStmt; % REMOVED
 
 ConstantDefinitions :
         % Accept one or more named constant definitions
@@ -333,23 +345,23 @@ ProcedureHeading :
         ';'
         .sParmEnd;
 
-Statement :
-        [
-            | pIdentifier:
-                @AssignmentOrCallStmt
-          % | 'begin':     % REMOVED
-          %     @BeginStmt % REMOVED
-            | 'if':
-                @IfStmt
-            | 'while':
-                @WhileStmt
-            | 'case':
-                @CaseStmt
-            | 'do': % CHANGED
-                @DoStmt % CHANGED
-            | *:
-                .sNullStmt
-        ];
+% Statement : % REMOVED RULE
+%         [
+%             | pIdentifier:
+%                 @AssignmentOrCallStmt
+%             | 'begin':
+%                 @BeginStmt
+%             | 'if':
+%                 @IfStmt
+%             | 'while':
+%                 @WhileStmt
+%             | 'case':
+%                 @CaseStmt
+%             | 'repeat':
+%                 @RepeatStmt
+%             | *:
+%                 .sNullStmt
+%         ];
 
 AssignmentOrCallStmt :
         [
@@ -400,28 +412,28 @@ CallStmt :
         ]
         .sParmEnd;
 
-BeginStmt :
-        .sBegin
-        {
-            @Statement
-            [
-                | ';':
-                | 'end':
-                    .sEnd
-                    >
-            ]
-        };
+% BeginStmt : % REMOVED RULE
+%         .sBegin
+%         {
+%             @Statement
+%             [
+%                 | ';':
+%                 | 'end':
+%                     .sEnd
+%                     >
+%             ]
+%         };
 
 IfStmt :
         .sIfStmt
         @Expression
         .sExpnEnd
         'then'  .sThen
-        @Statement
+        @Block % CHANGED
         [
             | 'else':
                 .sElse
-                @Statement
+                @Block % CHANGED
             | *:
         ];
 
@@ -460,32 +472,35 @@ CaseAlternative :
             ]
         }
         .sLabelEnd
-        ':'  @Statement;
+        ':'  @Block; % CHANGED
 
 WhileStmt :
         .sWhileStmt
         @Expression
         .sExpnEnd
         'do'
-        @Statement;
+        @Block; % CHANGED
 
-DoStmt : % CHANGED
-        .sDoStmt % CHANGED
-        {
-            @Statement
-            [
-                | ';':
-                | 'break': % ADDED
-                    'if' .sBreakIf @Expression .sExpnEnd % ADDED
-              % | 'until':      % REMOVED
-              %     .sRepeatEnd % REMOVED
-                | 'end': % ADDED
-                    >
-            ]
-      % }           % REMOVED
-      % @Expression % REMOVED
-      % .sExpnEnd;  % REMOVED
-        }; % ADDED
+% RepeatStmt : % REMOVED RULE
+%         .sRepeatStmt
+%         {
+%             @Statement
+%             [
+%                 | ';':
+%                 | 'until':
+%                     .sRepeatEnd
+%                     >
+%             ]
+%         }
+%         @Expression
+%         .sExpnEnd;
+
+DoStmt : % ADDED RULE
+        .sDoStmt
+        @Block
+        'break' 'if' .sBreakIf @Expression .sExpnEnd
+        @Block
+        'end';
 
 Expression :
         @SimpleExpression

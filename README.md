@@ -30,7 +30,7 @@ See the README there for installation information.
 - Tokens -- DONE Matthew Thompson
    - Remove old parser output tokens --- sRepeatStmt, sRepeatEnd
    - Add new parser output tokens    --- sPublic, sModule, sDoStmt, sBreakIf, sSubstring, sLength, sIndex
-- change main parser loop to allow declarations and statements to be intermixed
+- change main parser loop to allow declarations and statements to be intermixed -- DONE Matthew Thompson
    - keep begin .... end statement
 - Modify parsing of constant, type and variable declarations
 - Routines (procedures)
@@ -50,9 +50,10 @@ See the README there for installation information.
 - Elsif Clauses
    - We can either create `sElsif` and modify the semandtic phase or look like a nested set of if statements
    - I think we want the `sElsif` option
-- Do Statements
+- Do Statements -- DONE Matthew Thompson
    - remove the `repeat` statement add handling of the `do` statement
    - Should use `sDo` to mark the beginning of the do statement
+      - *Note: Tokens section of assignment said to add `sDoStmt`, not `sDo`. Currently using `sDoStmt`*
    - Should use the `sBreakIf` token for `break if`
 - The String type
    - remove handling of the `char` type 
