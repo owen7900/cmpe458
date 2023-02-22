@@ -33,11 +33,11 @@ See the README there for installation information.
 - change main parser loop to allow declarations and statements to be intermixed -- DONE Matthew Thompson
    - keep begin .... end statement
 - Modify parsing of constant, type and variable declarations -- DONE Matthew Thompson
-- Routines (procedures)
+- Routines (procedures) -- DONE Matthew Thompson
    - Public vs private functions
    - emit begin ... end
-- Modules
-   - parse input to output required modules and thier requirements
+- Modules -- DONE Matthew Thompson
+   - parse input to output required modules and their requirements
 - Statements
    - modify the parsing of `if`, `case`, `while`, `repeat`, and `begin` to meet the lang spec for Quby's `if`, `unless`, `case`, and `do`
    - for `if` and `case` the goal is to have the output token stream match that of PTPascal

@@ -196,19 +196,29 @@ Block :
             | 'def': % CHANGED
                 .sProcedure
                 % procedure name
-                pIdentifier  .sIdentifier
+                [ % ADDED CHOICE
+                    | '*':
+                        pIdentifier  .sIdentifier  .sPublic
+                    | *:
+                        pIdentifier  .sIdentifier
+                ]
+              % pIdentifier  .sIdentifier % REMOVED
                 @ProcedureHeading
-                @Block  ';'
-            | pIdentifier:            % ADDED (start)
+                @Block  'end' % CHANGED
+            | 'module': % ADDED CHOICE OPTION
+                .sModule
+                pIdentifier  .sIdentifier
+                @Block  'end'
+            | pIdentifier: % ADDED CHOICE OPTION
                 @AssignmentOrCallStmt
-            | 'if':
+            | 'if': % ADDED CHOICE OPTION
                 @IfStmt
-            | 'while':
+            | 'while': % ADDED CHOICE OPTION
                 @WhileStmt
-            | 'case':
+            | 'case': % ADDED CHOICE OPTION
                 @CaseStmt
-            | 'do':
-                @DoStmt               % ADDED (end)
+            | 'do': % ADDED CHOICE OPTION
+                @DoStmt
             | *:
                 >
         ]}
@@ -326,8 +336,10 @@ VariableDeclarations :
 
 ProcedureHeading :
         % Accept zero or more procedure formal parameter declarations.
-        [
-            | '(':
+        '(' % ADDED
+        [ % ADDED CHOICE
+            | ')':
+            | *:
                 {
                     % formal parameter identifier
                     [
@@ -341,15 +353,37 @@ ProcedureHeading :
                     % type identifier
                     pIdentifier  .sIdentifier
                     [
-                        | ';':
+                        | ',':
                         | *:
                             >
                     ]
                 }
                 ')'
-            | *:
         ]
-        ';'
+        % [ % REMOVED CHOICE
+        %     | '(':
+        %         {
+        %             % formal parameter identifier
+        %             [
+        %                 | 'var':
+        %                     pIdentifier  .sIdentifier
+        %                     .sVar
+        %                 | *:
+        %                     pIdentifier  .sIdentifier
+        %             ]
+        %             ':'
+        %             % type identifier
+        %             pIdentifier  .sIdentifier
+        %             [
+        %                 | ';':
+        %                 | *:
+        %                     >
+        %             ]
+        %         }
+        %         ')'
+        %     | *:
+        % ]
+        % ';' % REMOVED
         .sParmEnd;
 
 % Statement : % REMOVED RULE
