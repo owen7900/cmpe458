@@ -483,8 +483,8 @@ IfStmt :
                 .sElse
                 @Block 'end' .sEnd % CHANGED
             | *:
-        ];
-        'end'   % ADDED
+        ]
+        'end';   % ADDED
 
 Unless :                    % ADDED RULE
         .sIfStmt

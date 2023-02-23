@@ -41,6 +41,8 @@ See the README there for installation information.
 - Statements
    - modify the parsing of `if`, `case`, `while`, `repeat`, and `begin` to meet the lang spec for Quby's `if`, `unless`, `case`, and `do`
    - for `if` and `case` the goal is to have the output token stream match that of PTPascal
+- If Statements -- DONE Alan
+   - Implemented elsif in the nested method
 - Unless Statements -- DONE Alan
    - make them look like `if not` 
 - Case Statements -- DONE Alan
