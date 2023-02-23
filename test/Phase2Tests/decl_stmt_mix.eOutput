@@ -28,7 +28,6 @@
       .sIdentifier
       .sParmEnd
    % .sNewLine
-   .sEnd
   .sVar
    .sIdentifier
      % .sNewLine
