@@ -27,7 +27,7 @@ See the README there for installation information.
 # TODO 
 
 ## Phase 2
-- Tokens -- DONE Matthew Thompson
+- Tokens -- DONE Matthew Thompson -- TESTS DONE Owen Hooper
    - Remove old parser output tokens --- sRepeatStmt, sRepeatEnd
    - Add new parser output tokens    --- sPublic, sModule, sDoStmt, sBreakIf, sSubstring, sLength, sIndex
 - change main parser loop to allow declarations and statements to be intermixed -- DONE Matthew Thompson

@@ -149,7 +149,7 @@ Output :
         sInfixAnd
         sAnd
         sNot
-        sSubstring % ADDED
+        sSubStr % ADDED
         sLength % ADDED
         sIndex % ADDED
         sNewLine
@@ -175,7 +175,8 @@ Program :
         }
       % ')' % REMOVED
         .sParmEnd
-        @Block; % CHANGED
+        @Block % CHANGED
+        'end' .sEnd;
 
 Block :
         % Strictly speaking, standard Pascal requires that declarations
@@ -204,11 +205,11 @@ Block :
                 ]
               % pIdentifier  .sIdentifier % REMOVED
                 @ProcedureHeading
-                @Block  'end' % CHANGED
+                @Block 'end' .sEnd % CHANGED
             | 'module': % ADDED CHOICE OPTION
                 .sModule
                 pIdentifier  .sIdentifier
-                @Block  'end'
+                @Block  'end' .sEnd
             | pIdentifier: % ADDED CHOICE OPTION
                 @AssignmentOrCallStmt
             | 'if': % ADDED CHOICE OPTION
@@ -223,8 +224,7 @@ Block :
                 @DoStmt
             | *:
                 >
-        ]}
-        .sEnd; % ADDED
+        ]};
       % 'begin' % REMOVED
       % @BeginStmt; % REMOVED
 
@@ -481,10 +481,10 @@ IfStmt :
                 .sEnd
             | 'else':
                 .sElse
-                @Block % CHANGED
+                @Block 'end' .sEnd % CHANGED
             | *:
         ];
-        'end'    % ADDED
+        'end'   % ADDED
 
 Unless :                    % ADDED RULE
         .sIfStmt
@@ -496,7 +496,7 @@ Unless :                    % ADDED RULE
         [
             | 'else':
                 .sElse
-                @Block
+                @Block 'end' .sEnd
             | *:
         ]
         'end';
@@ -515,7 +515,7 @@ CaseStmt :
         ]}
         [ % ADDED CHOICE
             | 'else':
-                .sElse  @Block
+                .sElse  @Block 'end' .sEnd
             | *:
         ]
         % {[ % REMOVED LOOP
@@ -548,14 +548,14 @@ CaseAlternative :
         }
         'then'  % ADDED
         %.sLabelEnd  % REMOVED
-        @Block; % CHANGED
+        @Block 'end' .sEnd; % CHANGED
 
 WhileStmt :
         .sWhileStmt
         @Expression
         .sExpnEnd
         'do'
-        @Block; % CHANGED
+        @Block 'end' .sEnd; % CHANGED
 
 % RepeatStmt : % REMOVED RULE
 %         .sRepeatStmt
@@ -576,7 +576,7 @@ DoStmt : % ADDED RULE
         @Block
         'break' 'if' .sBreakIf @Expression .sExpnEnd
         @Block
-        'end';
+        'end' .sEnd;
 
 Expression :
         @SimpleExpression

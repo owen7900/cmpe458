@@ -1,0 +1,74 @@
+@Program
+ ?pUsing (pUsing)
+ .sProgram
+ ?pIdentifier (pIdentifier)
+ % .sNewLine
+ .sIdentifier
+ [ (pModule)
+ | *:
+ ] or >
+ .sParmEnd
+ @Block
+  .sBegin
+  [ (pModule)
+  | pModule:
+  .sModule
+  ?pIdentifier (pIdentifier)
+  scan/parse error, line 2: illegal character - deleted
+  .sIdentifier
+  @Block
+   .sBegin
+   [ (pIdentifier)
+   | pIdentifier:
+   scan/parse error, line 2: illegal character - deleted
+   @AssignmentOrCallStmt
+    [ (pIdentifier)
+    | *:
+    @CallStmt
+     .sCallStmt
+     .sIdentifier
+     [ (pIdentifier)
+     | *:
+     .sParmEnd
+     >>
+    ;CallStmt
+    >>
+   ;AssignmentOrCallStmt
+   ] or >
+   }
+   [ (pIdentifier)
+   | pIdentifier:
+   scan/parse error, line 2: illegal character - deleted
+   @AssignmentOrCallStmt
+    [ (pEnd)
+    | *:
+    @CallStmt
+     .sCallStmt
+     .sIdentifier
+     [ (pEnd)
+     | *:
+     .sParmEnd
+     >>
+    ;CallStmt
+    >>
+   ;AssignmentOrCallStmt
+   ] or >
+   }
+   [ (pEnd)
+   | *:
+   ] or >
+   >>
+  ;Block
+  ?pEnd (pEnd)
+  % .sNewLine
+  .sEnd
+  ] or >
+  }
+  [ (pEndFile)
+  | *:
+  ] or >
+  >>
+ ;Block
+ ?pEnd (pEndFile)
+ scan/parse error, line 3: unexpected end of file
+ translation aborted
