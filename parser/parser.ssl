@@ -149,7 +149,7 @@ Output :
         sInfixAnd
         sAnd
         sNot
-        sSubStr % ADDED
+        sSubstring % ADDED
         sLength % ADDED
         sIndex % ADDED
         sNewLine
@@ -175,8 +175,7 @@ Program :
         }
       % ')' % REMOVED
         .sParmEnd
-        @Block % CHANGED
-        'end' ;
+        @Block; % CHANGED
 
 Block :
         % Strictly speaking, standard Pascal requires that declarations
@@ -223,10 +222,12 @@ Block :
                 @CaseStmt
             | 'do': % ADDED CHOICE OPTION
                 @DoStmt
+            | ';': % ADDED CHOICE OPTION (null statement)
+                .sNullStmt
             | *:
                 >
         ]}
-        .sEnd;
+        .sEnd; % ADDED
       % 'begin' % REMOVED
       % @BeginStmt; % REMOVED
 
@@ -498,7 +499,7 @@ Unless :                    % ADDED RULE
         [
             | 'else':
                 .sElse
-                @Block 'end' 
+                @Block
             | *:
         ]
         'end';
@@ -517,7 +518,7 @@ CaseStmt :
         ]}
         [ % ADDED CHOICE
             | 'else':
-                .sElse  @Block 'end'
+                .sElse  @Block
             | *:
         ]
         % {[ % REMOVED LOOP
@@ -550,7 +551,7 @@ CaseAlternative :
         }
         'then'  % ADDED
         %.sLabelEnd  % REMOVED
-        @Block 'end' ; % CHANGED
+        @Block; % CHANGED
 
 WhileStmt :
         .sWhileStmt
@@ -619,16 +620,27 @@ SimpleExpression :
         ]};
 
 Term :
-        @Factor
+        @Subfactor % CHANGED
         {[
             | '*':
-                @Factor  .sMultiply
+                @Subfactor  .sMultiply % CHANGED
             | 'div':
-                @Factor  .sDivide
+                @Subfactor  .sDivide % CHANGED
             | 'mod':
-                @Factor  .sModulus
+                @Subfactor  .sModulus % CHANGED
             | 'and':
-                .sInfixAnd  @Factor  .sAnd
+                .sInfixAnd  @Subfactor  .sAnd % CHANGED
+            | '?': % ADDED CHOICE OPTION
+                @Subfactor  .sIndex
+            | *:
+                >
+        ]};
+
+Subfactor : % ADDED RULE
+        @Factor
+        {[
+            | '$':
+                @Factor  '..'  @Factor  .sSubstring
             | *:
                 >
         ]};
@@ -645,6 +657,9 @@ Factor :
             | '!': % CHANGED
                 @Factor
                 .sNot
+            | '#': % ADDED CHOICE OPTION
+                @Factor
+                .sLength
             | pStringLiteral:
                 .sStringLiteral
             | 'file':

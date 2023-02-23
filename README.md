@@ -57,7 +57,7 @@ See the README there for installation information.
    - Should use `sDo` to mark the beginning of the do statement
       - *Note: Tokens section of assignment said to add `sDoStmt`, not `sDo`. Currently using `sDoStmt`*
    - Should use the `sBreakIf` token for `break if`
-- The String type
+- The String type -- DONE Matthew Thompson
    - remove handling of the `char` type 
    - add handline of the `string` type
    - add handling of new operators `$` `?` `#` 
