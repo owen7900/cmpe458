@@ -214,6 +214,7 @@ Block :
                 @AssignmentOrCallStmt
             | 'if': % ADDED CHOICE OPTION
                 @IfStmt
+                'end'
             | 'unless': % ADDED CHOICE OPTION
                 @Unless
             | 'while': % ADDED CHOICE OPTION
@@ -482,10 +483,10 @@ IfStmt :
                 .sEnd
             | 'else':
                 .sElse
-                @Block 'end' % CHANGED
+                @Block % CHANGED
             | *:
         ]
-        'end' ;   % ADDED
+        ;
 
 Unless :                    % ADDED RULE
         .sIfStmt
