@@ -1,3 +1,10 @@
+# Phase 2
+## parser.ssl
+TODO
+
+## parser.pt
+- Pasted contents of `parser.def` (lines 190-352)
+
 # Phase 1
 ## scan.ssl
 - Added input tokens for `%`, `$`, `#`, `?` and `!` (line 28-42)
