@@ -213,6 +213,8 @@ Block :
                 @AssignmentOrCallStmt
             | 'if': % ADDED CHOICE OPTION
                 @IfStmt
+            | pUnless:
+                @Unless
             | 'while': % ADDED CHOICE OPTION
                 @WhileStmt
             | 'case': % ADDED CHOICE OPTION
@@ -478,11 +480,25 @@ IfStmt :
             | *:
         ];
 
+Unless :                    % ADDED RULE
+        .sIfStmt
+        @Expression
+        .sNot
+        .sExpnEnd
+        'then'  .sThen
+        @Block
+        [
+            | 'else':
+                .sElse
+                @Block
+            | *:
+        ];
+
 CaseStmt :
         .sCaseStmt
         @Expression
         .sExpnEnd
-        'of'
+        %'of'           % REMOVED
         @CaseAlternative
         {[
             | ';':
@@ -503,7 +519,12 @@ CaseStmt :
 CaseAlternative :
         % A case alternative is a statement labelled by
         % one or more optionally signed integer constants
-
+        {[  % ADDED OPTIONS
+            | 'else':
+                .sElse
+            | 'when':
+                >
+        ]}
         {
             @OptionallySignedIntegerConstant
             [
@@ -512,8 +533,9 @@ CaseAlternative :
                     >
             ]
         }
-        .sLabelEnd
-        ':'  @Block; % CHANGED
+        'then'  % ADDED
+        %.sLabelEnd  % REMOVED
+        @Block; % CHANGED
 
 WhileStmt :
         .sWhileStmt
