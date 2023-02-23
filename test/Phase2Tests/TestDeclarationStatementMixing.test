@@ -1,0 +1,70 @@
+#! /bin/bash
+
+echo "---------Testing Declarations and Statements------------"
+
+echo "   'val' should emit .sConst"
+
+ssltrace "./ptc -t2 -o2 const.pt" ../../lib/pt/parser.def -e > const.eOutput 2> /dev/null
+
+if [ $(grep -c '.sConst' const.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+echo "   'val test = 27' should emit .sInteger"
+
+ssltrace "./ptc -t2 -o2 const_val.pt" ../../lib/pt/parser.def -e > const_val.eOutput 2> /dev/null
+
+if [ $(grep -c '.sInteger' const_val.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   'var' should emit .sVar"
+
+ssltrace "./ptc -t2 -o2 var.pt" ../../lib/pt/parser.def -e > var.eOutput 2> /dev/null
+
+if [ $(grep -c '.sVar' var.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+echo "   'type' should emit .sType"
+
+ssltrace "./ptc -t2 -o2 type.pt" ../../lib/pt/parser.def -e > type.eOutput 2> /dev/null
+
+if [ $(grep -c '.sType' type.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   'var a, b, c, d : integer' should emit .sVar 4 times"
+
+ssltrace "./ptc -t2 -o2 var_4x.pt" ../../lib/pt/parser.def -e > var_4x.eOutput 2> /dev/null
+
+if [ $(grep -c '.sVar' var_4x.eOutput) -eq 4 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+echo "   declarations(var, val, def, type) and statements(if, func call, assignment) can be mixed"
+
+ssltrace "./ptc -t2 -o2 decl_stmt_mix.pt" ../../lib/pt/parser.def -e > decl_stmt_mix.eOutput 2> /dev/null
+ 
+if [ $(grep -c '.sVar' decl_stmt_mix.eOutput) -eq 1 -a \
+	$(grep -c '.sConst' decl_stmt_mix.eOutput) -eq 1 -a \
+	$(grep -c '.sIfStmt' decl_stmt_mix.eOutput) -eq 1 -a \
+	$(grep -c '.sCallStmt' decl_stmt_mix.eOutput) -eq 1 -a \
+	$(grep -c '.sAssignmentStmt' decl_stmt_mix.eOutput) -eq 1 -a \
+        $(grep -c '.sProcedure' decl_stmt_mix.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi

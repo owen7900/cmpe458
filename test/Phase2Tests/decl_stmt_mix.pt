@@ -1,0 +1,17 @@
+using PLACEHOLDER
+
+def P () end
+
+val x = 33
+if x == 28 then
+    P
+end
+var y : integer
+
+y = x
+
+
+type d : string
+
+
+
