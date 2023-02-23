@@ -474,12 +474,17 @@ IfStmt :
         'then'  .sThen
         @Block % CHANGED
         [
+            |'elsif':  % ADDED
+                .sElse
+                .sBegin
+                @IfStmt
+                .sEnd
             | 'else':
                 .sElse
                 @Block 'end' .sEnd % CHANGED
             | *:
         ]
-        'end' .sEnd;
+        'end';   % ADDED
 
 Unless :                    % ADDED RULE
         .sIfStmt
