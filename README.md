@@ -27,32 +27,33 @@ See the README there for installation information.
 # TODO 
 
 ## Phase 2
-- Tokens
+- Tokens -- DONE Matthew Thompson
    - Remove old parser output tokens --- sRepeatStmt, sRepeatEnd
    - Add new parser output tokens    --- sPublic, sModule, sDoStmt, sBreakIf, sSubstring, sLength, sIndex
-- change main perser loop to allow delcarations and statements to be intermixed -- In Progress
+- change main parser loop to allow declarations and statements to be intermixed -- DONE Matthew Thompson
    - keep begin .... end statement
-- Modify parsing of constant, type and variable declarations
-- Routines (procedures)
+- Modify parsing of constant, type and variable declarations -- DONE Matthew Thompson
+- Routines (procedures) -- DONE Matthew Thompson
    - Public vs private functions
    - emit begin ... end
-- Modules
-   - parse input to output required modules and thier requirements
+- Modules -- DONE Matthew Thompson
+   - parse input to output required modules and their requirements
 - Statements
    - modify the parsing of `if`, `case`, `while`, `repeat`, and `begin` to meet the lang spec for Quby's `if`, `unless`, `case`, and `do`
    - for `if` and `case` the goal is to have the output token stream match that of PTPascal
-- Unless Statements 
+- Unless Statements -- DONE Alan
    - make them look like `if not` 
-- Case Statements 
+- Case Statements -- DONE Alan
    - output should look the same as PTPascal --- using `sCase`, `sLabelEnd` and `sCaseEnd`
    - Re-use the the main block rule in here
    - add else statements 
 - Elsif Clauses
    - We can either create `sElsif` and modify the semandtic phase or look like a nested set of if statements
    - I think we want the `sElsif` option
-- Do Statements
+- Do Statements -- DONE Matthew Thompson
    - remove the `repeat` statement add handling of the `do` statement
    - Should use `sDo` to mark the beginning of the do statement
+      - *Note: Tokens section of assignment said to add `sDoStmt`, not `sDo`. Currently using `sDoStmt`*
    - Should use the `sBreakIf` token for `break if`
 - The String type
    - remove handling of the `char` type 
