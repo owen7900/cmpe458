@@ -8,9 +8,9 @@
   .sIdentifier
    .sParmEnd
    .sBegin
+   .sEnd
   % .sNewLine
   % .sNewLine
-  .sEnd
   .sConst
    .sIdentifier
     % .sNewLine
@@ -27,6 +27,7 @@
       .sCallStmt
       .sIdentifier
       .sParmEnd
+    .sEnd
    % .sNewLine
   .sVar
    .sIdentifier
@@ -47,3 +48,4 @@
      % .sNewLine
      % .sNewLine
      .sIdentifier
+  .sEnd

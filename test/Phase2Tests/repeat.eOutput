@@ -7,5 +7,5 @@
     .sCallStmt
     .sIdentifier
     .sParmEnd
+  .sEnd
  % .sNewLine
- .sEnd

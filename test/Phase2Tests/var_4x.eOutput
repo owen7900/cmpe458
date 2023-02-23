@@ -13,3 +13,4 @@
    .sIdentifier
      % .sNewLine
      .sIdentifier
+  .sEnd

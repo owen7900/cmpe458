@@ -63,7 +63,7 @@ if [ $(grep -c '.sProcedure' def.eOutput) -eq 1 -a \
 	$(grep -c '.sIdentifier' def.eOutput) -eq 2 -a \
 	$(grep -c '.sParmEnd' def.eOutput) -eq 2 -a \
 	$(grep -c '.sBegin' def.eOutput) -eq 2 -a \
-	$(grep -c '.sEnd' def.eOutput) -eq 1 ]; then
+	$(grep -c '.sEnd' def.eOutput) -eq 2 ]; then
     echo "      SUCCESS"
 else
     echo "      FAILED"

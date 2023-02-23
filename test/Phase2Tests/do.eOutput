@@ -6,3 +6,4 @@
   % .sNewLine
    .sDoStmt
     .sBegin
+    .sEnd
