@@ -22,26 +22,27 @@ Input :
         pMod                    'mod'
         pOr                     'or'
         pAnd                    'and'
-        pNot                    'not'
         pThen                   'then'
         pElse                   'else'
         pOf                     'of'
         pEnd                    'end'
-        pUntil                  'until'
         pDo                     'do'
         pArray                  'array'
         pFile                   'file'
-        pProgram                'program'
-        pConst                  'const'
         pVar                    'var'
         pType                   'type'
-        pProcedure              'procedure'
-        pBegin                  'begin'
         pIf                     'if'
+        pElsIf                  'elsif'
+        pUnless                 'unless'
         pCase                   'case'
         pWhile                  'while'
-        pRepeat                 'repeat'
-        lastKeywordToken = pRepeat 
+        pBreak                  'break'
+        pModule                 'module'
+        pUsing                  'using'
+        pVal                    'val'
+        pWhen                   'when'
+        pDef                    'def'
+        lastKeywordToken = pDef 
 
         % Scanner tokens -
         %   These are the tokens actually recognized by the Scanner itself.
@@ -61,7 +62,7 @@ Input :
         pPlus                   '+'
         pMinus                  '-'
         pStar                   '*'
-        pColonEquals            ':='
+        pAssignment             ':='
         pDot                    '.'
         pComma                  ','
         pSemicolon              ';'
@@ -76,6 +77,12 @@ Input :
         pRightParen             ')'
         pLeftBracket            '['
         pRightBracket           ']'
+        pLeftBrace              '{'
+        pRightBrace             '}'
+        pSubStr                 '$'
+        pStrLen                 '#'
+        pStrIdx                 '?'
+        pNot                    '!'
         pDotDot                 '..'
         lastSyntaxToken = pDotDot;
 
@@ -524,7 +531,7 @@ Factor :
                 .sInteger
             | '(':
                 @Expression  ')'
-            | 'not':
+            | '!':
                 @Factor
                 .sNot
             | pStringLiteral:
