@@ -327,25 +327,25 @@ program ScannerParser(output, stdIdentifiers, scanSsl, parseSsl, source, parseSt
         AssignmentOrCallStmt = 372;
         IfStmt = 456;
         Unless = 480;
-        WhileStmt = 586;
-        CaseStmt = 506;
-        DoStmt = 597;
+        WhileStmt = 588;
+        CaseStmt = 508;
+        DoStmt = 599;
         ConstantValue = 148;
         UnsignedIntegerConstant = 188;
         TypeBody = 217;
         SimpleType = 249;
         OptionallySignedIntegerConstant = 278;
-        Expression = 616;
+        Expression = 618;
         CallStmt = 412;
-        CaseAlternative = 547;
-        SimpleExpression = 670;
-        Term = 723;
-        Factor = 767;
-        IdentifierExtension = 825;
+        CaseAlternative = 549;
+        SimpleExpression = 672;
+        Term = 725;
+        Factor = 769;
+        IdentifierExtension = 827;
         }
 
         { S/SL Table Parameters } {
-        sslTblSize = 855;
+        sslTblSize = 857;
         minSslTableValue = -32767;
         maxSslTableValue = 32767;
 	}

@@ -213,7 +213,7 @@ Block :
                 @AssignmentOrCallStmt
             | 'if': % ADDED CHOICE OPTION
                 @IfStmt
-            | pUnless:
+            | 'unless': % ADDED CHOICE OPTION
                 @Unless
             | 'while': % ADDED CHOICE OPTION
                 @WhileStmt
@@ -492,39 +492,46 @@ Unless :                    % ADDED RULE
                 .sElse
                 @Block
             | *:
-        ];
+        ]
+        'end';
 
 CaseStmt :
         .sCaseStmt
         @Expression
         .sExpnEnd
         %'of'           % REMOVED
-        @CaseAlternative
-        {[
-            | ';':
-                % since case alternatives cannot be null, allow
-                % for the common situation of an extra semicolon
-                % at the end of the list of case alternatives.
-                [
-                    | 'end':
-                        >
-                    | *:
-                        @CaseAlternative
-                ]
-            | 'end':
+        % @CaseAlternative % REMOVED
+        {[ % ADDED LOOP
+            | 'when':
+                @CaseAlternative
+            | *:
                 >
         ]}
+        [ % ADDED CHOICE
+            | 'else':
+                .sElse  @Block
+            | *:
+        ]
+        % {[ % REMOVED LOOP
+        %     | ';':
+        %         % since case alternatives cannot be null, allow
+        %         % for the common situation of an extra semicolon
+        %         % at the end of the list of case alternatives.
+        %         [
+        %             | 'end':
+        %                 >
+        %             | *:
+        %                 @CaseAlternative
+        %         ]
+        %     | 'end':
+        %         >
+        % ]}
+        'end' % ADDED
         .sCaseEnd;
 
 CaseAlternative :
         % A case alternative is a statement labelled by
         % one or more optionally signed integer constants
-        {[  % ADDED OPTIONS
-            | 'else':
-                .sElse
-            | 'when':
-                >
-        ]}
         {
             @OptionallySignedIntegerConstant
             [

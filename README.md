@@ -41,9 +41,9 @@ See the README there for installation information.
 - Statements
    - modify the parsing of `if`, `case`, `while`, `repeat`, and `begin` to meet the lang spec for Quby's `if`, `unless`, `case`, and `do`
    - for `if` and `case` the goal is to have the output token stream match that of PTPascal
-- Unless Statements 
+- Unless Statements -- DONE Alan
    - make them look like `if not` 
-- Case Statements 
+- Case Statements -- DONE Alan
    - output should look the same as PTPascal --- using `sCase`, `sLabelEnd` and `sCaseEnd`
    - Re-use the the main block rule in here
    - add else statements 
