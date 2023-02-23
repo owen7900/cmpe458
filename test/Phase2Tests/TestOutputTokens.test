@@ -45,14 +45,17 @@ else
     echo "      SUCCESS"
 fi
 
-echo "   module should emit .sModule and .sIdentifier"
+echo "   module ... end should emit .sModule .sIdentifier .sBegin and .sEnd"
 
 ssltrace "./ptc -t2 -o2 module.pt" ../../lib/pt/parser.def -e > module.eOutput 2> /dev/null
 
-if [ $(grep -c '.sPublic' module.eOutput) -eq 1 ]; then
-    echo "      FAILED"
-else
+if [ $(grep -c '.sModule' module.eOutput) -eq 1 -a \
+	$(grep -c '.sIdentifier' module.eOutput) -eq 2 -a \
+	$(grep -c '.sBegin' module.eOutput) -eq 2 -a \
+	$(grep -c '.sEnd' module.eOutput) -eq 2 ]; then
     echo "      SUCCESS"
+else
+    echo "      FAILED"
 fi
 
 echo "   module without end should emit an error"

@@ -36,7 +36,7 @@ See the README there for installation information.
 - Routines (procedures) -- DONE Matthew Thompson -- TESTS DONE Owen Hooper
    - Public vs private functions
    - emit begin ... end
-- Modules -- DONE Matthew Thompson
+- Modules -- DONE Matthew Thompson -- TESTS DONE Owen Hooper
    - parse input to output required modules and their requirements
 - Statements
    - modify the parsing of `if`, `case`, `while`, `repeat`, and `begin` to meet the lang spec for Quby's `if`, `unless`, `case`, and `do`
