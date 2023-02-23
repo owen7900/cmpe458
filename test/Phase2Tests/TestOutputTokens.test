@@ -1,0 +1,90 @@
+#! /bin/bash
+
+echo "---------Testing Output Tokens------------"
+
+echo "   'using' should emit .sProgram and .sIdentifier"
+
+ssltrace "./ptc -t2 -o2 using.pt" ../../lib/pt/parser.def -e > using.eOutput 2> /dev/null
+
+if [ $(grep -c '.sProgram' using.eOutput) -eq 1 -a \
+	$(grep -c '.sIdentifier' using.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   'repeat ... end' should not emit sRepeatStmt or sRepeatEnd:"
+
+ssltrace "./ptc -t2 -o2 repeat.pt" ../../lib/pt/parser.def -e > repeat.eOutput 2> /dev/null
+
+if [ $(grep -c '.sRepeatStmt' repeat.eOutput) -eq 1 -o \
+	$(grep -c '.sRepeatEnd' repeat.eOutput) -eq 1 ]; then
+    echo "      FAILED"
+else
+    echo "      SUCCESS"
+fi
+
+echo "   '*' should emit sPublic when creating a procedure:"
+
+ssltrace "./ptc -t2 -o2 public.pt" ../../lib/pt/parser.def -e > public.eOutput 2> /dev/null
+
+if [ $(grep -c '.sPublic' public.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+echo "   .sPublic should not be emitted when creating a private procedure"
+
+ssltrace "./ptc -t2 -o2 private.pt" ../../lib/pt/parser.def -e > private.eOutput 2> /dev/null
+
+if [ $(grep -c '.sPublic' private.eOutput) -eq 1 ]; then
+    echo "      FAILED"
+else
+    echo "      SUCCESS"
+fi
+
+echo "   module should emit .sModule and .sIdentifier"
+
+ssltrace "./ptc -t2 -o2 module.pt" ../../lib/pt/parser.def -e > module.eOutput 2> /dev/null
+
+if [ $(grep -c '.sPublic' module.eOutput) -eq 1 ]; then
+    echo "      FAILED"
+else
+    echo "      SUCCESS"
+fi
+
+echo "   module without end should emit an error"
+
+ssltrace "./ptc -t2 -o2 module_no_end.pt" ../../lib/pt/parser.def > module_no_end.eOutput 2> /dev/null
+
+if [ $(grep -c 'unexpected end of file' module_no_end.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   do should emit .sDoStmt"
+
+ssltrace "./ptc -t2 -o2 do.pt" ../../lib/pt/parser.def -e > do.eOutput 2> /dev/null
+
+if [ $(grep -c '.sDoStmt' do.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   break if should emit .sBreakIf"
+
+ssltrace "./ptc -t2 -o2 break_if.pt" ../../lib/pt/parser.def -e > break_if.eOutput 2> /dev/null
+
+if [ $(grep -c '.sBreakIf' break_if.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+

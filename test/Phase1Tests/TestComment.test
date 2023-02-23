@@ -4,7 +4,7 @@ echo "---------Testing Comments-----------"
 
 echo "   A single comment only emits only a newline and eof: "
 
-ssltrace "./ptc -t1 -o1 simple_comment.pt" ../parser/scan.def -e > simple_comments.eOutput 2> /dev/null
+ssltrace "./ptc -t1 -o1 simple_comment.pt" ../../parser/scan.def -e > simple_comments.eOutput 2> /dev/null
 
 if [ $(grep -c '\.pNewLine' simple_comments.eOutput) -eq 1 -a \
 	$(grep -c '\.pEndFile' simple_comments.eOutput) -eq 1 -a \
@@ -16,7 +16,7 @@ fi
 
 echo "   A Comment with illegal chars emits only a newline and eof: "
 
-ssltrace "./ptc -t1 -o1 illegal_char_comment.pt" ../parser/scan.def -e > illegal_char_comments.eOutput 2> /dev/null
+ssltrace "./ptc -t1 -o1 illegal_char_comment.pt" ../../parser/scan.def -e > illegal_char_comments.eOutput 2> /dev/null
 
 if [ $(grep -c '\.pNewLine' illegal_char_comments.eOutput) -eq 1 -a \
 	$(grep -c '\.pEndFile' illegal_char_comments.eOutput) -eq 1 -a \
@@ -28,7 +28,7 @@ fi
 
 echo "   Identifiers between comments are still emitted with correct buffer text: "
 
-ssltrace "./ptc -t1 -o1 comments_with_identifiers.pt" ../parser/scan.def -e > comments_with_identifiers.eOutput 2> /dev/null
+ssltrace "./ptc -t1 -o1 comments_with_identifiers.pt" ../../parser/scan.def -e > comments_with_identifiers.eOutput 2> /dev/null
 
 
 if [ $(grep -c '\.pIdentifier' comments_with_identifiers.eOutput) -eq 1 -a \
@@ -41,7 +41,7 @@ fi
 
 echo "   Identifiers before comments are still scanned: "
 
-ssltrace "./ptc -t1 -o1 one_line_comment_identifier.pt" ../parser/scan.def -e > one_line_comment_identifier.eOutput 2> /dev/null
+ssltrace "./ptc -t1 -o1 one_line_comment_identifier.pt" ../../parser/scan.def -e > one_line_comment_identifier.eOutput 2> /dev/null
 
 
 if [ $(grep -c '\.pIdentifier' one_line_comment_identifier.eOutput) -eq 1 -a \
