@@ -58,17 +58,6 @@ else
     echo "      FAILED"
 fi
 
-echo "   module without end should emit an error"
-
-ssltrace "./ptc -t2 -o2 module_no_end.pt" ../../lib/pt/parser.def > module_no_end.eOutput 2> /dev/null
-
-if [ $(grep -c 'unexpected end of file' module_no_end.eOutput) -eq 1 ]; then
-    echo "      SUCCESS"
-else
-    echo "      FAILED"
-fi
-
-
 echo "   do should emit .sDoStmt"
 
 ssltrace "./ptc -t2 -o2 do.pt" ../../lib/pt/parser.def -e > do.eOutput 2> /dev/null

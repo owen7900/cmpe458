@@ -1,0 +1,17 @@
+ .sProgram
+ % .sNewLine
+ % .sNewLine
+ .sIdentifier
+ .sParmEnd
+  .sBegin
+   .sAssignmentStmt
+   .sIdentifier
+        .sStringLiteral
+        .sInteger
+        .sInteger
+       .sSubstring
+        % .sNewLine
+        .sInteger
+      .sMultiply
+   .sExpnEnd
+  .sEnd

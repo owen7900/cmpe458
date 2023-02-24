@@ -1,0 +1,138 @@
+#! /bin/bash
+
+echo "---------Testing String Type------------"
+
+echo "   'x = \"STRING LITERAL\"' should emit .sStringLiteral "
+
+ssltrace "./ptc -t2 -o2 string.pt" ../../lib/pt/parser.def -e > string.eOutput 2> /dev/null
+
+if [ $(grep -c '.sStringLiteral' string.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+echo "   'x = 'CHAR LITERAL'' should not emit .sStringLiteral "
+
+ssltrace "./ptc -t2 -o2 char.pt" ../../lib/pt/parser.def -e > char.eOutput 2> /dev/null
+
+if [ $(grep -c '.sStringLiteral' char.eOutput) -eq 0 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+echo "   '\"STRING LITERAL\" $ 1..2 ' should emit .sStringLiteral, 2x .sInteger and .sSubstring"
+
+ssltrace "./ptc -t2 -o2 substring.pt" ../../lib/pt/parser.def -e > substring.eOutput 2> /dev/null
+
+if [ $(grep -c '.sStringLiteral' substring.eOutput) -eq 1 -a \
+	$(grep -c '.sInteger' substring.eOutput) -eq 2 -a \
+	$(grep -c '.sSubstring' substring.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+echo "   '\"STRING LITERAL\" ? "LIT" ' should emit 2x .sStringLiteral, and .sIndex"
+
+ssltrace "./ptc -t2 -o2 string_index.pt" ../../lib/pt/parser.def -e > string_index.eOutput 2> /dev/null
+
+if [ $(grep -c '.sStringLiteral' string_index.eOutput) -eq 2 -a \
+	$(grep -c '.sIndex' string_index.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+echo "   ' # \"STRING LITERAL\"  ' should emit  .sStringLiteral, and .sLength"
+
+ssltrace "./ptc -t2 -o2 string_length.pt" ../../lib/pt/parser.def -e > string_length.eOutput 2> /dev/null
+
+if [ $(grep -c '.sStringLiteral' string_length.eOutput) -eq 1 -a \
+	$(grep -c '.sLength' string_length.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+echo "   ' \"STRING LITERAL\" ? "LIT" + 5 ' should emit .sIndex with higher precedence than +"
+
+ssltrace "./ptc -t2 -o2 string_index_precedence.pt" ../../lib/pt/parser.def -e > string_index_precedence.eOutput 2> /dev/null
+
+if [ $(grep -c '.sIndex' string_index_precedence.eOutput) -eq 1 -a \
+	$(grep -c '.sAdd' string_index_precedence.eOutput) -eq 1 -a \
+	$(awk '/.sAdd/ {print FNR}'  string_index_precedence.eOutput) -gt \
+	$(awk '/.sIndex/ {print FNR}'  string_index_precedence.eOutput) ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+echo "   ' \"STRING LITERAL\" ? ("LIT" + 5) ' should emit .sIndex with lower precedence than +"
+
+ssltrace "./ptc -t2 -o2 string_index_precedence_brakets.pt" ../../lib/pt/parser.def -e > string_index_precedence_brakets.eOutput 2> /dev/null
+
+if [ $(grep -c '.sIndex' string_index_precedence_brakets.eOutput) -eq 1 -a \
+	$(grep -c '.sAdd' string_index_precedence_brakets.eOutput) -eq 1 -a \
+	$(awk '/.sAdd/ {print FNR}'  string_index_precedence_brakets.eOutput) -lt \
+	$(awk '/.sIndex/ {print FNR}'  string_index_precedence_brakets.eOutput) ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   '# \"STRING LITERAL\" * 5 ' should emit .sLength with higher precedence than *"
+
+ssltrace "./ptc -t2 -o2 string_length_prec_mult.pt" ../../lib/pt/parser.def -e > string_length_prec_mult.eOutput 2> /dev/null
+
+if [ $(grep -c '.sLength' string_length_prec_mult.eOutput) -eq 1 -a \
+	$(grep -c '.sMultiply' string_length_prec_mult.eOutput) -eq 1 -a \
+	$(awk '/.sMultiply/ {print FNR}'  string_length_prec_mult.eOutput) -gt \
+	$(awk '/.sLength/ {print FNR}'  string_length_prec_mult.eOutput) ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   '# \"STRING LITERAL\" $ 5 .. 2 ' should emit .sLength with higher precedence than $"
+
+ssltrace "./ptc -t2 -o2 string_length_prec_substr.pt" ../../lib/pt/parser.def -e > string_length_prec_substr.eOutput 2> /dev/null
+
+if [ $(grep -c '.sLength' string_length_prec_substr.eOutput) -eq 1 -a \
+	$(grep -c '.sSubstring' string_length_prec_substr.eOutput) -eq 1 -a \
+	$(awk '/.sSubstring/ {print FNR}'  string_length_prec_substr.eOutput) -gt \
+	$(awk '/.sLength/ {print FNR}'  string_length_prec_substr.eOutput) ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   '\"STRING LITERAL\" $ (5 * 2) .. 2 ' should emit .sSubstring with lower precedence than *"
+
+ssltrace "./ptc -t2 -o2 string_substr_prec_braket.pt" ../../lib/pt/parser.def -e > string_substr_prec_braket.eOutput 2> /dev/null
+
+if [ $(grep -c '.sMultiply' string_substr_prec_braket.eOutput) -eq 1 -a \
+	$(grep -c '.sSubstring' string_substr_prec_braket.eOutput) -eq 1 -a \
+	$(awk '/.sSubstring/ {print FNR}'  string_substr_prec_braket.eOutput) -gt \
+	$(awk '/.sMultiply/ {print FNR}'  string_substr_prec_braket.eOutput) ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+echo "   '\"STRING LITERAL\" $ 5 .. 2 * 2 ' should emit .sSubstring with higher precedence than *"
+
+ssltrace "./ptc -t2 -o2 string_substr_prec_mult.pt" ../../lib/pt/parser.def -e > string_substr_prec_mult.eOutput 2> /dev/null
+
+if [ $(grep -c '.sMultiply' string_substr_prec_mult.eOutput) -eq 1 -a \
+	$(grep -c '.sSubstring' string_substr_prec_mult.eOutput) -eq 1 -a \
+	$(awk '/.sSubstring/ {print FNR}'  string_substr_prec_mult.eOutput) -lt \
+	$(awk '/.sMultiply/ {print FNR}'  string_substr_prec_mult.eOutput) ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi

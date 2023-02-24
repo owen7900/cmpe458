@@ -16,8 +16,8 @@
     % .sNewLine
     .sInteger
    .sIfStmt
-       .sIdentifier
-       .sInteger
+        .sIdentifier
+        .sInteger
     .sEq
    .sExpnEnd
    % .sNewLine
@@ -28,7 +28,7 @@
       .sIdentifier
       .sParmEnd
     .sEnd
-   % .sNewLine
+  % .sNewLine
   .sVar
    .sIdentifier
      % .sNewLine
@@ -36,10 +36,10 @@
      .sIdentifier
    .sAssignmentStmt
    .sIdentifier
-       % .sNewLine
-       % .sNewLine
-       % .sNewLine
-       .sIdentifier
+        % .sNewLine
+        % .sNewLine
+        % .sNewLine
+        .sIdentifier
    .sExpnEnd
   .sType
    .sIdentifier

@@ -1,0 +1,3 @@
+using PLACEHOLDER
+
+x = "STIRNG LITERAL" $ 5 .. 2 * 2
