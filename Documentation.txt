@@ -1,3 +1,30 @@
+Phase 2:
+Parser.ssl:
+- Removed old keywords: sRepeatStmt, sRepeatEnd.
+- Added Quby keywords: sPublic, sModule, sDoStmt, sBreakIf, sSubstring, sLength, sIndex.
+- Changed main parser loop to allow declarations and statements to be intermixed.
+- Modified parsing of constant, type and variable declarations
+- Changed procedures.
+- Modified parsing of modules
+- Updated If Statements and implemented elsif.
+- Added Unless Statements to make them work like if not
+- Modified Case Statements
+- Implemented Do Statements.
+- Modified handling of the String type.
+- Modified assignment, compare and not sign.
+
+Parser.pt:
+- Copied contents from parser.def to the corresponding section.
+
+test:
+- Created folders for each phase and moved the old tests to the relative folder.
+- Added new tests to Phase2Tests folder.
+- RunTests.bash automates the process.
+
+
+------------------------------------------------------------------------------------------------------------------------------
+Phase 1:
+
 Changes to the stdIdentifiers file:
     Changes made to this file include the removal of PT keywords "not," "unitl," "program," "const,"
     "procedure," "being," and "repeat." this was due to the fact that the Quby language does not use any of the keywords
