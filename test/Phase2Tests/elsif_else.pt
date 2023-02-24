@@ -1,0 +1,8 @@
+using PLACEHOLDER
+if x == 5 then
+	P
+elsif x == 6 then
+	Q
+else
+	R
+end

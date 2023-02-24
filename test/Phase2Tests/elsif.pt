@@ -1,0 +1,7 @@
+using PLACEHOLDER
+
+if x == 5 then
+	P
+elsif x == 4 then
+	Y
+end

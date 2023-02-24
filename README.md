@@ -41,17 +41,14 @@ See the README there for installation information.
 - Statements
    - modify the parsing of `if`, `case`, `while`, `repeat`, and `begin` to meet the lang spec for Quby's `if`, `unless`, `case`, and `do`
    - for `if` and `case` the goal is to have the output token stream match that of PTPascal
-- If Statements -- DONE Alan
+- If Statements -- DONE Alan -- TESTS DONE Owen
    - Implemented elsif in the nested method
-- Unless Statements -- DONE Alan
+- Unless Statements -- DONE Alan -- TESTS DONE Owen
    - make them look like `if not` 
 - Case Statements -- DONE Alan
    - output should look the same as PTPascal --- using `sCase`, `sLabelEnd` and `sCaseEnd`
    - Re-use the the main block rule in here
    - add else statements 
-- Elsif Clauses
-   - We can either create `sElsif` and modify the semandtic phase or look like a nested set of if statements
-   - I think we want the `sElsif` option
 - Do Statements -- DONE Matthew Thompson
    - remove the `repeat` statement add handling of the `do` statement
    - Should use `sDo` to mark the beginning of the do statement

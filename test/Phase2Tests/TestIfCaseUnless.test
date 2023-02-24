@@ -1,0 +1,48 @@
+#! /bin/bash
+
+echo "---------Testing If Case Unless------------"
+
+echo "   'unless' should emit .sIfStmt and .sNot "
+
+ssltrace "./ptc -t2 -o2 unless.pt" ../../lib/pt/parser.def -e > unless.eOutput 2> /dev/null
+
+if [ $(grep -c '.sIfStmt' unless.eOutput) -eq 1 -a \
+	$(grep -c '.sNot' unless.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   'if .. then .. elsif .. end' should emit 2x .sIfStmt "
+
+ssltrace "./ptc -t2 -o2 elsif.pt" ../../lib/pt/parser.def -e > elsif.eOutput 2> /dev/null
+
+if [ $(grep -c '.sIfStmt' elsif.eOutput) -eq 2 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   'if .. then .. elsif .. elsif .. end' should emit 3x .sIfStmt and 2x .sElse"
+
+ssltrace "./ptc -t2 -o2 elsif_2x.pt" ../../lib/pt/parser.def -e > elsif_2x.eOutput 2> /dev/null
+
+if [ $(grep -c '.sIfStmt' elsif_2x.eOutput) -eq 3 -a \
+	$(grep -c '.sElse' elsif_2x.eOutput) -eq 2 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+echo "   'if .. then .. elsif .. else .. end' should emit 2x .sIfStmt and 2x .sElse"
+
+ssltrace "./ptc -t2 -o2 elsif_else.pt" ../../lib/pt/parser.def -e > elsif_else.eOutput 2> /dev/null
+
+if [ $(grep -c '.sIfStmt' elsif_else.eOutput) -eq 2 -a \
+	$(grep -c '.sElse' elsif_else.eOutput) -eq 2 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
