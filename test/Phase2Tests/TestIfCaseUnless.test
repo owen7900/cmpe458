@@ -85,3 +85,16 @@ else
     echo "      FAILED"
 fi
 
+
+echo "   'while x == 1 do ... end' should emit .sWhileStmt .sBegin .sEnd"
+
+ssltrace "./ptc -t2 -o2 while.pt" ../../lib/pt/parser.def -e > "while.eOutput" 2> /dev/null
+if [ $(grep -c '.sWhileStmt' while.eOutput) -eq 1 -a\
+	$(grep -c '.sBegin' while.eOutput) -eq 2 -a \
+	$(grep -c '.sEnd' while.eOutput) -eq 2 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
