@@ -1,0 +1,7 @@
+using PLACEHOLDER
+case i 
+when 2 then
+	P
+else 
+	Q
+end

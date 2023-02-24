@@ -46,3 +46,42 @@ if [ $(grep -c '.sIfStmt' elsif_else.eOutput) -eq 2 -a \
 else
     echo "      FAILED"
 fi
+
+
+echo "   'case i ... end' should emit .sCaseStmt .sIdentifier .sExpnEnd .sCaseEnd"
+
+ssltrace "./ptc -t2 -o2 case.pt" ../../lib/pt/parser.def -e > "case.eOutput" 2> /dev/null
+
+if [ $(grep -c '.sCaseStmt' case.eOutput) -eq 1 -a \
+	$(grep -c '.sIdentifier' case.eOutput) -eq 2 -a \
+	$(grep -c '.sCaseEnd' case.eOutput) -eq 1 -a \
+	$(grep -c '.sExpnEnd' case.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   'case i when 2 then ... end' should emit .sInteger .sBegin .sEnd"
+
+ssltrace "./ptc -t2 -o2 case_when.pt" ../../lib/pt/parser.def -e > "case_when.eOutput" 2> /dev/null
+
+if [ $(grep -c '.sInteger' case_when.eOutput) -eq 1 -a\
+	$(grep -c '.sBegin' case_when.eOutput) -eq 2 -a \
+	$(grep -c '.sEnd' case_when.eOutput) -eq 2 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   'case i when 2 then ... else ... end' should emit .sElse"
+
+ssltrace "./ptc -t2 -o2 case_else.pt" ../../lib/pt/parser.def -e > "case_else.eOutput" 2> /dev/null
+
+if [ $(grep -c '.sElse' case_else.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+

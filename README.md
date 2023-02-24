@@ -45,11 +45,11 @@ See the README there for installation information.
    - Implemented elsif in the nested method
 - Unless Statements -- DONE Alan -- TESTS DONE Owen
    - make them look like `if not` 
-- Case Statements -- DONE Alan
+- Case Statements -- DONE Alan -- TESTS DONE Owen
    - output should look the same as PTPascal --- using `sCase`, `sLabelEnd` and `sCaseEnd`
    - Re-use the the main block rule in here
    - add else statements 
-- Do Statements -- DONE Matthew Thompson
+- Do Statements -- DONE Matthew Thompson -- TEST DONE Owen
    - remove the `repeat` statement add handling of the `do` statement
    - Should use `sDo` to mark the beginning of the do statement
       - *Note: Tokens section of assignment said to add `sDoStmt`, not `sDo`. Currently using `sDoStmt`*
