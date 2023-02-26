@@ -1,25 +1,28 @@
 Phase 2:
+
 Parser.ssl:
-- Removed old keywords: sRepeatStmt, sRepeatEnd.
-- Added Quby keywords: sPublic, sModule, sDoStmt, sBreakIf, sSubstring, sLength, sIndex.
-- Changed main parser loop to allow declarations and statements to be intermixed.
-- Modified parsing of constant, type and variable declarations
-- Changed procedures.
-- Modified parsing of modules
-- Updated If Statements and implemented elsif.
-- Added Unless Statements to make them work like if not
-- Modified Case Statements
-- Implemented Do Statements.
-- Modified handling of the String type.
-- Modified assignment, compare and not sign.
+- Update input tokens to match scan.ssl. (lines 20-94)
+- Removed old keywords: sRepeatStmt, sRepeatEnd. (lines 132-133)
+- Added Quby keywords: sPublic, sModule, sDoStmt, sBreakIf, sSubstring, sLength, sIndex. (lines 111-154)
+- Changed main parser loop to allow declarations and statements to be intermixed. (lines 212-226)
+- Modified parsing of constant, type and variable declarations. (lines 234-340)
+- Changed procedures. (lines 196-207 and 344-392)
+- Added parsing of modules. (lines 208-211)
+- Updated If Statements and implemented elsif. (lines 478-487)
+- Added Unless Statements to make them work like if not. (lines 492-505)
+- Modified Case Statements. (lines 511-554)
+- Implemented Do Statements. (lines 577-582)
+- Modified handling of the String type. (lines 625-662)
+- Modified assignment, compare and not sign. (lines 414, 425, 587, 589 and 657)
 
 Parser.pt:
-- Copied contents from parser.def to the corresponding section.
+- Copied contents from parser.def to the corresponding section. (lines 190-352)
 
-test:
+Testing:
 - Created folders for each phase and moved the old tests to the relative folder.
 - Added new tests to Phase2Tests folder.
 - RunTests.bash automates the process.
+- Testing documentation is located in test/Phase2Tests/TestingDocumentation.txt.
 
 
 ------------------------------------------------------------------------------------------------------------------------------

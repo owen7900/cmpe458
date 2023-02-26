@@ -1,6 +1,20 @@
 # Phase 2
 ## parser.ssl
-TODO
+- Update input tokens to match scan.ssl. (lines 20-94)
+- Removed old keywords: `sRepeatStmt`, `sRepeatEnd`. (lines 132-133)
+- Added Quby keywords: `sPublic`, `sModule`, `sDoStmt`, `sBreakIf`, `sSubstring`, `sLength`, `sIndex`. (lines 111-154)
+- Changed main parser loop to allow declarations and statements to be intermixed. (lines 212-226)
+- Modified parsing of constant, type and variable declarations. (lines 234-340)
+- Changed procedures. (lines 196-207 and 344-392)
+- Added parsing of modules. (lines 208-211)
+- Updated If Statements and implemented elsif. (lines 478-487)
+- Added Unless Statements to make them work like if not. (lines 492-505)
+- Modified Case Statements. (lines 511-554)
+- Implemented Do Statements. (lines 577-582)
+- Modified handling of the String type. (lines 625-662)
+  - Added a new rule for a new precedence level for the `$` operator. (lines 639-646)
+  - Added the `?` and `#` operators. (lines 633-634 and 660-662)
+- Modified assignment, compare and not sign. (lines 414, 425, 587, 589 and 657)
 
 ## parser.pt
 - Pasted contents of `parser.def` (lines 190-352)

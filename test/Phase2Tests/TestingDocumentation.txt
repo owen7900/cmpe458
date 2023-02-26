@@ -1,0 +1,40 @@
+Tests for declarations and statements:
+- const.pt: Test constants. 'val' should emit .sConst
+- const_val.pt: Test constants. 'val test = 27' should emit .sInteger
+- var.pt: Test variables. 'var' should emit .sVar
+- type.pt: Test types. 'type' should emit .sType
+- var_4x.pt: Test multiple variable declarations. 'var a, b, c, d : integer' should emit .sVar 4 times
+- def.pt: Test procedures. 'def P () end' should emit .sProcedure .sIdentifier .sParmEnd .sBegin and .sEnd
+- decl_stmt_mix.pt: Test that declarations and statements can be mixed.
+
+Tests for If, Case, Unless and While statements:
+- unless.pt: Test unless statement. 'unless' should emit .sIfStmt and .sNot
+- elsif.pt: Test elsif. 'if .. then .. elsif .. end' should emit 2x .sIfStmt
+- elsif_2x.pt: Test multiple elsif. 'if .. then .. elsif .. elsif .. end' should emit 3x .sIfStmt and 2x .sElse
+- elsif_else.pt: Test elsif and else. 'if .. then .. elsif .. else .. end' should emit 2x .sIfStmt and 2x .sElse
+- case.pt: Test empty case statement. 'case i ... end' should emit .sCaseStmt .sIdentifier .sExpnEnd .sCaseEnd
+- case_when.pt: Test case statement with condition. 'case i when 2 then ... end' should emit .sInteger .sBegin .sEnd
+- case_else.pt: Test case statement with condition and default. 'case i when 2 then ... else ... end' should emit .sElse
+- while.pt: Test while statement. 'while x == 1 do ... end' should emit .sWhileStmt .sBegin .sEnd
+
+Tests for output tokens:
+- using.pt: Test program initialization. 'using' should emit .sProgram and .sIdentifier
+- repeat.pt: Test that repeat statements are no longer recognized. 'repeat ... end' should not emit .sRepeatStmt or .sRepeatEnd
+- public.pt: Test public procedure. '*' should emit .sPublic when creating a procedure
+- private.pt: Test private procedure. .sPublic should not be emitted when creating a private procedure
+- module.pt: Test modules. 'module ... end' should emit .sModule .sIdentifier .sBegin and .sEnd
+- do.pt: Test do statement. 'do' should emit .sDoStmt
+- break_if.pt: Test do statment with break if. 'break if' should emit .sBreakIf
+
+Tests for strings:
+- string.pt: Test declaration of string literal. 'x = "STRING LITERAL"' should emit .sStringLiteral
+- char.pt: Test that old Pascal-style chars are not recognized as string literals. 'x = 'CHAR LITERAL'' should not emit .sStringLiteral
+- substring.pt: Test substring. '"STRING LITERAL" $ 1..2 ' should emit .sStringLiteral, 2x .sInteger and .sSubstring
+- string_index.pt: Test string indexing. '"STRING LITERAL" ? "LIT"' should emit 2x .sStringLiteral, and .sIndex
+- string_length.pt: Test string length. ' # "STRING LITERAL"  ' should emit  .sStringLiteral, and .sLength
+- string_index_precedence.pt: Test precedence with string indexing. ' "STRING LITERAL" ? "LIT" + 5 ' should emit .sIndex with higher precedence than +
+- string_index_precedence_brakets.pt: Test precedence with string indexing. ' "STRING LITERAL" ? ("LIT" + 5) ' should emit .sIndex with lower precedence than +
+- string_length_prec_mult.pt: Test precedence with string length. '# "STRING LITERAL" * 5 ' should emit .sLength with higher precedence than *
+- string_length_prec_substr.pt: Test precenence between string length and substring. '# "STRING LITERAL" $ 5 .. 2 ' should emit .sLength with higher precedence than $
+- string_substr_prec_braket.pt: Test precedence with substring. '"STRING LITERAL" $ (5 * 2) .. 2 ' should emit .sSubstring with lower precedence than *
+- string_substr_prec_mult.pt: Test precedence with substring. '"STRING LITERAL" $ 5 .. 2 * 2 ' should emit .sSubstring with higher precedence than *
