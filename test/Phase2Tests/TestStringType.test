@@ -34,7 +34,7 @@ else
     echo "      FAILED"
 fi
 
-echo "   '\"STRING LITERAL\" ? "LIT" ' should emit 2x .sStringLiteral, and .sIndex"
+echo "   '\"STRING LITERAL\" ? \"LIT\" ' should emit 2x .sStringLiteral, and .sIndex"
 
 ssltrace "./ptc -t2 -o2 string_index.pt" ../../lib/pt/parser.def -e > string_index.eOutput 2> /dev/null
 
@@ -56,7 +56,7 @@ else
     echo "      FAILED"
 fi
 
-echo "   ' \"STRING LITERAL\" ? "LIT" + 5 ' should emit .sIndex with higher precedence than +"
+echo "   ' \"STRING LITERAL\" ? \"LIT\" + 5 ' should emit .sIndex with higher precedence than +"
 
 ssltrace "./ptc -t2 -o2 string_index_precedence.pt" ../../lib/pt/parser.def -e > string_index_precedence.eOutput 2> /dev/null
 
@@ -69,7 +69,7 @@ else
     echo "      FAILED"
 fi
 
-echo "   ' \"STRING LITERAL\" ? ("LIT" + 5) ' should emit .sIndex with lower precedence than +"
+echo "   ' \"STRING LITERAL\" ? (\"LIT\" + 5) ' should emit .sIndex with lower precedence than +"
 
 ssltrace "./ptc -t2 -o2 string_index_precedence_brakets.pt" ../../lib/pt/parser.def -e > string_index_precedence_brakets.eOutput 2> /dev/null
 
