@@ -30,8 +30,8 @@ See the README there for installation information.
 **semantic.ssl:**
 - Upate input tokens in semantic.ssl to match output tokens in parser.ssl -- DONE Matthew
 - Change output tokens for Char operations to String operattions (replace "Char" with "String"). Add the new T-codes for `tConcatenate`, `tSubstring`, `tLength`, `tIndex` and `tStringEqual`. Remove the old T-codes for the while operations, and replace the old T-codes for the repeat operations with the new do loop operations `tDoBegin`, `tDoBreakIf`, `tDoTest` and `tDoEnd`. Add the new `tCaseElse` T-code
-- Add a definition for `stringSize` to the type Integer. The value is 1024
-- In type StdType, change `stdChar` to `stdString`.
+- Add a definition for `stringSize` to the type Integer. The value is 1024 -- DONE Matthew
+- In type StdType, change `stdChar` to `stdString` -- DONE Matthew
 - Add the new `oSymbolTblStripScope` and `oSymbolTblMergeScope` operations to the `SymbolTable` mechanism
 - Add a kind for `syModule` to the type `SymbolKind`. If you are using a special kind for public procedures, add a kind for them also (e.g. `syPublicProcedure`), otherwise add a public attribute in another way
 - In type `TypeKind`, change the type kind for char (`tpChar`) to be for string (`tpString`)
@@ -56,7 +56,7 @@ See the README there for installation information.
 - Change the predefined type for Char to be a predefined type for String in the predefined type table entries and their initialization. Change all references to the Char type ref in the program to reference String instead
 - Change the predefined type "text" to reference String instead of Char
 - Add cases for the new semantic operations `oSymbolTblStripScope` and `oSymbolTblMergeScope` to the `SslWalker`. The implementation of `oSymbolTblStripScope` is like `oSymbolTblPopScope` except that it should not decrement the lexical level. That is, it just changes all the `identSymbolTblRefs` for the symbols in the top scope to their `symbolTblLink` values, and that's all. (This has the effect of removing them from visibility even though they are technically still in the table. A bit of a hack, but easy and correct.) Unlike `oSymbolTblPopScope`, be careful not to change `symbolTableTop`, `typeTableTop` and `lexicLevelStackTop` in `oSymbolTblStripScope` since we don’t want to remove anything from the tables in this case. The implementation of `oSymbolTblMergeScope` is easy - it just has to decrement the lexical level without changing any ident links
-- Change `oAllocateVariable` to handle allocation of Strings (size 1024)
+- Change `oAllocateVariable` to handle allocation of Strings (size 1024) -- DONE Matthew
 - Change all the assertions that insist on the top of the `SymbolStack` being `syProcedure` to allow for `syPublicProcedure` as well
 
 ## Phase 2
