@@ -26,6 +26,39 @@ See the README there for installation information.
 
 # TODO 
 
+## Phase 3
+**semantic.ssl:**
+- Upate input tokens in semantic.ssl to match output tokens in parser.ssl -- DONE Matthew
+- Change output tokens for Char operations to String operattions (replace "Char" with "String"). Add the new T-codes for `tConcatenate`, `tSubstring`, `tLength`, `tIndex` and `tStringEqual`. Remove the old T-codes for the while operations, and replace the old T-codes for the repeat operations with the new do loop operations `tDoBegin`, `tDoBreakIf`, `tDoTest` and `tDoEnd`. Add the new `tCaseElse` T-code
+- Add a definition for `stringSize` to the type Integer. The value is 1024
+- In type StdType, change `stdChar` to `stdString`.
+- Add the new `oSymbolTblStripScope` and `oSymbolTblMergeScope` operations to the `SymbolTable` mechanism
+- Add a kind for `syModule` to the type `SymbolKind`. If you are using a special kind for public procedures, add a kind for them also (e.g. `syPublicProcedure`), otherwise add a public attribute in another way
+- In type `TypeKind`, change the type kind for char (`tpChar`) to be for string (`tpString`)
+-  In type `TrapKind`, change the names of the traps for read and write char to be for string, and change their trap numbers to 108 for `trReadString` and 109 for `trWriteString` (which are the trap numbers assigned to them in the Quby runtime library). Remove the redundant extra `trWriteString`. Change all uses of the char traps in the S/SL to use the string traps instead
+- Add a new rule `ModuleDefinition` to handle modules. A `ModuleDefinition` is much like Program except it has no program parameters and no halt. At the end of the module it uses the new `oSymbolTblStripScope` and `oSymbolTblMergeScope` symbol table operations to promote all public symbols to the enclosing scope
+-  Merge the alternatives of the `Statement` rule into the `Block` rule and modify the `Statement` rule to push a new scope, call the `Block` rule, then pop the scope
+- Modify handling of constant definitions to allow only one per definition
+- Modify handling of type definitions to allow only one per definition
+- Modify handling of variable declarations to allow multiple identifiers declared using one type, but only one declaration per definition. You will have to push all the declared identifiers on the Symbol Stack and keep count of how many there are using the Count Stack, and then accept the type and use it to set the type and enter in the SymbolTable all the identifiers you pushed, one at a time. Remember to keep the stacks straight and clean up after you're done. Watch out for the fact that the code to do this for one variable in PT swaps the type stack but forgets to swap it back after entering the variable type - this will have to be fixed when you do it for more than one variable. (Note: If you’re finding this change too challenging, try just doing the single identifier case with no counting first.)
+- Change handling of procedure definitions to recognize public procedures and store them with the special public attribute or special symbol kind `syPublicProcedure`
+- Remove the handling of repeat statements and add handling of the Quby general do loop statement. Handling do statements is just like while statements except that the T-codes are different and there is a statement allowed before the conditional exit
+- Change case statement handling to handle the Quby optional else clause. The else clause is much like another case alternative, except emitted after the `tCaseEnd`
+-  Add handling of ternary (three-operand) operators (e.g. substring) to the `Expression` rule. Add a new `TernaryOperator` rule to handle substring operations. Look at the `BinaryOperator` rule as a model
+- Add handling of the string index (`?`) operator to the `BinaryOperator` rule. Be careful to get the type checking right
+- Add handling of string concatenation to the `sAdd` part of the `BinaryOperator` rule. Remember that strings are first class values in Quby, so string concatenation is just like integer addition in terms of what to do, except the T-codes are different
+- Change `UnaryOperator` rule to handle the string length operation as well. Be careful to get the type checking right
+- Strings are first class values in Quby, so we no longer need the `tSkipString` and `tStringDescriptor` stuff in the T-code for string literals. The T-code for a string literal in any context should simply be `tLiteralString`
+- Change handling of string constants to act like vars instead
+
+**semantic.pt:**
+- Copy and paste the entire contents of semantic.def where indicated by the comments in the semantic.pt source code
+- Change the predefined type for Char to be a predefined type for String in the predefined type table entries and their initialization. Change all references to the Char type ref in the program to reference String instead
+- Change the predefined type "text" to reference String instead of Char
+- Add cases for the new semantic operations `oSymbolTblStripScope` and `oSymbolTblMergeScope` to the `SslWalker`. The implementation of `oSymbolTblStripScope` is like `oSymbolTblPopScope` except that it should not decrement the lexical level. That is, it just changes all the `identSymbolTblRefs` for the symbols in the top scope to their `symbolTblLink` values, and that's all. (This has the effect of removing them from visibility even though they are technically still in the table. A bit of a hack, but easy and correct.) Unlike `oSymbolTblPopScope`, be careful not to change `symbolTableTop`, `typeTableTop` and `lexicLevelStackTop` in `oSymbolTblStripScope` since we don’t want to remove anything from the tables in this case. The implementation of `oSymbolTblMergeScope` is easy - it just has to decrement the lexical level without changing any ident links
+- Change `oAllocateVariable` to handle allocation of Strings (size 1024)
+- Change all the assertions that insist on the top of the `SymbolStack` being `syProcedure` to allow for `syPublicProcedure` as well
+
 ## Phase 2
 - Tokens -- DONE Matthew Thompson -- TESTS DONE Owen Hooper
    - Remove old parser output tokens --- sRepeatStmt, sRepeatEnd

@@ -30,6 +30,8 @@ Input :
         sType
         sVar
         sProcedure
+        sPublic  % ADDED
+        sModule  % ADDED
         sBegin
         sEnd
         sNegate
@@ -49,8 +51,10 @@ Input :
         sThen
         sElse
         sWhileStmt
-        sRepeatStmt
-        sRepeatEnd
+        % sRepeatStmt % REMOVED
+        % sRepeatEnd % REMOVED
+        sDoStmt % ADDED
+        sBreakIf % ADDED
         sEq
         sNE
         sLT
@@ -67,6 +71,9 @@ Input :
         sInfixAnd
         sAnd
         sNot
+        sSubstring % ADDED
+        sLength % ADDED
+        sIndex % ADDED
         sNewLine
         sEndOfFile
         lastSemanticToken = sEndOfFile;
@@ -1346,8 +1353,8 @@ Statement :
                 @WhileStmt
             | sCaseStmt:
                 @CaseStmt
-            | sRepeatStmt:
-                @RepeatStmt
+            % | sRepeatStmt: % REMOVED
+            %     @RepeatStmt % REMOVED
             | sNullStmt:
         ];
 
@@ -1565,19 +1572,19 @@ WhileStmt :
         oFixPopTargetAddress
         oFixPopForwardBranch;
 
-RepeatStmt :
-        .tRepeatBegin
-        oFixPushTargetAddress           % top-of-loop branch target
-        {[
-            | sRepeatEnd:
-                >
-            | *:
-                @Statement
-        ]}
-        .tRepeatControl
-        @BooleanControlExpression
-        .tRepeatTest
-        oFixPopTargetAddress;
+% RepeatStmt : % REMOVED RULE
+%         .tRepeatBegin
+%         oFixPushTargetAddress           % top-of-loop branch target
+%         {[
+%             | sRepeatEnd:
+%                 >
+%             | *:
+%                 @Statement
+%         ]}
+%         .tRepeatControl
+%         @BooleanControlExpression
+%         .tRepeatTest
+%         oFixPopTargetAddress;
 
 CaseStmt :
         .tCaseBegin
