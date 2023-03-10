@@ -105,6 +105,11 @@ Output :
         tEoln
         tEOF
         tVarParm
+        tConcatenate % ADDED
+        tSubstring % ADDED
+        tLength % ADDED
+        tIndex % ADDED
+        tStringEqual % ADDED
         tFetchAddress
         tFetchInteger
         tFetchString % CHANGED
@@ -129,9 +134,12 @@ Output :
         tIfBegin
         tIfEnd
         tCaseBegin
+        tCaseElse % ADDED
         tWhileBegin
-        tRepeatBegin
-        tRepeatControl
+        % tRepeatBegin % REMOVED
+        % tRepeatControl % REMOVED
+        tDoBegin % ADDED
+        tDoBreakIf % ADDED
         tCallBegin
         tParmEnd
         tProcedureEnd
@@ -157,7 +165,9 @@ Output :
         tCaseEnd
         tWhileTest
         tWhileEnd
-        tRepeatTest
+        % tRepeatTest % REMOVED
+        tDoTest % ADDED
+        tDoEnd % ADDED
         tSkipProc
         tCallEnd
         tLineNumber
@@ -308,6 +318,8 @@ type SymbolKind :
         syType
         syVariable
         syVarParameter
+        syModule % ADDED
+        syPublicProcedure % ADDED
         syProcedure
         syFunction
         syExternal
@@ -523,12 +535,14 @@ type TrapKind :
         trReadln = 4
         trWrite = 5
         trWriteln = 6
-        trWriteString = 7
+        % trWriteString = 7 % REMOVED
         trWriteInteger = 8
-        trWriteChar = 9
+        % trWriteChar = 9 % REMOVED
         trReadInteger = 10
-        trReadChar = 11
-        trAssign = 12;
+        % trReadChar = 11 % REMOVED
+        trAssign = 12
+        trReadString = 108 % ADDED
+        trWriteString = 109; % ADDED
 
 mechanism Emit :
     % Emit writes to the output "t-code" stream (the code area),
@@ -787,7 +801,7 @@ ProgramParameter :
 Block :
         % The parser has flagged phase errors, but has emitted out-of-phase
         % definitions with the intent of providing better error repair.
-
+        sBegin % ADDED
         {[
             | sProcedure:
                 @ProcedureDefinition
@@ -797,11 +811,23 @@ Block :
                 @TypeDefinitions
             | sVar:
                 @VariableDeclarations
+            % FOLLOWING CHOICE OPTIONS ADDED
+            | sAssignmentStmt:
+                @AssignmentStmt
+            | sCallStmt:
+                @CallStmt
+            | sIfStmt:
+                @IfStmt
+            | sWhileStmt:
+                @WhileStmt
+            | sCaseStmt:
+                @CaseStmt
+            | sNullStmt:
             | *:
                 >
         ]}
-        sBegin
-        @BeginStmt;
+        sEnd; % CHANGED
+        % @BeginStmt; % REMOVED
 
 ConstantDefinitions :           % Process named constant definitions
         {[
@@ -1341,23 +1367,26 @@ ProcedurePrologue :
         oCountPop;
 
 Statement :
-        [
-            | sAssignmentStmt:
-                @AssignmentStmt
-            | sCallStmt:
-                @CallStmt
-            | sBegin:
-                @BeginStmt
-            | sIfStmt:
-                @IfStmt
-            | sWhileStmt:
-                @WhileStmt
-            | sCaseStmt:
-                @CaseStmt
-            % | sRepeatStmt: % REMOVED
-            %     @RepeatStmt % REMOVED
-            | sNullStmt:
-        ];
+        % [ % REMOVED CHOICE
+        %     | sAssignmentStmt:
+        %         @AssignmentStmt
+        %     | sCallStmt:
+        %         @CallStmt
+        %     | sBegin:
+        %         @BeginStmt
+        %     | sIfStmt:
+        %         @IfStmt
+        %     | sWhileStmt:
+        %         @WhileStmt
+        %     | sCaseStmt:
+        %         @CaseStmt
+        %     | sRepeatStmt:
+        %         @RepeatStmt
+        %     | sNullStmt:
+        % ];
+        oSymbolTblPushScope % ADDED
+        @Block % ADDED
+        oSymbolTblPopScope; % ADDED
 
 AssignmentStmt :
         sIdentifier  oSymbolStkPushIdentifier
@@ -1400,13 +1429,13 @@ EmitStore:
             | *:                
         ];
 
-BeginStmt :
-        {[
-            | sEnd:
-                >
-            | *:
-                @Statement
-        ]};
+% BeginStmt : % REMOVED RULE
+%         {[
+%             | sEnd:
+%                 >
+%             | *:
+%                 @Statement
+%         ]};
 
 CallStmt :
         sIdentifier  oSymbolStkPushIdentifier   % Procedure being called
@@ -2795,7 +2824,7 @@ ReadText :
         [ oTypeStkChooseKind
             | tpString: % CHANGED
                 .tTrap
-                oEmitTrapKind(trReadChar)
+                oEmitTrapKind(trReadString)
             | tpInteger, tpSubrange:
                 .tTrap
                 oEmitTrapKind(trReadInteger)
