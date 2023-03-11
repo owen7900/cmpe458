@@ -1827,6 +1827,12 @@ UnaryOperator :
                 oTypeStkPush(tpBoolean) % result type
                 @CompareAndSwapTypes
                 oTypeStkPop
+            % ADDED Below choice
+            | sLength:
+                .tLength
+                oTypeStkPush(tpInteger) % result type
+                @CompareAndSwapTypes
+                oTypeStkPop
             | *:
                 >>
         ]
