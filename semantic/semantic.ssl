@@ -1837,13 +1837,14 @@ BinaryOperator :
         % Could make this a cycle (comment applies to UnaryOperator as well)
         % but that would probably be less efficient on average.
         [
-            | sAdd:
-                .tAdd
+            | sAdd: % CHANGED choice option
                 [oTypeStkChooseKind
-                   | tpString :
-                      oTypeStkPush(tpString)
-                   | tpInteger : 
-                      oTypeStkPush(tpInteger) % result type
+                    | tpString:
+                        .tConcatenate
+                        oTypeStkPush(tpString)
+                    | tpInteger:
+                        .tAdd
+                        oTypeStkPush(tpInteger) % result type
                 ]
                 @CompareOperandAndResultTypes
             | sSubtract:
