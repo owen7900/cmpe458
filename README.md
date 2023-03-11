@@ -46,7 +46,7 @@ See the README there for installation information.
 - Change case statement handling to handle the Quby optional else clause. The else clause is much like another case alternative, except emitted after the `tCaseEnd`
 -  Add handling of ternary (three-operand) operators (e.g. substring) to the `Expression` rule. Add a new `TernaryOperator` rule to handle substring operations. Look at the `BinaryOperator` rule as a model
 - Add handling of the string index (`?`) operator to the `BinaryOperator` rule. Be careful to get the type checking right
-- Add handling of string concatenation to the `sAdd` part of the `BinaryOperator` rule. Remember that strings are first class values in Quby, so string concatenation is just like integer addition in terms of what to do, except the T-codes are different
+- Add handling of string concatenation to the `sAdd` part of the `BinaryOperator` rule. Remember that strings are first class values in Quby, so string concatenation is just like integer addition in terms of what to do, except the T-codes are different -- DONE Owen Hooper
 - Change `UnaryOperator` rule to handle the string length operation as well. Be careful to get the type checking right -- DONE Owen Hooper
 - Strings are first class values in Quby, so we no longer need the `tSkipString` and `tStringDescriptor` stuff in the T-code for string literals. The T-code for a string literal in any context should simply be `tLiteralString`
 - Change handling of string constants to act like vars instead

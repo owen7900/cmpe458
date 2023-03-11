@@ -1846,7 +1846,12 @@ BinaryOperator :
         [
             | sAdd:
                 .tAdd
-                oTypeStkPush(tpInteger) % result type
+                [oTypeStkChooseKind
+                   | tpString :
+                      oTypeStkPush(tpString)
+                   | tpInteger : 
+                      oTypeStkPush(tpInteger) % result type
+                ]
                 @CompareOperandAndResultTypes
             | sSubtract:
                 .tSubtract
