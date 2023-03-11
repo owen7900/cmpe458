@@ -820,6 +820,8 @@ Block :
                 @IfStmt
             | sWhileStmt:
                 @WhileStmt
+            | sDoStmt:
+                @DoStmt
             | sCaseStmt:
                 @CaseStmt
             | sNullStmt:
@@ -1608,6 +1610,22 @@ WhileStmt :
 %         @BooleanControlExpression
 %         .tRepeatTest
 %         oFixPopTargetAddress;
+
+DoStmt : % ADDED RULE
+        .tDoBegin
+        oFixPushTargetAddress           % top-of-loop branch target
+        @Statement
+        sBreakIf
+        .tDoBreakIf
+        @BooleanControlExpression
+        .tDoTest
+        oFixPushForwardBranch
+        oEmitNullAddress                % exit branch
+        oFixSwap                % top-of-loop target back on top
+        @Statement
+        .tDoEnd
+        oFixPopTargetAddress
+        oFixPopForwardBranch;
 
 CaseStmt :
         .tCaseBegin
