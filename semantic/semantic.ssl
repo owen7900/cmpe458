@@ -1841,9 +1841,16 @@ UnaryOperator :
             % ADDED Below choice
             | sLength:
                 .tLength
-                oTypeStkPush(tpInteger) % result type
-                @CompareAndSwapTypes
+                % check the type of the operand
+                [ oTypeStkChooseKind
+                    | tpString:
+                    | *:
+                        #eTypeMismatch
+                ]
                 oTypeStkPop
+                % remove the operand type from the stack and replace it with
+                % the result type
+                oTypeStkPush(tpInteger) % result type
             | *:
                 >>
         ]
@@ -1911,6 +1918,25 @@ BinaryOperator :
                 .tModulus
                 oTypeStkPush(tpInteger)
                 @CompareOperandAndResultTypes
+            | sIndex: % ADDED choice option
+                .tIndex
+                % compare type of top two type stack entries
+                [ oTypeStkChooseKind
+                    | tpString:
+                        oTypeStkSwap
+                        [ oTypeStkChooseKind
+                            | tpString:
+                            | *:
+                                #eTypeMismatch
+                        ]
+                    | *:
+                        #eTypeMismatch
+                ]
+                % remove the operands' types from the stack
+                oTypeStkPop
+                oTypeStkPop
+                oTypeStkPush(tpInteger) % result type
+                oSymbolStkPop
             | *:
                 >>
         ]
