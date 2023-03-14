@@ -302,6 +302,13 @@ mechanism SymbolTable :
         % Pop the lexic level stack and unlink all names local to the scope.
         % Remove all local entries from the symbol and type tables.
 
+    oSymbolTblStripScope
+        % Change all the identSymbolTblRefs for the symbols in the top scope to
+        % their symbolTblLink values.
+
+    oSymbolTblMergeScope
+        % Decrement the lexical level without changing anything else.
+
     oSymbolTblPreserveParameters
         % Restore procedure parameter entries to the symbol table 
         % after popping the scope.
