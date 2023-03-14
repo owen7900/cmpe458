@@ -1889,10 +1889,23 @@ BinaryOperator :
                 oTypeStkPush(tpBoolean)
                 @CompareOperandAndResultTypes
             | sEq:
-                .tEQ
+                [ oTypeStkChooseKind % ADDED CHOICE
+                    | tpString:
+                        .tStringEqual
+                    | *:
+                        .tEQ
+                ]
+                % .tEQ % REMOVED
                 @CompareEqualityOperandTypes
             | sNE:
-                .tNE
+                [ oTypeStkChooseKind % ADDED CHOICE
+                    | tpString:
+                        .tStringEqual
+                        .tNot
+                    | *:
+                        .tNE
+                ]
+                % .tNE % REMOVED
                 @CompareEqualityOperandTypes
             | sGT:
                 .tGT
