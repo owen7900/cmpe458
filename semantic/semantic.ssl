@@ -1242,8 +1242,8 @@ ProcedureDefinition :
         oFixPushForwardBranch
         oEmitNullAddress
 
-        % oSymbolStkSetKind(syProcedure)
-        [
+        % oSymbolStkSetKind(syProcedure) % REMOVED
+        [ % ADDED CHOICE
             | sPublic:
                 oSymbolStkSetKind(syPublicProcedure)
             | *:
