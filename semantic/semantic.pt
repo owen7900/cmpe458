@@ -423,78 +423,79 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
         Program = 0;
         ProgramParameter = 45;
         Block = 111;
-        AllocateVar = 715;
-        ProcedureDefinition = 799;
-        ConstantDefinitions = 187;
-        TypeDefinitions = 303;
-        VariableDeclarations = 638;
-        AssignmentStmt = 1014;
-        CallStmt = 1096;
-        IfStmt = 1335;
-        WhileStmt = 1366;
-        DoStmt = 1383;
-        CaseStmt = 1406;
-        ConstantValue = 218;
-        SymbolStkPushDefaultIntegerConstant = 3821;
-        StringLiteral = 1674;
-        TypeBody = 332;
-        IndexType = 370;
-        ComponentType = 405;
-        SimpleType = 431;
-        TypeTblEnterIfNew = 360;
-        ValuePushValuePlusOne = 3812;
-        SubrangeUpperBound = 576;
-        EnterVariableAttributes = 669;
-        ProcedureHeading = 855;
-        ProcedureParameterType = 901;
-        ProcedurePrologue = 964;
-        CountPushCopy = 3817;
-        EmitStore = 1069;
-        Statement = 1009;
-        Variable = 2212;
-        Expression = 1556;
-        CompareAndSwapTypes = 2001;
-        EmitAssign = 1042;
-        OpenProcedure = 2605;
-        AssignProcedure = 2636;
-        WriteProcedure = 2743;
-        WritelnProcedure = 3206;
-        ReadProcedure = 3264;
-        ReadlnProcedure = 3626;
-        ActualParameters = 1229;
-        FlushActuals = 3892;
-        VarActual = 1297;
-        BooleanControlExpression = 3797;
-        CaseSelectorExpression = 3780;
-        CaseAlternative = 1452;
-        Operand = 1584;
-        UnaryOperator = 1731;
-        BinaryOperator = 1783;
-        FlushExpn = 3871;
-        ConstantOperand = 2323;
-        VariableOperand = 2355;
-        FunctionOperand = 2382;
-        SymbolStkPushDefaultIntegerVariable = 3854;
-        FileOperand = 2580;
-        CompareOperandAndResultTypes = 2086;
-        CompareEqualityOperandTypes = 2147;
-        CompareRelationalOperandTypes = 2097;
-        VariableExtension = 2254;
-        StandardFunctionActual = 2485;
-        FileVariable = 3684;
-        WriteText = 3010;
-        WriteBinary = 3122;
-        WriteStandardExpnList = 2964;
-        TextFileVariable = 3725;
-        ReadTextParameterList = 3394;
-        ReadBinaryParameterList = 3460;
-        ReadText = 3526;
-        ReadBinary = 3555;
-        SymbolStkPushDefaultCharConstant = 3837;
+        AllocateVar = 721;
+        ProcedureDefinition = 805;
+        ConstantDefinitions = 193;
+        TypeDefinitions = 309;
+        VariableDeclarations = 644;
+        ModuleDefinition = 1015;
+        AssignmentStmt = 1058;
+        CallStmt = 1140;
+        IfStmt = 1379;
+        WhileStmt = 1410;
+        DoStmt = 1427;
+        CaseStmt = 1450;
+        ConstantValue = 224;
+        SymbolStkPushDefaultIntegerConstant = 3865;
+        StringLiteral = 1718;
+        TypeBody = 338;
+        IndexType = 376;
+        ComponentType = 411;
+        SimpleType = 437;
+        TypeTblEnterIfNew = 366;
+        ValuePushValuePlusOne = 3856;
+        SubrangeUpperBound = 582;
+        EnterVariableAttributes = 675;
+        ProcedureHeading = 861;
+        ProcedureParameterType = 907;
+        ProcedurePrologue = 970;
+        CountPushCopy = 3861;
+        EmitStore = 1113;
+        Statement = 1053;
+        Variable = 2256;
+        Expression = 1600;
+        CompareAndSwapTypes = 2045;
+        EmitAssign = 1086;
+        OpenProcedure = 2649;
+        AssignProcedure = 2680;
+        WriteProcedure = 2787;
+        WritelnProcedure = 3250;
+        ReadProcedure = 3308;
+        ReadlnProcedure = 3670;
+        ActualParameters = 1273;
+        FlushActuals = 3936;
+        VarActual = 1341;
+        BooleanControlExpression = 3841;
+        CaseSelectorExpression = 3824;
+        CaseAlternative = 1496;
+        Operand = 1628;
+        UnaryOperator = 1775;
+        BinaryOperator = 1827;
+        FlushExpn = 3915;
+        ConstantOperand = 2367;
+        VariableOperand = 2399;
+        FunctionOperand = 2426;
+        SymbolStkPushDefaultIntegerVariable = 3898;
+        FileOperand = 2624;
+        CompareOperandAndResultTypes = 2130;
+        CompareEqualityOperandTypes = 2191;
+        CompareRelationalOperandTypes = 2141;
+        VariableExtension = 2298;
+        StandardFunctionActual = 2529;
+        FileVariable = 3728;
+        WriteText = 3054;
+        WriteBinary = 3166;
+        WriteStandardExpnList = 3008;
+        TextFileVariable = 3769;
+        ReadTextParameterList = 3438;
+        ReadBinaryParameterList = 3504;
+        ReadText = 3570;
+        ReadBinary = 3599;
+        SymbolStkPushDefaultCharConstant = 3881;
         }
 
         { S/SL Table Parameters }
-        sslTblSize = 3911;
+        sslTblSize = 3955;
         minSslTableValue = -32767;
         maxSslTableValue = 32767;
 
@@ -1800,7 +1801,8 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                                 begin
                                     link := symbolTblIdentLink[i];
 
-                                    if link <> null then
+                                    if (link <> null) and (symbolTblKind[i] <> syPublicProcedure) then
+                                        { Keep public procedures in scope. }
                                         { This is not a dummy identifier generated by 
                                           the parser's syntax error recovery procedure. }
                                         begin
@@ -1823,7 +1825,8 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                     oSymbolTblPreserveParameters:
                         { Restore procedure parameter entries to the symbol table }
                         begin
-                            assert (symbolTblKind [symbolTblTop] = syProcedure, assert46);
+                            assert((symbolTblKind[symbolTblTop] = syProcedure) or
+                                   (symbolTblKind[symbolTblTop] = syPublicProcedure), assert46);
                             symbolTblTop := symbolTblTop +
                                 typeTblLowerBound [symbolTblTypeTblLink[symbolTblTop]];
                         end ;
@@ -1935,7 +1938,8 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                         { The top symbol is a procedure.  Push the procedure's i'th 
                           formal parameter, where i is the value of the top count stack entry. }
                         begin
-                            Assert((symbolStkKind[symbolStkTop] = syProcedure), assert24);
+                            Assert((symbolStkKind[symbolStkTop] = syProcedure) or
+                                   (symbolStkKind[symbolStkTop] = syPublicProcedure), assert24); { ADDED OR }
                             SymbolStkPushIdentifier(symbolStkSymbolTblRef [symbolStkTop] + 
                                 countStack[countStackTop]);
                         end;
@@ -1983,7 +1987,8 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                           negative value fields. }
                         begin
                             Assert((symbolStkKind[symbolStkTop] = syProcedure) or
-                                   (symbolStkKind[symbolStkTop] = syFunction), assert27);
+                                   (symbolStkKind[symbolStkTop] = syFunction) or
+                                   (symbolStkKind[symbolStkTop] = syPublicProcedure), assert27); { ADDED OR }
                             if symbolStkValue[symbolStkTop] < 0 then
                                 resultValue := -symbolStkValue[symbolStkTop]
                             else
@@ -2101,7 +2106,8 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                     oTypeStkEnterParameterCount:
                         { Set the top entry's parameter count field from the top count. }
                         begin
-                            Assert((symbolStkKind[symbolStkTop] = syProcedure), assert28);
+                            Assert((symbolStkKind[symbolStkTop] = syProcedure) or
+                                   (symbolStkKind[symbolStkTop] = syPublicProcedure), assert28); { ADDED OR }
                             typeStkLowerBound[typeStkTop] := countStack[countStackTop];
                         end;
 
@@ -2109,7 +2115,8 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
                         { Return yes if the parameter count field matches the top count, 
                           otherwise return no. }
                         begin
-                            Assert((symbolStkKind[symbolStkTop] = syProcedure), assert29);
+                            Assert((symbolStkKind[symbolStkTop] = syProcedure) or
+                                   (symbolStkKind[symbolStkTop] = syPublicProcedure), assert29); { ADDED OR }
                             if typeStkLowerBound[typeStkTop] = countStack[countStackTop] then
                                 resultValue := yes
                             else

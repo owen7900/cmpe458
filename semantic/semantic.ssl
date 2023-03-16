@@ -819,6 +819,8 @@ Block :
             | sVar:
                 @VariableDeclarations
             % FOLLOWING CHOICE OPTIONS ADDED
+            | sModule:
+                @ModuleDefinition
             | sAssignmentStmt:
                 @AssignmentStmt
             | sCallStmt:
@@ -1240,7 +1242,13 @@ ProcedureDefinition :
         oFixPushForwardBranch
         oEmitNullAddress
 
-        oSymbolStkSetKind(syProcedure)
+        % oSymbolStkSetKind(syProcedure)
+        [
+            | sPublic:
+                oSymbolStkSetKind(syPublicProcedure)
+            | *:
+                oSymbolStkSetKind(syProcedure)
+        ]
         oValuePushCodeAddress
         oSymbolStkEnterValue
         oValuePop
@@ -1368,6 +1376,36 @@ ProcedurePrologue :
         oTypeStkEnterParameterCount     % In procedure's type entry
         oCountPop;
 
+ModuleDefinition : % ADDED RULE
+        sIdentifier  oSymbolStkPushIdentifier % module name
+        [ oSymbolStkChooseKind
+            | syUndefined:
+            | syExternal:
+                % Program parameters must be declared as file variables
+                #eExternalDeclare
+            | *:
+                #eMultiplyDefined
+                % New definition obscures old one.
+        ]
+
+        oSymbolStkSetKind(syModule)
+        oTypeStkPush(tpNull)
+        oTypeTblEnter
+        oSymbolStkEnterTypeReference
+        oSymbolTblEnter
+
+        oSymbolTblPushScope     % module scope
+
+        @Block
+
+        oTypeTblUpdate
+        oTypeStkPop
+        oSymbolTblUpdate
+        oSymbolStkPop
+
+        oSymbolTblStripScope
+        oSymbolTblMergeScope;
+
 Statement :
         % [ % REMOVED CHOICE
         %     | sAssignmentStmt:
@@ -1447,7 +1485,7 @@ CallStmt :
             | *:
         ]
         [ oSymbolStkChooseKind
-            | syProcedure:
+            | syProcedure, syPublicProcedure: % CHANGED
                 [ oSymbolStkChooseStandardRoutine
                     | rtReset:
                         .tTrapBegin
