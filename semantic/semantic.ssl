@@ -1787,6 +1787,7 @@ Expression :
             @Operand
             @UnaryOperator
             @BinaryOperator
+            @TernaryOperator % ADDED
             [
                 | sExpnEnd:
                     >
@@ -2012,6 +2013,42 @@ BinaryOperator :
                 oTypeStkPop
                 oTypeStkPop
                 oTypeStkPush(tpInteger) % result type
+                oSymbolStkPop
+            | *:
+                >>
+        ]
+        % If an operator is present the result is an expression
+        oSymbolStkSetKind(syExpression);
+
+TernaryOperator : % ADDED RULE
+        [
+            | sSubstring:
+                .tSubstring
+                % compare type of top two type stack entries (start and end positions)
+                [ oTypeStkChooseKind
+                    | tpInteger:
+                        oTypeStkSwap
+                        [ oTypeStkChooseKind
+                            | tpInteger:
+                            | *:
+                                #eTypeMismatch
+                        ]
+                    | *:
+                        #eTypeMismatch
+                ]
+                % remove the position operands' types from the stack
+                oTypeStkPop
+                oTypeStkPop
+                % check that the first operand is a string
+                [ oTypeStkChooseKind
+                    | tpString:
+                    | *:
+                        #eTypeMismatch
+                ]
+                % remove the operand's type from the stack
+                oTypeStkPop
+                oTypeStkPush(tpString) % result type
+                oSymbolStkPop
                 oSymbolStkPop
             | *:
                 >>

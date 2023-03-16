@@ -44,7 +44,7 @@ See the README there for installation information.
 - Change handling of procedure definitions to recognize public procedures and store them with the special public attribute or special symbol kind `syPublicProcedure` -- DONE Matthew
 - Remove the handling of repeat statements and add handling of the Quby general do loop statement. Handling do statements is just like while statements except that the T-codes are different and there is a statement allowed before the conditional exit -- DONE Matthew
 - Change case statement handling to handle the Quby optional else clause. The else clause is much like another case alternative, except emitted after the `tCaseEnd` -- DONE Matthew
--  Add handling of ternary (three-operand) operators (e.g. substring) to the `Expression` rule. Add a new `TernaryOperator` rule to handle substring operations. Look at the `BinaryOperator` rule as a model
+-  Add handling of ternary (three-operand) operators (e.g. substring) to the `Expression` rule. Add a new `TernaryOperator` rule to handle substring operations. Look at the `BinaryOperator` rule as a model -- DONE Matthew
 - Add handling of the string index (`?`) operator to the `BinaryOperator` rule. Be careful to get the type checking right -- DONE Matthew
 - Add handling of string concatenation to the `sAdd` part of the `BinaryOperator` rule. Remember that strings are first class values in Quby, so string concatenation is just like integer addition in terms of what to do, except the T-codes are different -- DONE Owen Hooper
 - Change `UnaryOperator` rule to handle the string length operation as well. Be careful to get the type checking right -- DONE Owen Hooper
