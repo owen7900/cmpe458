@@ -1682,13 +1682,29 @@ CaseStmt :
         oEmitNullAddress        % address of case branch table
         {[
             | sCaseEnd:
+                .tCaseEnd % ADDED
+                oFixPopForwardBranch % ADDED
+                oEmitCaseBranchTable % ADDED
+                >
+            | sElse: % ADDED CHOICE OPTION
+                .tCaseEnd
+                oFixPopForwardBranch
+                oEmitCaseBranchTable
+                .tCaseElse
+                @Statement
+                .tCaseMerge
+                oFixPushForwardBranch
+                oEmitNullAddress                % merge branch at end of statement
+                oFixSwap                        % keep case select branch on top
+                oCountIncrement
+                sCaseEnd
                 >
             | *:
                 @CaseAlternative
         ]}
-        .tCaseEnd
-        oFixPopForwardBranch
-        oEmitCaseBranchTable
+        % .tCaseEnd % REMOVED
+        % oFixPopForwardBranch % REMOVED
+        % oEmitCaseBranchTable % REMOVED
         % emit merge branches for case alternatives
         {[ oCountChoose         % number of case alternatives
             | zero:
@@ -1705,8 +1721,8 @@ CaseAlternative :
         % constant case labels followed by a statement.
 
         {[
-            | sLabelEnd:
-                >
+            % | sLabelEnd: % REMOVED
+            %     > % REMOVED
             | sIdentifier:
                 oSymbolStkPushIdentifier
                 [ oSymbolStkChooseKind
@@ -1752,6 +1768,8 @@ CaseAlternative :
                         oCasePushLabel
                 ]
                 oValuePop
+            | *: % ADDED CHOICE DEFAULT
+                >
         ]}
         @Statement
         .tCaseMerge
