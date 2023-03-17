@@ -1840,9 +1840,7 @@ Operand :
                 %         .tLiteralString
                 %         oEmitValue
                 % ]
-                .tLiteralString % ADDED
-                oEmitValue % ADDED
-                oValuePop
+                % oValuePop % REMOVED
             | sFile:
                 @Expression
                 @FileOperand
@@ -1856,39 +1854,46 @@ StringLiteral :
         % The value of a packed array is its address.
 
         oValuePushStringLength
-        [ oValueChoose
-            | zero:
-                #eNullString
-                oTypeStkPush(tpString) % CHANGED
-                oTypeStkLinkToStandardType(stdString) % CHANGED
-                oValuePop
-                oValuePush(zero)
-            | one:
-                oTypeStkPush(tpString) % CHANGED
-                oTypeStkLinkToStandardType(stdString) % CHANGED
-                oValuePop
-                oValuePushChar
-            | *:
-                % branch around the literal string since
-                % it is stored in the code area
-                .tSkipString
-                oFixPushForwardBranch
-                oEmitNullAddress
-                .tStringData
-                oEmitValue                      % string length
-                oValuePop
-                oValuePushCodeAddress           % The string's characters are in the code area
-                oValueNegate                    % encode that with a negative address
-                oEmitString                     % string's characters
-                oFixPopForwardBranch
-                oTypeStkPush(tpString)
-                oValuePush(one)                 % strings are indexed from 1
-                oValuePushStringLength
-                oTypeStkEnterBounds
-                oValuePop
-                oValuePop
-                oTypeTblEnter
-        ];
+        % ADDED below
+        .tLiteralString
+        oEmitValue                      % string length
+        oValuePop
+        oEmitString                     % string's characters
+        oTypeStkPush(tpString)
+        oTypeStkLinkToStandardType(stdString);
+        % [ oValueChoose % REMOVED CHOICE
+        %     | zero:
+        %         #eNullString
+        %         oTypeStkPush(tpString) % CHANGED
+        %         oTypeStkLinkToStandardType(stdString) % CHANGED
+        %         oValuePop
+        %         oValuePush(zero)
+        %     | one:
+        %         oTypeStkPush(tpString) % CHANGED
+        %         oTypeStkLinkToStandardType(stdString) % CHANGED
+        %         oValuePop
+        %         oValuePushChar
+        %     | *:
+        %         % branch around the literal string since
+        %         % it is stored in the code area
+        %         .tSkipString
+        %         oFixPushForwardBranch
+        %         oEmitNullAddress
+        %         .tStringData
+        %         oEmitValue                      % string length
+        %         oValuePop
+        %         oValuePushCodeAddress           % The string's characters are in the code area
+        %         oValueNegate                    % encode that with a negative address
+        %         oEmitString                     % string's characters
+        %         oFixPopForwardBranch
+        %         oTypeStkPush(tpString)
+        %         oValuePush(one)                 % strings are indexed from 1
+        %         oValuePushStringLength
+        %         oTypeStkEnterBounds
+        %         oValuePop
+        %         oValuePop
+        %         oTypeTblEnter
+        % ];
 
 UnaryOperator :
         [
