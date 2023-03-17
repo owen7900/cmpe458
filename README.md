@@ -49,7 +49,7 @@ See the README there for installation information.
 - Add handling of string concatenation to the `sAdd` part of the `BinaryOperator` rule. Remember that strings are first class values in Quby, so string concatenation is just like integer addition in terms of what to do, except the T-codes are different -- DONE Owen Hooper
 - Change `UnaryOperator` rule to handle the string length operation as well. Be careful to get the type checking right -- DONE Owen Hooper
 - Strings are first class values in Quby, so we no longer need the `tSkipString` and `tStringDescriptor` stuff in the T-code for string literals. The T-code for a string literal in any context should simply be `tLiteralString` -- DONE Matthew
-- Change handling of string constants to act like vars instead
+- Change handling of string constants to act like vars instead -- DONE Matthew
 
 **semantic.pt:**
 - Copy and paste the entire contents of semantic.def where indicated by the comments in the semantic.pt source code

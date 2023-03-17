@@ -856,9 +856,15 @@ ConstantDefinitions :           % Process named constant definitions
         oSymbolStkSetKind(syConstant)
         @ConstantValue
         oSymbolStkEnterTypeReference
+        [ oTypeStkChooseKind % ADDED CHOICE
+            | tpString:
+            | *:
+                oSymbolStkEnterValue
+                oValuePop
+        ]
         oTypeStkPop
-        oSymbolStkEnterValue
-        oValuePop
+        % oSymbolStkEnterValue % REMOVED
+        % oValuePop % REMOVED
         oSymbolTblEnter
         oSymbolStkPop;
 
@@ -902,7 +908,28 @@ ConstantValue :         % push the value and type of the constant value
                 ]
                 oSymbolStkPop   
             | sStringLiteral:
-                @StringLiteral  % pushes type and value, enters address
+                % @StringLiteral  % pushes type and value, enters address % REMOVED
+                % ADDED below
+                % set symbol type to string
+                oTypeStkPush(tpString)
+                oTypeStkLinkToStandardType(stdString)
+                oSymbolStkEnterTypeReference
+                % make symbol look like a variable
+                oSymbolStkSetKind(syVariable)
+                % allocate the "variable"
+                oAllocateAlignOnWord
+                oSymbolStkEnterDataAddress
+                oAllocateVariable
+                oTypeStkPop
+                % begin variable-like assignment
+                .tAssignBegin
+                @Variable
+                oSymbolStkPush(syExpression)
+                @StringLiteral
+                .tAssignString
+                oTypeStkPop  oSymbolStkPop      % Expression
+                % set symbol kind back to constant
+                oSymbolStkSetKind(syConstant)
         ];
 
 TypeDefinitions :       % process named type definitions
@@ -2276,8 +2303,10 @@ ConstantOperand :
                 .tLiteralBoolean
                 oEmitValue
             | tpString:         % a named literal string
-                .tLiteralString
+                % .tLiteralString % REMOVED
+                .tLiteralAddress % ADDED
                 oEmitValue
+                .tFetchString % ADDED
         ]
         oValuePop;
 
