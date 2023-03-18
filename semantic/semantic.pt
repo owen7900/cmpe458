@@ -787,7 +787,7 @@ program SemanticAnalysis (output, semanticSsl, parseStream, temp, tCode, options
 
         { Predefined type table entries }
         standardIntegerTypeRef: TypeTblReference;
-        standardStringTypeRef:    TypeTblReference;
+        standardStringTypeRef:  TypeTblReference; { CHANGED }
         standardBooleanTypeRef: TypeTblReference;
         standardTextTypeRef:    TypeTblReference;
         

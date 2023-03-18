@@ -274,7 +274,7 @@ type PredeclaredId :
 
 type StdType :
         stdInteger
-        stdString
+        stdString % CHANGED
         stdBoolean
         stdText;
 
@@ -302,11 +302,11 @@ mechanism SymbolTable :
         % Pop the lexic level stack and unlink all names local to the scope.
         % Remove all local entries from the symbol and type tables.
 
-    oSymbolTblStripScope
+    oSymbolTblStripScope % ADDED
         % Change all the identSymbolTblRefs for the symbols in the top scope to
         % their symbolTblLink values.
 
-    oSymbolTblMergeScope
+    oSymbolTblMergeScope % ADDED
         % Decrement the lexical level without changing anything else.
 
     oSymbolTblPreserveParameters
@@ -932,7 +932,7 @@ ConstantValue :         % push the value and type of the constant value
                 oSymbolStkSetKind(syConstant)
         ];
 
-TypeDefinitions :       % process named type definitions
+TypeDefinitions : % UPDATED RULE      % process named type definitions
         sIdentifier
         oSymbolStkPushLocalIdentifier
         [ oSymbolStkChooseKind

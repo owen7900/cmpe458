@@ -1,3 +1,37 @@
+# Phase 3
+## semantic.ssl
+- Update input tokens to match parser.ssl (lines 33-76)
+- Remove old T-codes and add new T-codes (lines 108-170)
+- Add string size (line 232)
+- Change `stdChar` to `stdString` (line 277)
+- Add new symbol table operations `oSymbolTblStripScope` and `oSymbolTblMergeScope` (lines 305, 309)
+- Add symbol kinds `syModule` and `syPublicProcedure` (lines 328-329)
+- Remove `tpChar` (line 447)
+- Change char traps to be string traps (lines 545-552)
+- Add rule `ModuleDefinition` (lines 1430-1458)
+- Update statment and block rules to allow declaration and statement intermixing (lines 811-841, 1461-1480)
+- Update constant definitions (lines 844-869)
+- Update type definitions (lines 936-956)
+- Update variable declarations (lines 1139-1183)
+- Recognize public procedures (lines 1296-1302)
+- Remove repeat statement and add do loop (lines 1696-1724)
+- Handle else clause within case statements (lines 1736-1758)
+- Handle ternary operators (lines 1841, 2079-2113)
+- Handle string index (lines 2054-2072)
+- Handle string concatenation (lines 1986-1993)
+- Handle string (in)equality (lines 2011-2028)
+- Handle string length (lines 1962-1973)
+- Update string T-codes (lines 1886-1894, 1909-1947)
+- Update string constants (lines 859-867, 911-932, 2330-2333)
+
+## semantic.pt
+- Pasted contents of `semantic.def` (lines 54-501)
+- Change predefined Char type to predefined String type (line 790)
+- Replace Char references with String references (lines 1020-1035, 2081)
+- Handle allocation of strings (lines 2396-2397)
+- Add semantic operations `oSymbolTblStripScope` and `oSymbolTblMergeScope` (lines 1793-1824)
+- Update assertions that require `syProcedure` on top of the Symbol stack to allow for `syPublicProcedure` (lines 1830, 1943, 1992, 2111, 2120)
+
 # Phase 2
 ## parser.ssl
 - Update input tokens to match scan.ssl. (lines 20-94)
