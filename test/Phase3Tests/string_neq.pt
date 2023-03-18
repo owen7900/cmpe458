@@ -1,0 +1,2 @@
+using output
+if "a" != "a" then end

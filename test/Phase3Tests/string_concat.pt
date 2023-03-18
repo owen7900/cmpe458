@@ -1,0 +1,3 @@
+using output
+var x : string
+x = "a" + "b"

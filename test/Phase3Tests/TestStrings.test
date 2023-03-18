@@ -1,0 +1,53 @@
+#! /bin/bash
+
+echo "---------Testing Strings----------------"
+
+echo "   Constant declaration 'val x = \"TEST\"' should resemble a variable declaration"
+
+ssltrace "./ptc -t3 -o3 string_const.pt" ../../lib/pt/semantic.def -e > string_const.eOutput 2> /dev/null
+
+if [ $(grep -c '.tAssignBegin' string_const.eOutput) -eq 1 -a\
+    $(grep -c '.tLiteralAddress' string_const.eOutput) -eq 2 -a\
+    $(grep -c '.tLiteralString' string_const.eOutput) -eq 1 -a\
+    $(grep -c '.tAssignString' string_const.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   Concatenation 'x = \"a\" + \"b\"' should emit .tConcatenate"
+
+ssltrace "./ptc -t3 -o3 string_concat.pt" ../../lib/pt/semantic.def -e > string_concat.eOutput 2> /dev/null
+
+if [ $(grep -c '.tLiteralString' string_concat.eOutput) -eq 2 -a\
+    $(grep -c '.tConcatenate' string_concat.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   String equality '\"a\" == \"a\"' should emit .tStringEqual"
+
+ssltrace "./ptc -t3 -o3 string_eq.pt" ../../lib/pt/semantic.def -e > string_eq.eOutput 2> /dev/null
+
+if [ $(grep -c '.tLiteralString' string_eq.eOutput) -eq 2 -a\
+    $(grep -c '.tStringEqual' string_eq.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   String inequality '\"a\" != \"a\"' should emit .tStringEqual .tNot"
+
+ssltrace "./ptc -t3 -o3 string_neq.pt" ../../lib/pt/semantic.def -e > string_neq.eOutput 2> /dev/null
+
+if [ $(grep -c '.tLiteralString' string_neq.eOutput) -eq 2 -a\
+    $(grep -c '.tStringEqual' string_neq.eOutput) -eq 1 -a\
+    $(grep -c '.tNot' string_neq.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
