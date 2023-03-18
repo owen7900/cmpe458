@@ -1,0 +1,3 @@
+using output
+var x : integer
+x = "TEST" ? "ES"

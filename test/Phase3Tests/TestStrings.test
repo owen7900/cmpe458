@@ -16,7 +16,7 @@ else
 fi
 
 
-echo "   Concatenation 'x = \"a\" + \"b\"' should emit .tConcatenate"
+echo "   Concatenation '\"a\" + \"b\"' should emit .tConcatenate"
 
 ssltrace "./ptc -t3 -o3 string_concat.pt" ../../lib/pt/semantic.def -e > string_concat.eOutput 2> /dev/null
 
@@ -47,6 +47,42 @@ ssltrace "./ptc -t3 -o3 string_neq.pt" ../../lib/pt/semantic.def -e > string_neq
 if [ $(grep -c '.tLiteralString' string_neq.eOutput) -eq 2 -a\
     $(grep -c '.tStringEqual' string_neq.eOutput) -eq 1 -a\
     $(grep -c '.tNot' string_neq.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   String length '# \"TEST\"' should emit .tLength"
+
+ssltrace "./ptc -t3 -o3 string_length.pt" ../../lib/pt/semantic.def -e > string_length.eOutput 2> /dev/null
+
+if [ $(grep -c '.tLiteralString' string_length.eOutput) -eq 1 -a\
+    $(grep -c '.tLength' string_length.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   String index '\"TEST\" ? \"ES\"' should emit .tIndex"
+
+ssltrace "./ptc -t3 -o3 string_index.pt" ../../lib/pt/semantic.def -e > string_index.eOutput 2> /dev/null
+
+if [ $(grep -c '.tLiteralString' string_index.eOutput) -eq 2 -a\
+    $(grep -c '.tIndex' string_index.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   Substring '\"TEST\" $ 2..3' should emit .tSubstring"
+
+ssltrace "./ptc -t3 -o3 string_substr.pt" ../../lib/pt/semantic.def -e > string_substr.eOutput 2> /dev/null
+
+if [ $(grep -c '.tLiteralString' string_substr.eOutput) -eq 1 -a\
+    $(grep -c '.tSubstring' string_substr.eOutput) -eq 1 ]; then
     echo "      SUCCESS"
 else
     echo "      FAILED"
