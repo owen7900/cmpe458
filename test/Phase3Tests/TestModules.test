@@ -1,0 +1,35 @@
+#! /bin/bash
+
+echo "---------Testing Modules----------------"
+
+echo "   A private procedure declared inside a module should emit #eUndefinedIdentifier when called outside the module"
+
+ssltrace "./ptc -t3 -o3 module_private.pt" ../../lib/pt/semantic.def -e > module_private.eOutput 2> /dev/null
+
+if [ $(grep -c '#eUndefinedIdentifier' module_private.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   A public procedure declared inside a module should NOT emit #eUndefinedIdentifier when called outside the module"
+
+ssltrace "./ptc -t3 -o3 module_public.pt" ../../lib/pt/semantic.def -e > module_public.eOutput 2> /dev/null
+
+if [ $(grep -c '#eUndefinedIdentifier' module_public.eOutput) -eq 0 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   A variable declared inside a module should emit #eUndefinedIdentifier when referenced outside the module"
+
+ssltrace "./ptc -t3 -o3 module_var.pt" ../../lib/pt/semantic.def -e > module_var.eOutput 2> /dev/null
+
+if [ $(grep -c '#eUndefinedIdentifier' module_var.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
