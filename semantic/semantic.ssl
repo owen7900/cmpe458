@@ -1136,10 +1136,23 @@ SubrangeUpperBound :
         ];
 
 VariableDeclarations :
+        % get the first variable
+        sIdentifier % ADDED
+        oSymbolStkPushLocalIdentifier % ADDED
+        % Check not previously defined
+        [ oSymbolStkChooseKind % ADDED CHOICE
+            | syUndefined, syExternal:
+            | *:
+                #eMultiplyDefined
+                % The new definition will obscure the old one
+        ]
+        % keep track of the number of variables
+        oCountPush(one) % ADDED
         {[
-            | sIdentifier:
+            | sVar: % CHANGED
+                sIdentifier % ADDED
                 oSymbolStkPushLocalIdentifier
-
+                oCountIncrement
                 % Check not previously defined
                 [ oSymbolStkChooseKind
                     | syUndefined, syExternal:
@@ -1150,13 +1163,24 @@ VariableDeclarations :
 
                 % Accepts a type specification and pushes its type to the Type Stack.
                 % Creates type table entries for the type and any new subtypes as necessary.
-                @TypeBody
-                @EnterVariableAttributes
-                oTypeStkPop
-                oSymbolStkPop
+                % @TypeBody % REMOVED
+                % @EnterVariableAttributes % REMOVED
+                % oTypeStkPop % REMOVED
+                % oSymbolStkPop % REMOVED
             | *:
                 >
-        ]};
+        ]}
+        @TypeBody % ADDED
+        {[ oCountChoose % ADDED LOOP
+            | zero:
+                >
+            | *:
+                @EnterVariableAttributes
+                oSymbolStkPop
+                oCountDecrement
+        ]}
+        oTypeStkPop % ADDED
+        oCountPop; % ADDED
 
 EnterVariableAttributes :
         % Enter the type on top of the Type Stack as the type of 
