@@ -1,0 +1,29 @@
+   .tFileDescriptor
+   .tLiteralInteger
+   oEmitValue
+   % value emitted 2
+   .tFileBind
+   .tLiteralAddress
+   oEmitDataAddress
+   % value emitted 0
+   .tStoreInteger
+   .tCaseBegin
+       .tLiteralInteger
+       oEmitValue
+       % value emitted 7
+   .tCaseSelect
+   oEmitNullAddress
+   % value emitted -32767
+   .tCaseEnd
+   oEmitCaseBranchTable
+   % value emitted 32767
+   % value emitted -32767
+   % value emitted -1
+   .tCaseElse
+   .tCaseMerge
+   oEmitNullAddress
+   % value emitted -32767
+ .tTrapBegin
+ .tTrap
+ oEmitTrapKind(trHalt)
+ % value emitted 0

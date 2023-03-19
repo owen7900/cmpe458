@@ -1,0 +1,6 @@
+using output
+val x = 7
+case x
+    else
+        ;
+end

@@ -1,0 +1,49 @@
+#! /bin/bash
+
+echo "---------Testing Statements-------------"
+
+echo "   A do statement should emit .tDoBegin, .tDoBreakIf, .tDoTest and .tDoEnd"
+
+ssltrace "./ptc -t3 -o3 stmt_do.pt" ../../lib/pt/semantic.def -e > stmt_do.eOutput 2> /dev/null
+
+if [ $(grep -c '.tDoBegin' stmt_do.eOutput) -eq 1 -a\
+    $(grep -c '.tDoBreakIf' stmt_do.eOutput) -eq 1 -a\
+    $(grep -c '.tDoTest' stmt_do.eOutput) -eq 1 -a\
+    $(grep -c '.tDoEnd' stmt_do.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   A variable declared within a do statement's scope should emit #eUndefinedIdentifier when referenced outside the do statement"
+
+ssltrace "./ptc -t3 -o3 stmt_do_scope.pt" ../../lib/pt/semantic.def -e > stmt_do_scope.eOutput 2> /dev/null
+
+if [ $(grep -c '#eUndefinedIdentifier' stmt_do_scope.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   A case statement with an else clause should emit .tCaseElse"
+
+ssltrace "./ptc -t3 -o3 stmt_case_else.pt" ../../lib/pt/semantic.def -e > stmt_case_else.eOutput 2> /dev/null
+
+if [ $(grep -c '.tCaseElse' stmt_case_else.eOutput) -eq 1 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+
+
+echo "   A case statement without an else clause should NOT emit .tCaseElse"
+
+ssltrace "./ptc -t3 -o3 stmt_case_no_else.pt" ../../lib/pt/semantic.def -e > stmt_case_no_else.eOutput 2> /dev/null
+
+if [ $(grep -c '.tCaseElse' stmt_case_no_else.eOutput) -eq 0 ]; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi

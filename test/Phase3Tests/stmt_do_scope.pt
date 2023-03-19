@@ -1,0 +1,6 @@
+using output
+do
+    var x : integer
+    break if true
+end
+x = 1
