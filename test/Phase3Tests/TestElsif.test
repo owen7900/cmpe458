@@ -1,0 +1,15 @@
+#! /bin/bash
+
+echo "---------Testing Elsif----------------"
+
+echo "   Elsif should produce the same results as else..if"
+
+ssltrace "./ptc -t3 -o3 elsif.pt" ../../lib/pt/semantic.def -e > elsif.eOutput 2> /dev/null
+ssltrace "./ptc -t3 -o3 else..if.pt" ../../lib/pt/semantic.def -e > else..if.eOutput 2> /dev/null
+
+if cmp -s "$elsif.eOutput" "$else..if.eOutput" ; then
+    echo "      SUCCESS"
+else
+    echo "      FAILED"
+fi
+

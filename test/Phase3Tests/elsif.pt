@@ -1,0 +1,6 @@
+using output
+if a == 1 then
+    P
+elsif b == 2 then
+    Q
+end

@@ -1,0 +1,8 @@
+using output
+if a == 1 then
+    P
+else
+    if b == 2 then
+    Q
+    end
+end
