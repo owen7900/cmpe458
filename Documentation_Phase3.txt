@@ -1,0 +1,58 @@
+Changes to the semantic.ssl file:
+    Changes made to this file include adding the input semantic token definitions sPublic, sModule, sDoStmt, sBreakIf, sSubstring, sLength, 
+    sIndex and removal of sRepeatStmt and sRepeatEnd to match the tokens in parser.ssl. The old output t-codes tRepeatBegin, tRpeatControl, 
+    tLiteralChar, tRepeatTest were removed, the t-codes tFetchString, tAssignString, tStoreString, tSubscriptString are changed and new 
+    t-codes tConcatenate, tSubstring, tLength, tIndex, tStringEqual, tCaseElse, tDoBegin, tDoBreakIf, tDoTest, tDoEnd are added to satisfy 
+    the new requirement.
+
+    Support for Quby's allowing mixing of declarations and statements were added. Support for handling declaration of anonymous modules and 
+    the module's scope features were implemented. The PT char type was modified to support the Quby's string type. String comparison 
+    with the equality or inequality sign is allowed. The PT repeat statements were modified to behave as Quby's do statements. PT's case 
+    statements were modified to support Quby's case .. else statements.
+
+    Detailed changes are listed below:
+
+- Update input tokens to match parser.ssl (lines 33-76)
+- Remove old T-codes and add new T-codes (lines 108-170)
+- Add string size (line 232)
+- Change stdChar to stdString (line 277)
+- Add new symbol table operations oSymbolTblStripScope and oSymbolTblMergeScope (lines 305, 309)
+- Add symbol kinds syModule and syPublicProcedure (lines 328-329)
+- Remove tpChar (line 447)
+- Change char traps to be string traps (lines 545-552)
+- Add rule ModuleDefinition (lines 1430-1458)
+- Update statment and block rules to allow declaration and statement intermixing (lines 811-841, 1461-1480)
+- Update constant definitions (lines 844-869)
+- Update type definitions (lines 936-956)
+- Update variable declarations (lines 1139-1183)
+- Recognize public procedures (lines 1296-1302)
+- Remove repeat statement and add do loop (lines 1696-1724)
+- Handle else clause within case statements (lines 1736-1758)
+- Handle ternary operators (lines 1841, 2079-2113)
+- Handle string index (lines 2054-2072)
+- Handle string concatenation (lines 1986-1993)
+- Handle string (in)equality (lines 2011-2028)
+- Handle string length (lines 1962-1973)
+- Update string T-codes (lines 1886-1894, 1909-1947)
+- Update string constants (lines 859-867, 911-932, 2330-2333)
+
+
+
+semantic.pt:
+- Copied contents from semantic.def to the corresponding section. (lines 51-503)
+- Change predefined Char type to predefined String type (line 790)
+- Replace Char references with String references (lines 1020-1035, 2081)
+- Handle allocation of strings (lines 2396-2397)
+- Add semantic operations oSymbolTblStripScope and oSymbolTblMergeScope (lines 1793-1824)
+- Update assertions that require syProcedure on top of the Symbol stack to allow for syPublicProcedure (lines 1830, 1943, 1992, 2111, 2120)
+
+
+Test Suites:
+    Test suites are contained in the test/Phase3Tests folder.
+
+    The test suites .pt files that contains unit tests that are named after the tests to each specific changes that were made.
+
+    The .test files are actual tests to test the .pt files to behave with certain expected traits, such as having a specific number of tokens.
+    All the tests are expected to output "SUCCESS".
+
+    Finally, the RunTests.bash automates the process of running all the .test files.
