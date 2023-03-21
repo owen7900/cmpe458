@@ -1741,6 +1741,7 @@ CaseStmt :
                 .tCaseEnd
                 oFixPopForwardBranch
                 oEmitCaseBranchTable
+
                 .tCaseElse
                 @Statement
                 .tCaseMerge

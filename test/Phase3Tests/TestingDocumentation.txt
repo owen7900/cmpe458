@@ -1,0 +1,20 @@
+Tests for modules:
+- module_private.pt: A private procedure declared inside a module should emit #eUndefinedIdentifier when called outside the module
+- module_public.pt: A public procedure declared inside a module should NOT emit #eUndefinedIdentifier when called outside the module
+- module_var.pt: A variable declared inside a module should emit #eUndefinedIdentifier when referenced outside the module
+
+Tests for statements:
+- elsif.pt and else..if.pt: An if statement with elsif should produce the same results as else with a nested if
+- stmt_do.pt: A do statement should emit .tDoBegin, .tDoBreakIf, .tDoTest and .tDoEnd
+- stmt_do_scope.pt: A variable declared within a do statement's scope should emit #eUndefinedIdentifier when referenced outside the do statement
+- stmt_case_else.pt: A case statement with an else clause should emit .tCaseElse
+- stmt_case_no_else.pt: A case statement without an else clause should NOT emit .tCaseElse
+
+Tests for strings:
+- string_const.pt: Constant declaration of a string should resemble a variable declaration
+- string_concat.pt: String concatenation '"a" + "b"' should emit .tConcatenate
+- string_eq.pt: String equality '"a" == "a"' should emit .tStringEqual
+- string_neq.pt: String inequality '"a" != "a"' should emit .tStringEqual .tNot
+- string_length.pt: String length '# "TEST"' should emit .tLength
+- string_index.pt: String index '"TEST" ? "ES"' should emit .tIndex
+- string_substr.pt: Substring '"TEST" $ 2..3' should emit .tSubstring

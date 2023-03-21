@@ -10,8 +10,9 @@ Changes to the semantic.ssl file:
     with the equality or inequality sign is allowed. The PT repeat statements were modified to behave as Quby's do statements. PT's case 
     statements were modified to support Quby's case .. else statements.
 
-    Detailed changes are listed below:
+Detailed changes are listed below:
 
+semantic.ssl:
 - Update input tokens to match parser.ssl (lines 33-76)
 - Remove old T-codes and add new T-codes (lines 108-170)
 - Add string size (line 232)
@@ -36,8 +37,6 @@ Changes to the semantic.ssl file:
 - Update string T-codes (lines 1886-1894, 1909-1947)
 - Update string constants (lines 859-867, 911-932, 2330-2333)
 
-
-
 semantic.pt:
 - Copied contents from semantic.def to the corresponding section. (lines 51-503)
 - Change predefined Char type to predefined String type (line 790)
@@ -50,7 +49,9 @@ semantic.pt:
 Test Suites:
     Test suites are contained in the test/Phase3Tests folder.
 
-    The test suites .pt files that contains unit tests that are named after the tests to each specific changes that were made.
+    Testing documentation is located in test/Phase3Tests/TestingDocumentation.txt.
+
+    The test suites' .pt files that contains unit tests that are named after the tests to each specific changes that were made.
 
     The .test files are actual tests to test the .pt files to behave with certain expected traits, such as having a specific number of tokens.
     All the tests are expected to output "SUCCESS".
