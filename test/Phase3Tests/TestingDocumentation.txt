@@ -4,7 +4,6 @@ Tests for modules:
 - module_var.pt: A variable declared inside a module should emit #eUndefinedIdentifier when referenced outside the module
 
 Tests for statements:
-- elsif.pt and else..if.pt: An if statement with elsif should produce the same results as else with a nested if
 - stmt_do.pt: A do statement should emit .tDoBegin, .tDoBreakIf, .tDoTest and .tDoEnd
 - stmt_do_scope.pt: A variable declared within a do statement's scope should emit #eUndefinedIdentifier when referenced outside the do statement
 - stmt_case_else.pt: A case statement with an else clause should emit .tCaseElse
@@ -20,4 +19,4 @@ Tests for strings:
 - string_substr.pt: Substring '"TEST" $ 2..3' should emit .tSubstring
 
 Test for elsif:
-- Elsif should return the same results as else .. if ..
+- elsif.pt and else..if.pt: An if statement with elsif should return the same results as else .. if ..
