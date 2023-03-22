@@ -18,3 +18,6 @@ Tests for strings:
 - string_length.pt: String length '# "TEST"' should emit .tLength
 - string_index.pt: String index '"TEST" ? "ES"' should emit .tIndex
 - string_substr.pt: Substring '"TEST" $ 2..3' should emit .tSubstring
+
+Test for elsif:
+- Elsif should return the same results as else .. if ..
