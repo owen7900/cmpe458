@@ -26,6 +26,32 @@ See the README there for installation information.
 
 # TODO 
 
+## Phase 4
+**coder.ssl**
+- Update input tokens in *coder.ssl* to match output T-codes from *semantic.ssl*
+- Add the trap codes for the new Quby run time monitor string operation traps - make sure that the values are the ones listed in the phase 4 handout (i.e., `trAssignString` = 101, `trWriteString` = 109, and so on). Make sure that your semantic phase is also using the correct trap numbers (old `trWriteString` was 8, it's now 109)
+- Add a `string` kind to the `DataKinds`. Value doesn't matter, 3 works
+- Remove the `oOperandPushChar` semantic operation. Add the `oOperandPushString` operation
+- Modify the `Block` rule to accept all the statement T-codes directly in its main declaration-handling loop by copying all the alternatives in the `Statements` rule directly into it instead of calling `Statements` afterwards. Conversely, wherever statements can appear in Quby, declarations can, so replace the entire body of the `Statements` rule with a simple call to the new `Block` rule
+- Remove handling of `tLiteralChar` and `tStoreChar` whereever they occur. Add handling of `tLiteralString` and `tStoreString` instead. Remove handling of `tStringDescriptor` and `tSkipString` whereever they occur. The new `tLiteralString` can be handled just like `tSkipString` used to be, except that no `tStringDescriptor` T-code is accepted. Remove handling of Char operations `tAssignChar` and `tSubscriptChar`. Don't remove the rules they call (because they are also used to handle Booleans)
+- Add handling of String operations `tAssignString`, `tStoreString`, `tSubscriptString`, `tConcatenate` etc. Remember that the operand length for string operations is Data Kind `string`. DO NOT make coalescence optimized
+cases (ones that look for immediate assignment) for String operations
+- Add handling of String parameters in the `Routine` rule - instead of using `EmitMove`, they must use your new `OperandAssignStringPopPop` rule
+- Add subscripting of String arrays. Subscripting of strings is EXACTLY like subscripting of Integer arrays except that the scaling factor is 1024 (2^10) instead of 4 (2^2). (Remember that you can multiply by 1024 by shifting left 10 bits.)
+- Add the new rules to be used by your string operations, `OperandAssignStringPopPop`, `OperandConcatenatePop`, `OperandSubstringPopPop`, `OperandIndexPop`, `OperandLength`, `OperandChr`, `OperandOrd` and `OperandStringEqualPop`. DO NOT make optimized versions such as `OperandConcatenateAssignPopPopPop`. The string operations all call trap routines at run time, so the optimizations are irrelevant. Remove the optimized cases for `tChr` and `tOrd`, which are now String operations. To implement Ord, for which we have no trap routine, simply force the address of the string into a temporary, change the mode to `mTempIndirect` and the length to `byte`, then force to a temporary to get the result integer (word)
+- Strings are passed to the string traps by address always. So to pass a String argument to the String operation traps, just force the address of the String to a temporary (`OperandForceAddresIntoTemp`), force the result to the stack (`OperandForceToStack`), then pop and free the temporary (`OperandPopAndFreeTemp`). The String result of a String trap routine is returned as the address of the result in the result register. To represent that, simply push the result register (`mResultReg`) on the Operand Stack and generate code to copy it into a scratch register (`mScratchReg1`) before restoring the temporary registers (`RestoreTempRegsFromStack`), then force the scratch register to a temporary (`OperandForceIntoTemp`). Make sure that you generate code to call the string traps exactly as other traps are called - see `OperandEofFunction` for an example
+- Since strings are always represented by their addresses, `OperandForceIntoTemp` must be changed to have an alternative for `mString` that calls `OperandForceAddressIntoTemp` instead. Otherwise items of size string act like those of size word (because they are addresses), so `OperandForceIntoTemp` must be modified to allow size string as well as word
+- Add handling of `do` statements by copying the `WhileStmt` rule to a new `DoStmt` rule to handle Quby do statements, and delete `RepeatStmt`. Remember that Quby do loops are just like PT while statements except that statements may appear between the beginning of the loop and the `break if` condition
+- Modify the `EmitDefaultCaseAbort` rule to check for an else clause (beginning with the `tCaseElse` T-code) before emitting the trap call. If there is an else clause, handle it just like a CaseVariant (but without a case label), otherwise emit the abort trap just as before
+
+**coder.pt**
+-  Change the semantic operations, type values, input tokens, output tokens, etc. to those generated in *coder.def* when *coder.ssl* is compiled by S/SL
+- Make sure that the `firstCompoundToken` and `lastCompoundToken` values correspond exactly to the first and last T-code that have associated values generated by the semantic phase (these must be in a contiguous range). Make sure that the value of `tEndOfFile` and `lastInputToken` is exactly one more than the `lastOutputToken` T-code generated by your semantic phase
+- In `OperandFoldManifestSubscript`, add a case to scale the subscript by 1024 if the element size is string (in the same way it scales by 4 if the element size is word). (You only need to do this if you chose to optimize manifest subscripts of string arrays in your S/SL.)
+- Remove all references and alternatives for `tStringDescriptor` and `tSkipString` wherever they occur. Change the Assert statements that reference `tStringDescriptor` to say `tLiteralString` instead
+- Remove the case alternative for the `oOperandPushChar` semantic operation, and change the case alternative for the `oOperandPushStringDescriptor` semantic operation to be `oOperandPushString`
+- Remove the call to `AssertAllTempsAreFree` in the `oEmitMergeSourceCoordinate` semantic operation. Now that we have string traps, it’s going to fail
+
 ## Phase 3
 **semantic.ssl:**
 - Upate input tokens in semantic.ssl to match output tokens in parser.ssl -- DONE Matthew
