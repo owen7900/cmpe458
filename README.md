@@ -28,7 +28,7 @@ See the README there for installation information.
 
 ## Phase 4
 **coder.ssl**
-- Update input tokens in *coder.ssl* to match output T-codes from *semantic.ssl*
+- Update input tokens in *coder.ssl* to match output T-codes from *semantic.ssl* -- DONE Matthew
 - Add the trap codes for the new Quby run time monitor string operation traps - make sure that the values are the ones listed in the phase 4 handout (i.e., `trAssignString` = 101, `trWriteString` = 109, and so on). Make sure that your semantic phase is also using the correct trap numbers (old `trWriteString` was 8, it's now 109)
 - Add a `string` kind to the `DataKinds`. Value doesn't matter, 3 works
 - Remove the `oOperandPushChar` semantic operation. Add the `oOperandPushString` operation

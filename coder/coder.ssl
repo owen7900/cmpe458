@@ -46,23 +46,28 @@ Input:
         tEoln
         tEOF
         tVarParm
+        tConcatenate % ADDED
+        tSubstring % ADDED
+        tLength % ADDED
+        tIndex % ADDED
+        tStringEqual % ADDED
         tFetchAddress
         tFetchInteger
-        tFetchChar
+        tFetchString % CHANGED
         tFetchBoolean
         tAssignBegin
         tAssignAddress
         tAssignInteger
-        tAssignChar
+        tAssignString % CHANGED
         tAssignBoolean
         tStoreAddress
         tStoreInteger
-        tStoreChar
+        tStoreString % CHANGED
         tStoreBoolean
         tSubscriptBegin
         tSubscriptAddress
         tSubscriptInteger
-        tSubscriptChar
+        tSubscriptString % CHANGED
         tSubscriptBoolean
         tArrayDescriptor
         tFileDescriptor
@@ -70,9 +75,12 @@ Input:
         tIfBegin
         tIfEnd
         tCaseBegin
+        tCaseElse % ADDED
         tWhileBegin
-        tRepeatBegin
-        tRepeatControl
+        % tRepeatBegin % REMOVED
+        % tRepeatControl % REMOVED
+        tDoBegin % ADDED
+        tDoBreakIf % ADDED
         tCallBegin
         tParmEnd
         tProcedureEnd
@@ -86,7 +94,7 @@ Input:
         tLiteralAddress
         firstCompoundTcode = tLiteralAddress
         tLiteralInteger
-        tLiteralChar
+        % tLiteralChar % REMOVED
         tLiteralBoolean
         tSkipString
         tStringData
@@ -98,7 +106,9 @@ Input:
         tCaseEnd
         tWhileTest
         tWhileEnd
-        tRepeatTest
+        % tRepeatTest % REMOVED
+        tDoTest % ADDED
+        tDoEnd % ADDED
         tSkipProc
         tCallEnd
         tLineNumber
@@ -779,7 +789,7 @@ Routine:
                         | tStoreInteger, tStoreAddress:
                             oOperandSetLength(word)
                             @OperandAssignIntegerPopPop
-                        | tStoreChar:
+                        | tStoreString: % CHANGED
                             oOperandSetLength(byte)
                             @OperandAssignCharPopPop
                         | tStoreBoolean:
@@ -823,8 +833,8 @@ Statements:
             @IfStmt
         | tWhileBegin:
             @WhileStmt
-        | tRepeatBegin:
-            @RepeatStmt
+        % | tRepeatBegin: % REMOVED CHOICE OPTION
+        %     @RepeatStmt
         | tCaseBegin:
             @CaseStmt
         | tWriteBegin:
@@ -1058,40 +1068,40 @@ SkipToEndWhile:
     ]};
 
 
-RepeatStmt:
-    % Save the target address for the top-of-loop branch
-    oFixPushAddress                             % bNNN:
-    oEmitMergeSourceCoordinate
-    @Statements                                 % loop body
-    tRepeatControl
-    @OperandPushBooleanControlExpression        % ... cond
-    tRepeatTest
+% RepeatStmt: % REMOVED RULE
+%     % Save the target address for the top-of-loop branch
+%     oFixPushAddress                             % bNNN:
+%     oEmitMergeSourceCoordinate
+%     @Statements                                 % loop body
+%     tRepeatControl
+%     @OperandPushBooleanControlExpression        % ... cond
+%     tRepeatTest
 
-    % Optimize if loop condition is known at compile time
-    [ oOperandChooseJumpCondition
-        | iJnever:
-            % Exit condition is always false (until false) - an infinite loop.
-            % false branches fall through to top-of-loop backward branch
-            oFixAndFreeFalseBranches
-            oEmitUnconditionalBackwardBranch    %  jmp      bNN
+%     % Optimize if loop condition is known at compile time
+%     [ oOperandChooseJumpCondition
+%         | iJnever:
+%             % Exit condition is always false (until false) - an infinite loop.
+%             % false branches fall through to top-of-loop backward branch
+%             oFixAndFreeFalseBranches
+%             oEmitUnconditionalBackwardBranch    %  jmp      bNN
 
-        | iJalways:
-            % Exit condition is always true (until true) - loop never repeats.
-            % fall through without backward branch
-            oFixAndFreeFalseBranches
+%         | iJalways:
+%             % Exit condition is always true (until true) - loop never repeats.
+%             % fall through without backward branch
+%             oFixAndFreeFalseBranches
 
-        | *:
-            % Emit a conditional forward branch to exit the loop.
-            % True branches follow the conditional exit path, false
-            % branches fall through to the top-of-loop branch.
-            @OperandInfixOr                     %       jcond   fNNN
-            oEmitUnconditionalBackwardBranch    %       jmp     bNNN
-    ]
+%         | *:
+%             % Emit a conditional forward branch to exit the loop.
+%             % True branches follow the conditional exit path, false
+%             % branches fall through to the top-of-loop branch.
+%             @OperandInfixOr                     %       jcond   fNNN
+%             oEmitUnconditionalBackwardBranch    %       jmp     bNNN
+%     ]
 
-    oFixPopAddress
-    % Fix the true branches exiting the statement
-    oFixAndFreeShuntList                        % fNNN:
-    oOperandPop;
+%     oFixPopAddress
+%     % Fix the true branches exiting the statement
+%     oFixAndFreeShuntList                        % fNNN:
+%     oOperandPop;
 
 
 CaseStmt:
@@ -1442,8 +1452,8 @@ OperandPushExpression:
             @OperandPushVariable
         | tLiteralInteger:
             oOperandPushInteger
-        | tLiteralChar:
-            oOperandPushChar
+        % | tLiteralString: % REMOVED CHOICE OPTION
+        %     oOperandPushChar
         | tLiteralBoolean:
             oOperandPushBoolean
         | tLiteralString:
@@ -1533,7 +1543,7 @@ OperandPushVariable:
             [
                 | tSubscriptInteger:
                     @OperandSubscriptIntegerPop
-                | tSubscriptChar:
+                | tSubscriptString: % CHANGED
                     @OperandSubscriptCharPop
                 | tSubscriptBoolean:
                     @OperandSubscriptBooleanPop
@@ -1543,7 +1553,7 @@ OperandPushVariable:
     ]
     [
         | tFetchInteger:
-        | tFetchChar, tFetchBoolean:
+        | tFetchString, tFetchBoolean: % CHANGED
             oOperandSetLength(byte)
         | *: 
             % Value is not to be loaded
@@ -2028,14 +2038,14 @@ OperandPushExpressionAssignPopPop:
             @OperandPushVariable
         | tLiteralInteger:
             oOperandPushInteger
-        | tLiteralChar:
+        | tLiteralString: % CHANGED
             oOperandPushChar
         | tLiteralBoolean:
             oOperandPushBoolean
         | tAssignInteger:
             @OperandAssignIntegerPopPop
             >
-        | tAssignChar:
+        | tAssignString: % CHANGED
             @OperandAssignCharPopPop
             >
         | tAssignBoolean:
